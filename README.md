@@ -2111,3 +2111,1163 @@ System.out.println(set.hashCode()); // Example Output: 32015
 
 ---
 
+# **📌 Deep Dive into `HashSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `HashSet<T>`?**
+A `HashSet<T>` in Java is a class that implements the `Set<T>` interface and **stores unique elements in an unordered way** using **hashing** for fast retrieval.
+
+✔️ **Stores only unique elements (No duplicates allowed).**  
+✔️ **Uses `HashMap` internally for storage.**  
+✔️ **Allows `null` values (only one).**  
+✔️ **Unordered (No guarantee of insertion order).**  
+✔️ **Fast operations (O(1) time complexity for add, remove, contains).**  
+
+---
+
+## **2️⃣ How `HashSet` Works Internally?**
+### **🔹 Step 1: Uses `HashMap` for storage**
+Internally, `HashSet<T>` uses a `HashMap<T, Object>` where:  
+- Each element is stored as **a key** in the `HashMap`.  
+- A dummy value (like `PRESENT`) is used as a value.  
+
+```java
+private static final Object PRESENT = new Object();
+private transient HashMap<E,Object> map;
+```
+
+### **🔹 Step 2: Hashing Process**
+1. When you **add** an element, it calculates the **hash code** of the element.
+2. Finds a suitable **bucket (index)** in the Hash Table.
+3. Stores the element **only if it does not already exist.**
+
+### **🔹 Step 3: No Duplicate Elements**
+Since `HashMap` does not allow duplicate keys, `HashSet` ensures **no duplicate elements**.
+
+---
+
+## **3️⃣ Creating a `HashSet` (Basic Example)**
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        HashSet<String> set = new HashSet<>();
+
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Mango");
+        set.add("Apple"); // Duplicate, will not be added
+
+        System.out.println(set); // Output: [Banana, Apple, Mango] (Unordered)
+    }
+}
+```
+- **Duplicates are ignored** (Only one "Apple" is stored).
+- **Order is not maintained**.
+
+---
+
+## **4️⃣ Important Methods of `HashSet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element if it is not already present. |
+| `remove(Object o)` | Removes the specified element from the set. |
+| `contains(Object o)` | Returns `true` if the element exists. |
+| `size()` | Returns the number of elements in the set. |
+| `isEmpty()` | Checks if the set is empty. |
+| `clear()` | Removes all elements from the set. |
+| `iterator()` | Returns an iterator to traverse the set. |
+
+---
+
+## **5️⃣ Detailed Examples of `HashSet<T>` Methods**
+### **📍 1. `add(E e)` → Adds an element**
+```java
+HashSet<Integer> numbers = new HashSet<>();
+numbers.add(10);
+numbers.add(20);
+numbers.add(10); // Duplicate, ignored
+
+System.out.println(numbers); // Output: [20, 10] (Unordered)
+```
+
+---
+
+### **📍 2. `remove(Object o)` → Removes an element**
+```java
+HashSet<String> set = new HashSet<>(Arrays.asList("Java", "Python", "C++"));
+set.remove("Python");
+
+System.out.println(set); // Output: [Java, C++]
+```
+
+---
+
+### **📍 3. `contains(Object o)` → Checks if an element exists**
+```java
+HashSet<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3));
+System.out.println(numbers.contains(2)); // Output: true
+System.out.println(numbers.contains(5)); // Output: false
+```
+
+---
+
+### **📍 4. `size()` → Returns the total number of elements**
+```java
+HashSet<String> set = new HashSet<>(Arrays.asList("Apple", "Banana"));
+System.out.println(set.size()); // Output: 2
+```
+
+---
+
+### **📍 5. `isEmpty()` → Checks if the set is empty**
+```java
+HashSet<Integer> set = new HashSet<>();
+System.out.println(set.isEmpty()); // Output: true
+```
+
+---
+
+### **📍 6. `clear()` → Removes all elements**
+```java
+HashSet<String> set = new HashSet<>(Arrays.asList("A", "B", "C"));
+set.clear();
+
+System.out.println(set); // Output: []
+```
+
+---
+
+### **📍 7. `iterator()` → Traversing the set**
+```java
+HashSet<String> set = new HashSet<>(Arrays.asList("Red", "Blue", "Green"));
+Iterator<String> itr = set.iterator();
+
+while (itr.hasNext()) {
+    System.out.println(itr.next());
+}
+```
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | O(1) |
+| `remove(Object o)` | O(1) |
+| `contains(Object o)` | O(1) |
+| `size()` | O(1) |
+| `iterator()` | O(n) |
+
+---
+
+## **7️⃣ When to Use `HashSet<T>`?**
+| Use `HashSet` When... | Avoid `HashSet` When... |
+|------------------|------------------|
+| You need **fast lookups**. | You need **ordered elements** (Use `LinkedHashSet`). |
+| You don’t care about insertion order. | You need **sorted elements** (Use `TreeSet`). |
+| You want to store unique elements. | You need **index-based access** (Use `ArrayList`). |
+
+---
+
+## **8️⃣ Summary**
+✔️ **HashSet is a Set implementation that uses hashing to store unique elements.**  
+✔️ **Elements are stored in an unordered manner.**  
+✔️ **Uses `HashMap` internally for storage.**  
+✔️ **Fast operations: O(1) for adding, removing, and searching elements.**  
+✔️ **Best choice when you need unique elements and fast access.**
+
+---
+
+# **📌 Deep Dive into `LinkedHashSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `LinkedHashSet<T>`?**
+A `LinkedHashSet<T>` is a class in Java that implements the `Set<T>` interface and **maintains the insertion order** while ensuring **unique elements**.  
+
+✔️ **Stores only unique elements (No duplicates allowed).**  
+✔️ **Maintains insertion order (Unlike `HashSet`).**  
+✔️ **Uses a combination of `HashSet` and `LinkedList`.**  
+✔️ **Allows `null` values (only one).**  
+✔️ **Faster than `TreeSet`, but slightly slower than `HashSet`.**  
+
+---
+
+## **2️⃣ How `LinkedHashSet<T>` Works Internally?**
+### **🔹 Step 1: Uses `LinkedHashMap` for storage**
+Internally, `LinkedHashSet<T>` uses a **`LinkedHashMap<T, Object>`** where:  
+- Each element is stored as **a key** in the `LinkedHashMap`.  
+- A dummy value (like `PRESENT`) is used as a value.  
+
+```java
+private static final Object PRESENT = new Object();
+private transient LinkedHashMap<E,Object> map;
+```
+
+### **🔹 Step 2: Maintains Insertion Order**
+- Unlike `HashSet`, `LinkedHashSet` **preserves the order in which elements are added**.  
+- This happens because `LinkedHashMap` maintains a **doubly linked list** of its entries.  
+
+---
+
+## **3️⃣ Creating a `LinkedHashSet` (Basic Example)**
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Mango");
+        set.add("Apple"); // Duplicate, will not be added
+
+        System.out.println(set); // Output: [Apple, Banana, Mango] (Maintains order)
+    }
+}
+```
+✔️ **Order is maintained as elements were inserted (`Apple → Banana → Mango`).**  
+✔️ **Duplicates are ignored.**  
+
+---
+
+## **4️⃣ Important Methods of `LinkedHashSet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element if it is not already present. |
+| `remove(Object o)` | Removes the specified element from the set. |
+| `contains(Object o)` | Returns `true` if the element exists. |
+| `size()` | Returns the number of elements in the set. |
+| `isEmpty()` | Checks if the set is empty. |
+| `clear()` | Removes all elements from the set. |
+| `iterator()` | Returns an iterator to traverse the set. |
+
+---
+
+## **5️⃣ Detailed Examples of `LinkedHashSet<T>` Methods**
+### **📍 1. `add(E e)` → Adds an element**
+```java
+LinkedHashSet<Integer> numbers = new LinkedHashSet<>();
+numbers.add(10);
+numbers.add(20);
+numbers.add(10); // Duplicate, ignored
+
+System.out.println(numbers); // Output: [10, 20] (Maintains order)
+```
+
+---
+
+### **📍 2. `remove(Object o)` → Removes an element**
+```java
+LinkedHashSet<String> set = new LinkedHashSet<>(Arrays.asList("Java", "Python", "C++"));
+set.remove("Python");
+
+System.out.println(set); // Output: [Java, C++]
+```
+
+---
+
+### **📍 3. `contains(Object o)` → Checks if an element exists**
+```java
+LinkedHashSet<Integer> numbers = new LinkedHashSet<>(Arrays.asList(1, 2, 3));
+System.out.println(numbers.contains(2)); // Output: true
+System.out.println(numbers.contains(5)); // Output: false
+```
+
+---
+
+### **📍 4. `size()` → Returns the total number of elements**
+```java
+LinkedHashSet<String> set = new LinkedHashSet<>(Arrays.asList("Apple", "Banana"));
+System.out.println(set.size()); // Output: 2
+```
+
+---
+
+### **📍 5. `isEmpty()` → Checks if the set is empty**
+```java
+LinkedHashSet<Integer> set = new LinkedHashSet<>();
+System.out.println(set.isEmpty()); // Output: true
+```
+
+---
+
+### **📍 6. `clear()` → Removes all elements**
+```java
+LinkedHashSet<String> set = new LinkedHashSet<>(Arrays.asList("A", "B", "C"));
+set.clear();
+
+System.out.println(set); // Output: []
+```
+
+---
+
+### **📍 7. `iterator()` → Traversing the set**
+```java
+LinkedHashSet<String> set = new LinkedHashSet<>(Arrays.asList("Red", "Blue", "Green"));
+Iterator<String> itr = set.iterator();
+
+while (itr.hasNext()) {
+    System.out.println(itr.next());
+}
+```
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | O(1) |
+| `remove(Object o)` | O(1) |
+| `contains(Object o)` | O(1) |
+| `size()` | O(1) |
+| `iterator()` | O(n) |
+
+---
+
+## **7️⃣ When to Use `LinkedHashSet<T>`?**
+| Use `LinkedHashSet` When... | Avoid `LinkedHashSet` When... |
+|------------------|------------------|
+| You need **fast lookups** with **insertion order maintained**. | You need **sorted elements** (Use `TreeSet`). |
+| You want a **unique collection that preserves order**. | You need **index-based access** (Use `ArrayList`). |
+| You need moderate performance with predictable order. | You need **higher performance** (Use `HashSet`). |
+
+---
+
+## **8️⃣ Summary**
+✔️ **LinkedHashSet is a Set implementation that maintains insertion order.**  
+✔️ **Uses `LinkedHashMap` internally to store unique elements.**  
+✔️ **Allows fast lookups, insertions, and deletions (O(1) time complexity).**  
+✔️ **Best choice when you need unique elements with predictable order.**
+
+---
+
+# **📌 Deep Dive into `TreeSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `TreeSet<T>`?**
+A `TreeSet<T>` in Java is a class that implements the `NavigableSet<T>` interface and maintains **sorted unique elements**.  
+
+✔️ **Stores only unique elements (No duplicates allowed).**  
+✔️ **Maintains elements in sorted (ascending) order.**  
+✔️ **Implements `NavigableSet<T>`, which extends `SortedSet<T>`.**  
+✔️ **Uses a self-balancing Red-Black Tree for storage.**  
+✔️ **Faster than `LinkedList`, but slower than `HashSet`.**  
+
+---
+
+## **2️⃣ How `TreeSet<T>` Works Internally?**
+### **🔹 Step 1: Uses a Red-Black Tree**
+A **Red-Black Tree** is a type of **self-balancing binary search tree (BST)**.  
+Whenever a new element is added:  
+- It is first inserted in BST order.  
+- If the tree becomes unbalanced, rotations and color changes occur to maintain balance.  
+- The height of the tree is maintained as **O(log n)**, ensuring efficient operations.  
+
+### **🔹 Step 2: Maintains Sorted Order**
+`TreeSet<T>` sorts elements **automatically in natural order** (`Comparable`) or based on a custom comparator (`Comparator`).  
+
+### **🔹 Step 3: No Duplicates Allowed**
+Duplicate elements are ignored while maintaining order.  
+
+---
+
+## **3️⃣ Creating a `TreeSet` (Basic Example)**
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        TreeSet<Integer> numbers = new TreeSet<>();
+
+        numbers.add(50);
+        numbers.add(20);
+        numbers.add(10);
+        numbers.add(40);
+        numbers.add(30);
+        numbers.add(10); // Duplicate, ignored
+
+        System.out.println(numbers); // Output: [10, 20, 30, 40, 50] (Sorted)
+    }
+}
+```
+✔️ **Sorted Order (`10 → 20 → 30 → 40 → 50`)**  
+✔️ **Duplicates are ignored.**  
+
+---
+
+## **4️⃣ Important Methods of `TreeSet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element if it is not already present (sorted). |
+| `remove(Object o)` | Removes the specified element from the set. |
+| `contains(Object o)` | Returns `true` if the element exists. |
+| `size()` | Returns the number of elements in the set. |
+| `isEmpty()` | Checks if the set is empty. |
+| `clear()` | Removes all elements from the set. |
+| `iterator()` | Returns an iterator to traverse the set. |
+| `first()` | Returns the smallest (first) element. |
+| `last()` | Returns the largest (last) element. |
+| `higher(E e)` | Returns the smallest element greater than `e`. |
+| `lower(E e)` | Returns the largest element smaller than `e`. |
+| `ceiling(E e)` | Returns the smallest element greater than or equal to `e`. |
+| `floor(E e)` | Returns the largest element smaller than or equal to `e`. |
+| `pollFirst()` | Removes and returns the first element. |
+| `pollLast()` | Removes and returns the last element. |
+
+---
+
+## **5️⃣ Detailed Examples of `TreeSet<T>` Methods**
+### **📍 1. `add(E e)` → Adds an element**
+```java
+TreeSet<String> set = new TreeSet<>();
+set.add("Banana");
+set.add("Apple");
+set.add("Mango");
+
+System.out.println(set); // Output: [Apple, Banana, Mango] (Sorted order)
+```
+
+---
+
+### **📍 2. `remove(Object o)` → Removes an element**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(10, 20, 30, 40));
+numbers.remove(20);
+
+System.out.println(numbers); // Output: [10, 30, 40]
+```
+
+---
+
+### **📍 3. `contains(Object o)` → Checks if an element exists**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(5, 10, 15));
+System.out.println(numbers.contains(10)); // Output: true
+System.out.println(numbers.contains(25)); // Output: false
+```
+
+---
+
+### **📍 4. `first()` and `last()` → Get first and last elements**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(100, 50, 75, 25));
+System.out.println(numbers.first()); // Output: 25 (Smallest)
+System.out.println(numbers.last());  // Output: 100 (Largest)
+```
+
+---
+
+### **📍 5. `higher(E e)` and `lower(E e)` → Get next and previous elements**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(10, 20, 30, 40));
+System.out.println(numbers.higher(20)); // Output: 30 (Next higher)
+System.out.println(numbers.lower(20));  // Output: 10 (Previous lower)
+```
+
+---
+
+### **📍 6. `ceiling(E e)` and `floor(E e)` → Get equal or closest values**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(10, 20, 30, 40));
+System.out.println(numbers.ceiling(25)); // Output: 30 (Next greater or equal)
+System.out.println(numbers.floor(25));   // Output: 20 (Next smaller or equal)
+```
+
+---
+
+### **📍 7. `pollFirst()` and `pollLast()` → Remove first and last elements**
+```java
+TreeSet<Integer> numbers = new TreeSet<>(Arrays.asList(5, 10, 15, 20));
+System.out.println(numbers.pollFirst()); // Output: 5 (Removes first)
+System.out.println(numbers.pollLast());  // Output: 20 (Removes last)
+```
+
+---
+
+### **📍 8. Custom Sorting with `Comparator`**
+```java
+TreeSet<String> set = new TreeSet<>(Comparator.reverseOrder());
+set.add("Banana");
+set.add("Apple");
+set.add("Mango");
+
+System.out.println(set); // Output: [Mango, Banana, Apple] (Reverse Order)
+```
+
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | O(log n) |
+| `remove(Object o)` | O(log n) |
+| `contains(Object o)` | O(log n) |
+| `size()` | O(1) |
+| `iterator()` | O(n) |
+
+---
+
+## **7️⃣ When to Use `TreeSet<T>`?**
+| Use `TreeSet` When... | Avoid `TreeSet` When... |
+|------------------|------------------|
+| You need elements to be **sorted automatically**. | You need **unordered but fast access** (Use `HashSet`). |
+| You want **logarithmic time complexity** (`O(log n)`). | You need **constant time lookups** (`O(1)`, Use `HashSet`). |
+| You need efficient **range queries** (`higher(), lower()`). | You need **insertion order to be maintained** (Use `LinkedHashSet`). |
+
+---
+
+## **8️⃣ Summary**
+✔️ **TreeSet is a Set implementation that maintains sorted order.**  
+✔️ **Uses a self-balancing Red-Black Tree for internal storage.**  
+✔️ **Offers `O(log n)` time complexity for insert, delete, and search.**  
+✔️ **Best for scenarios where sorted order is required.**
+
+---
+
+# **📌 Deep Dive into `EnumSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `EnumSet<T>`?**  
+`EnumSet<T>` is a specialized **Set implementation for Enums** in Java. It is designed to work **only with Enums** and is much **faster and memory-efficient** than other Set implementations like `HashSet` or `TreeSet`.  
+
+✔️ **Stores only `enum` values.**  
+✔️ **Extremely fast (Better than `HashSet` and `TreeSet`).**  
+✔️ **Compact memory usage (Uses bitwise operations).**  
+✔️ **Maintains natural order of Enums.**  
+
+---
+
+## **2️⃣ How `EnumSet<T>` Works Internally?**
+- Unlike `HashSet`, which uses a **HashMap**, `EnumSet` uses a **bitwise representation** to store elements.  
+- Each `enum` constant is assigned a **bit position**, making operations **very fast (`O(1)`)**.  
+- Since `EnumSet` is backed by a **bit vector**, it **does not allow null values**.  
+- It maintains **insertion order** based on how `enum` constants are declared.  
+
+---
+
+## **3️⃣ Creating an `EnumSet` (Basic Example)**
+Let's define an `enum` first:  
+```java
+enum Days {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+```
+Now, let's create an `EnumSet` and add elements:  
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        EnumSet<Days> weekend = EnumSet.of(Days.SATURDAY, Days.SUNDAY);
+        System.out.println(weekend); // Output: [SATURDAY, SUNDAY]
+    }
+}
+```
+✔️ **Stores only `enum` values**  
+✔️ **Maintains insertion order**  
+
+---
+
+## **4️⃣ Ways to Create an `EnumSet<T>`**
+### **📍 1. `EnumSet.of(E... elements)` → Create from specific values**
+```java
+EnumSet<Days> set = EnumSet.of(Days.MONDAY, Days.WEDNESDAY);
+System.out.println(set); // Output: [MONDAY, WEDNESDAY]
+```
+
+### **📍 2. `EnumSet.allOf(EnumType.class)` → Create a set of all Enum values**
+```java
+EnumSet<Days> allDays = EnumSet.allOf(Days.class);
+System.out.println(allDays); // Output: [MONDAY, TUESDAY, WEDNESDAY, ...]
+```
+
+### **📍 3. `EnumSet.noneOf(EnumType.class)` → Create an empty set**
+```java
+EnumSet<Days> emptySet = EnumSet.noneOf(Days.class);
+System.out.println(emptySet); // Output: []
+```
+
+### **📍 4. `EnumSet.range(E from, E to)` → Create a range of Enum values**
+```java
+EnumSet<Days> midWeek = EnumSet.range(Days.TUESDAY, Days.THURSDAY);
+System.out.println(midWeek); // Output: [TUESDAY, WEDNESDAY, THURSDAY]
+```
+
+### **📍 5. `EnumSet.copyOf(Collection<E> c)` → Create from another collection**
+```java
+List<Days> list = Arrays.asList(Days.MONDAY, Days.FRIDAY);
+EnumSet<Days> copiedSet = EnumSet.copyOf(list);
+System.out.println(copiedSet); // Output: [MONDAY, FRIDAY]
+```
+
+---
+
+## **5️⃣ Important Methods of `EnumSet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element to the set. |
+| `remove(E e)` | Removes an element from the set. |
+| `contains(E e)` | Checks if the set contains an element. |
+| `size()` | Returns the number of elements in the set. |
+| `isEmpty()` | Checks if the set is empty. |
+| `clear()` | Removes all elements from the set. |
+| `iterator()` | Returns an iterator to traverse the set. |
+| `complementOf(EnumSet<E> s)` | Returns a set containing all elements **except** those in `s`. |
+
+---
+
+## **6️⃣ Examples of `EnumSet<T>` Methods**
+### **📍 1. `add(E e)` and `remove(E e)` → Add & Remove Elements**
+```java
+EnumSet<Days> set = EnumSet.noneOf(Days.class);
+set.add(Days.MONDAY);
+set.add(Days.FRIDAY);
+set.remove(Days.MONDAY);
+
+System.out.println(set); // Output: [FRIDAY]
+```
+
+---
+
+### **📍 2. `contains(E e)` → Check if an element exists**
+```java
+EnumSet<Days> set = EnumSet.of(Days.WEDNESDAY, Days.FRIDAY);
+System.out.println(set.contains(Days.FRIDAY)); // Output: true
+System.out.println(set.contains(Days.SUNDAY)); // Output: false
+```
+
+---
+
+### **📍 3. `complementOf(EnumSet<E> s)` → Get the complement set**
+```java
+EnumSet<Days> workingDays = EnumSet.range(Days.MONDAY, Days.FRIDAY);
+EnumSet<Days> nonWorkingDays = EnumSet.complementOf(workingDays);
+
+System.out.println(workingDays);  // Output: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+System.out.println(nonWorkingDays); // Output: [SATURDAY, SUNDAY]
+```
+
+---
+
+## **7️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | O(1) |
+| `remove(E e)` | O(1) |
+| `contains(E e)` | O(1) |
+| `size()` | O(1) |
+| `iterator()` | O(n) |
+
+✔️ **Extremely fast because it uses bitwise operations.**  
+
+---
+
+## **8️⃣ When to Use `EnumSet<T>`?**
+| Use `EnumSet` When... | Avoid `EnumSet` When... |
+|------------------|------------------|
+| You have **enum values** to store. | You need to store **non-enum values**. |
+| You need a **faster and memory-efficient** Set. | You need to store **null values** (`EnumSet` does not allow `null`). |
+| You want **ordered enum storage**. | You need a **hashed or sorted collection** (Use `HashSet` or `TreeSet`). |
+
+---
+
+## **9️⃣ Summary**
+✔️ **EnumSet is the best choice for storing Enums in a Set.**  
+✔️ **Much faster and memory-efficient than `HashSet` and `TreeSet`.**  
+✔️ **Uses bitwise operations for fast access.**  
+✔️ **Maintains natural order of Enum constants.**  
+✔️ **Does not allow `null` values.**  
+
+---
+
+# **📌 Deep Dive into `ConcurrentSkipListSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `ConcurrentSkipListSet<T>`?**  
+`ConcurrentSkipListSet<T>` is a **thread-safe, sorted Set implementation** in Java.  
+It is part of the **java.util.concurrent** package and is designed for **concurrent (multi-threaded) environments**.  
+
+✔️ **Thread-Safe** (Multiple threads can modify it safely).  
+✔️ **Sorted Set** (Maintains natural order of elements).  
+✔️ **Non-Synchronized Alternative to `TreeSet`**.  
+✔️ **Uses a Skip List (Efficient for concurrent reads/writes).**  
+✔️ **Does not allow `null` elements.**  
+
+---
+
+## **2️⃣ How `ConcurrentSkipListSet<T>` Works Internally?**  
+- It uses a **Skip List** instead of a Tree or Hash structure.  
+- A Skip List is like a **linked list with multiple levels** to speed up searches.  
+- It provides **logarithmic time complexity (`O(log n)`) for add, remove, and search** operations.  
+- Unlike `TreeSet`, which uses **synchronized locks**, `ConcurrentSkipListSet` allows **lock-free concurrent access**, making it much faster in multi-threaded scenarios.  
+
+🔹 **Comparison with Other Sets**  
+
+| Feature | `ConcurrentSkipListSet` | `TreeSet` | `HashSet` |
+|---------|-----------------|---------|---------|
+| Thread-Safe? | ✅ Yes | ❌ No | ❌ No |
+| Sorted? | ✅ Yes (Natural Order) | ✅ Yes (Natural Order) | ❌ No |
+| Performance (Insert/Search) | ⚡ `O(log n)` | ⚡ `O(log n)` | 🔥 `O(1)` |
+| Allows `null`? | ❌ No | ❌ No | ✅ Yes |
+
+---
+
+## **3️⃣ Creating a `ConcurrentSkipListSet<T>` (Basic Example)**  
+Let's create a `ConcurrentSkipListSet` and add elements to it:  
+```java
+import java.util.concurrent.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+
+        set.add(10);
+        set.add(5);
+        set.add(20);
+        set.add(15);
+
+        System.out.println(set); // Output: [5, 10, 15, 20] (Sorted Order)
+    }
+}
+```
+✔️ **Elements are always sorted in natural order**.  
+✔️ **Thread-Safe operations without explicit locking**.  
+
+---
+
+## **4️⃣ Important Methods of `ConcurrentSkipListSet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element to the set. |
+| `remove(E e)` | Removes an element from the set. |
+| `contains(E e)` | Checks if the set contains an element. |
+| `size()` | Returns the number of elements in the set. |
+| `isEmpty()` | Checks if the set is empty. |
+| `pollFirst()` | Retrieves and removes the **smallest** element. |
+| `pollLast()` | Retrieves and removes the **largest** element. |
+| `headSet(E toElement)` | Returns elements **less than** `toElement`. |
+| `tailSet(E fromElement)` | Returns elements **greater than or equal to** `fromElement`. |
+| `subSet(E fromElement, E toElement)` | Returns a range of elements. |
+
+---
+
+## **5️⃣ Examples of `ConcurrentSkipListSet<T>` Methods**
+### **📍 1. `add(E e)`, `remove(E e)`, and `contains(E e)`**
+```java
+ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+set.add(10);
+set.add(5);
+set.add(20);
+set.remove(10);
+
+System.out.println(set.contains(10)); // Output: false
+System.out.println(set); // Output: [5, 20]
+```
+✔️ **`add()` inserts elements in sorted order.**  
+✔️ **`remove()` deletes elements safely in multi-threaded environments.**  
+✔️ **`contains()` checks if an element exists.**  
+
+---
+
+### **📍 2. `pollFirst()` and `pollLast()` → Retrieve & Remove First/Last Element**
+```java
+ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+set.add(10);
+set.add(5);
+set.add(20);
+
+System.out.println(set.pollFirst()); // Output: 5 (Removes Smallest Element)
+System.out.println(set.pollLast());  // Output: 20 (Removes Largest Element)
+System.out.println(set); // Output: [10]
+```
+
+---
+
+### **📍 3. `headSet(E toElement)` → Get elements less than a value**
+```java
+ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+set.add(10);
+set.add(5);
+set.add(20);
+set.add(15);
+
+System.out.println(set.headSet(15)); // Output: [5, 10]
+```
+✔️ **Returns all elements smaller than `15`**  
+
+---
+
+### **📍 4. `tailSet(E fromElement)` → Get elements greater than or equal to a value**
+```java
+ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+set.add(10);
+set.add(5);
+set.add(20);
+set.add(15);
+
+System.out.println(set.tailSet(15)); // Output: [15, 20]
+```
+✔️ **Returns all elements `>= 15`**  
+
+---
+
+### **📍 5. `subSet(E fromElement, E toElement)` → Get a range of elements**
+```java
+ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+set.add(10);
+set.add(5);
+set.add(20);
+set.add(15);
+
+System.out.println(set.subSet(10, 20)); // Output: [10, 15]
+```
+✔️ **Returns elements in the range `[10, 20)` (exclusive of 20)**  
+
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | `O(log n)` |
+| `remove(E e)` | `O(log n)` |
+| `contains(E e)` | `O(log n)` |
+| `pollFirst() / pollLast()` | `O(log n)` |
+| `headSet(E e) / tailSet(E e) / subSet(E e, E e)` | `O(log n)` |
+
+✔️ **Faster than `TreeSet` in concurrent scenarios.**  
+✔️ **Performs better in multi-threaded applications.**  
+
+---
+
+## **7️⃣ When to Use `ConcurrentSkipListSet<T>`?**
+| Use `ConcurrentSkipListSet` When... | Avoid `ConcurrentSkipListSet` When... |
+|--------------------------|--------------------------|
+| You need a **thread-safe sorted Set**. | You don't need sorting (Use `ConcurrentHashMap`). |
+| You need **fast concurrent reads & writes**. | You need **faster writes** (`HashSet` is faster for single-threaded use). |
+| You need **logarithmic time complexity (`O(log n)`)**. | You need constant-time lookups (`HashSet` provides `O(1)`). |
+
+---
+
+## **8️⃣ Summary**
+✔️ **Thread-Safe alternative to `TreeSet`**.  
+✔️ **Faster concurrent operations than `TreeSet`**.  
+✔️ **Uses Skip List for `O(log n)` operations**.  
+✔️ **Maintains elements in sorted order**.  
+✔️ **Does not allow `null` values**.  
+
+---
+
+Yes! Before moving to `CopyOnWriteArraySet<T>`, let's first understand **SortedSet<T>** in deep detail.  
+
+---
+
+# **📌 Deep Dive into `SortedSet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `SortedSet<T>`?**  
+A **`SortedSet<T>`** is a specialized version of the `Set<T>` interface that **maintains elements in a sorted order**.  
+It is part of the **`java.util` package** and is implemented by `TreeSet<T>`.  
+
+✔️ **No Duplicate Elements** (Like `Set<T>`)  
+✔️ **Maintains Sorted Order** (Ascending order by default)  
+✔️ **Supports Range Queries** (`headSet()`, `tailSet()`, `subSet()`)  
+✔️ **Implements `NavigableSet<T>`** (which extends `SortedSet<T>` for more flexibility)  
+
+---
+
+## **2️⃣ How `SortedSet<T>` Works Internally?**  
+- It **extends `Set<T>`** and enforces a **sorting order**.  
+- It can use **natural ordering (Comparable)** or **custom ordering (Comparator)**.  
+- The most common implementation is **`TreeSet<T>`**, which is based on a **Red-Black Tree**.  
+- The **sorting mechanism is automatic**, meaning elements are always stored in sorted order.  
+
+---
+
+## **3️⃣ Declaring a `SortedSet<T>` in Java**  
+Since `SortedSet<T>` is an interface, we use `TreeSet<T>` as an implementation.  
+
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        SortedSet<Integer> sortedSet = new TreeSet<>();
+
+        sortedSet.add(30);
+        sortedSet.add(10);
+        sortedSet.add(20);
+        sortedSet.add(50);
+        sortedSet.add(40);
+
+        System.out.println(sortedSet); // Output: [10, 20, 30, 40, 50] (Sorted Order)
+    }
+}
+```
+✔️ **Automatically maintains sorted order**.  
+✔️ **Duplicates are not allowed**.  
+
+---
+
+## **4️⃣ Important Methods of `SortedSet<T>`**
+| Method | Description |
+|--------|------------|
+| `first()` | Returns the first (smallest) element. |
+| `last()` | Returns the last (largest) element. |
+| `headSet(E toElement)` | Returns elements **less than** `toElement`. |
+| `tailSet(E fromElement)` | Returns elements **greater than or equal to** `fromElement`. |
+| `subSet(E fromElement, E toElement)` | Returns elements within the range `[fromElement, toElement)`. |
+| `comparator()` | Returns the comparator used for ordering (or `null` for natural ordering). |
+
+---
+
+## **5️⃣ Examples of `SortedSet<T>` Methods**
+### **📍 1. `first()` and `last()` → Get First and Last Element**
+```java
+SortedSet<Integer> set = new TreeSet<>();
+set.add(10);
+set.add(30);
+set.add(20);
+set.add(50);
+set.add(40);
+
+System.out.println(set.first()); // Output: 10
+System.out.println(set.last());  // Output: 50
+```
+✔️ **Retrieves the smallest and largest elements.**  
+
+---
+
+### **📍 2. `headSet(E toElement)` → Get Elements Less Than a Value**
+```java
+SortedSet<Integer> set = new TreeSet<>();
+set.add(10);
+set.add(20);
+set.add(30);
+set.add(40);
+set.add(50);
+
+System.out.println(set.headSet(30)); // Output: [10, 20]
+```
+✔️ **Returns elements smaller than `30`**.  
+
+---
+
+### **📍 3. `tailSet(E fromElement)` → Get Elements Greater Than or Equal to a Value**
+```java
+SortedSet<Integer> set = new TreeSet<>();
+set.add(10);
+set.add(20);
+set.add(30);
+set.add(40);
+set.add(50);
+
+System.out.println(set.tailSet(30)); // Output: [30, 40, 50]
+```
+✔️ **Returns elements `>= 30`**.  
+
+---
+
+### **📍 4. `subSet(E fromElement, E toElement)` → Get a Range of Elements**
+```java
+SortedSet<Integer> set = new TreeSet<>();
+set.add(10);
+set.add(20);
+set.add(30);
+set.add(40);
+set.add(50);
+
+System.out.println(set.subSet(20, 40)); // Output: [20, 30]
+```
+✔️ **Returns elements in the range `[20, 40)` (exclusive of 40)**.  
+
+---
+
+### **📍 5. `comparator()` → Get the Sorting Comparator**
+```java
+SortedSet<Integer> set = new TreeSet<>();
+System.out.println(set.comparator()); // Output: null (Natural Ordering)
+```
+✔️ **Returns `null` if elements are sorted naturally**.  
+
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | `O(log n)` |
+| `remove(E e)` | `O(log n)` |
+| `contains(E e)` | `O(log n)` |
+| `first() / last()` | `O(1)` |
+| `headSet(E e) / tailSet(E e) / subSet(E e, E e)` | `O(log n)` |
+
+✔️ **Uses a Red-Black Tree for efficient sorting**.  
+✔️ **Faster than `LinkedList` but slower than `HashSet` for insertions/removals**.  
+
+---
+
+## **7️⃣ When to Use `SortedSet<T>`?**
+| Use `SortedSet` When... | Avoid `SortedSet` When... |
+|------------------------|--------------------------|
+| You need **automatically sorted elements**. | You don't care about ordering (Use `HashSet`). |
+| You need **range queries** (`headSet()`, `tailSet()`, etc.). | You need **fast lookups (`O(1)`)** (Use `HashSet`). |
+| You need **logarithmic time complexity (`O(log n)`)**. | You need **constant-time inserts/deletes (`O(1)`)**. |
+
+---
+
+## **8️⃣ Summary**
+✔️ **`SortedSet<T>` maintains sorted order**.  
+✔️ **Implemented using `TreeSet<T>` (Red-Black Tree)**.  
+✔️ **Supports range queries like `headSet()`, `tailSet()`, `subSet()`**.  
+✔️ **Does not allow duplicate elements**.  
+✔️ **Faster than `LinkedList`, but slower than `HashSet`**.  
+
+---
+
+# **📌 Deep Dive into `CopyOnWriteArraySet<T>` in Java (Easy Explanation)**  
+
+## **1️⃣ What is `CopyOnWriteArraySet<T>`?**  
+A **`CopyOnWriteArraySet<T>`** is a thread-safe implementation of the `Set<T>` interface. It is part of the **`java.util.concurrent`** package and is designed for **concurrent environments** where reads are frequent but writes (modifications) are rare.
+
+✔️ **Thread-Safe** (No need for manual synchronization)  
+✔️ **No Duplicate Elements** (Like `Set<T>`)  
+✔️ **Based on `CopyOnWriteArrayList<T>`** (Internally uses an array)  
+✔️ **Best for Scenarios with Frequent Reads and Rare Writes**  
+
+---
+
+## **2️⃣ How `CopyOnWriteArraySet<T>` Works Internally?**  
+- It is backed by a **`CopyOnWriteArrayList<T>`**.  
+- Every time a **modification (add/remove) occurs**, it creates a **new copy of the underlying array**.  
+- **Iterators are fail-safe**, meaning they do not throw `ConcurrentModificationException`.  
+- **Best suited for scenarios where reading happens more frequently than writing**.  
+
+---
+
+## **3️⃣ Declaring a `CopyOnWriteArraySet<T>` in Java**  
+Since `CopyOnWriteArraySet<T>` is a concrete class, we can instantiate it directly.
+
+```java
+import java.util.concurrent.CopyOnWriteArraySet;
+
+public class Main {
+    public static void main(String[] args) {
+        CopyOnWriteArraySet<Integer> set = new CopyOnWriteArraySet<>();
+
+        set.add(10);
+        set.add(20);
+        set.add(30);
+        set.add(10); // Duplicate, will not be added
+
+        System.out.println(set); // Output: [10, 20, 30]
+    }
+}
+```
+✔️ **Automatically avoids duplicates**.  
+✔️ **Thread-safe without explicit locks**.  
+
+---
+
+## **4️⃣ Important Methods of `CopyOnWriteArraySet<T>`**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element to the set (if not already present). |
+| `remove(E e)` | Removes the element from the set. |
+| `contains(E e)` | Checks if an element is present in the set. |
+| `size()` | Returns the number of elements in the set. |
+| `iterator()` | Returns a fail-safe iterator. |
+| `toArray()` | Converts the set into an array. |
+
+---
+
+## **5️⃣ Examples of `CopyOnWriteArraySet<T>` Methods**
+### **📍 1. `add()` and `remove()` → Add and Remove Elements**
+```java
+import java.util.concurrent.CopyOnWriteArraySet;
+
+public class Main {
+    public static void main(String[] args) {
+        CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
+
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Cherry");
+
+        System.out.println(set); // Output: [Apple, Banana, Cherry]
+
+        set.remove("Banana");
+        System.out.println(set); // Output: [Apple, Cherry]
+    }
+}
+```
+✔️ **Handles duplicates and thread safety automatically**.  
+
+---
+
+### **📍 2. `contains()` → Check If an Element Exists**
+```java
+CopyOnWriteArraySet<Integer> set = new CopyOnWriteArraySet<>();
+set.add(100);
+set.add(200);
+set.add(300);
+
+System.out.println(set.contains(200)); // Output: true
+System.out.println(set.contains(400)); // Output: false
+```
+✔️ **Efficiently checks for element presence**.  
+
+---
+
+### **📍 3. `iterator()` → Fail-Safe Iterator**
+```java
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Iterator;
+
+public class Main {
+    public static void main(String[] args) {
+        CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
+        set.add("A");
+        set.add("B");
+        set.add("C");
+
+        Iterator<String> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            set.add("D"); // No ConcurrentModificationException!
+        }
+
+        System.out.println(set); // Output: [A, B, C, D]
+    }
+}
+```
+✔️ **Iterator does not throw `ConcurrentModificationException`**.  
+✔️ **Changes made while iterating will not affect the current iterator**.  
+
+---
+
+## **6️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `add(E e)` | `O(n)` (Creates a new copy of the array) |
+| `remove(E e)` | `O(n)` |
+| `contains(E e)` | `O(n)` |
+| `iteration` | `O(n)` |
+
+✔️ **Best for multi-threaded environments with frequent reads and rare writes**.  
+✔️ **Not suitable for scenarios with frequent insertions/removals (`O(n)`)**.  
+
+---
+
+## **7️⃣ When to Use `CopyOnWriteArraySet<T>`?**
+| Use `CopyOnWriteArraySet<T>` When... | Avoid `CopyOnWriteArraySet<T>` When... |
+|--------------------------------------|--------------------------------------|
+| **Frequent reads, rare writes**. | **Frequent additions/removals** (`O(n)`). |
+| **Multiple threads accessing the set**. | **Performance is critical** (Use `HashSet` for faster operations). |
+| **You need fail-safe iterators**. | **You have large datasets** (Memory overhead is high). |
+
+---
+
+## **8️⃣ Summary**
+✔️ **Thread-safe `Set<T>` implementation** (No need for manual synchronization).  
+✔️ **Uses `CopyOnWriteArrayList<T>` internally** (Every modification creates a new copy).  
+✔️ **Best for read-heavy operations in multi-threaded environments**.  
+✔️ **Fail-safe iterators (No `ConcurrentModificationException`)**.  
+✔️ **Not suitable for frequent writes (`O(n)` complexity)**.  
+
+---
+
+
