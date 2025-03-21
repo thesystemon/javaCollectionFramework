@@ -3270,4 +3270,989 @@ public class Main {
 
 ---
 
+# **📌 Chapter 5: Queue Interface (FIFO Data Structure) in Java (Deep and Easy Explanation)**  
+
+---
+
+## **1️⃣ What is a Queue?**
+A **Queue** is a **FIFO (First-In-First-Out)** data structure, meaning the **first element added** will be the **first element removed**.
+
+✔️ **Imagine a queue at a movie ticket counter:**  
+- The first person who arrives will be the first one to get the ticket.  
+- The next person waits in line until it's their turn.  
+
+✔️ **Real-Life Examples of Queues:**  
+- **Print Queue:** The first document sent to the printer gets printed first.  
+- **Call Center Support:** The first customer in line gets connected to an agent first.  
+
+✔️ **Java Provides `Queue<T>` Interface**  
+- It is part of **`java.util` package** and extends the `Collection<T>` interface.  
+- **Different Implementations** are available based on requirements.  
+
+---
+
+## **2️⃣ Why Do We Need a Queue in Java?**
+🔹 **Problem with Arrays & Lists:**  
+- `ArrayList` and `LinkedList` allow insertion and removal, but they do **not follow FIFO automatically**.  
+- Using **`remove(0)`** in an `ArrayList` is slow (`O(n)`) because all elements shift left.  
+
+🔹 **Queue is the Solution:**  
+- Efficiently **adds elements at the rear** and **removes from the front** (`O(1)`).  
+- Provides **built-in methods** for managing elements.  
+
+---
+
+## **3️⃣ Queue Interface and Its Methods**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element at the end (throws exception if full). |
+| `offer(E e)` | Adds an element at the end (returns false if full). |
+| `remove()` | Removes and returns the front element (throws exception if empty). |
+| `poll()` | Removes and returns the front element (returns null if empty). |
+| `element()` | Retrieves the front element without removing (throws exception if empty). |
+| `peek()` | Retrieves the front element without removing (returns null if empty). |
+
+✔️ **Use `offer()` and `poll()` instead of `add()` and `remove()` to avoid exceptions.**  
+
+---
+
+## **4️⃣ Queue Hierarchy in Java**
+```
+Queue<T>  (Interface)
+│
+├── LinkedList<T>  (Doubly Linked List Implementation)
+│
+├── PriorityQueue<T>  (Min-Heap Implementation)
+│
+├── Deque<T>  (Double-Ended Queue Interface)
+│   ├── ArrayDeque<T>  (Array-Based Deque)
+│   ├── LinkedList<T>  (Also Implements Deque)
+│
+├── ConcurrentLinkedQueue<T>  (Thread-Safe, Non-Blocking Queue)
+│
+├── BlockingQueue<T>  (Used in Multi-Threading)
+│   ├── ArrayBlockingQueue<T>
+│   ├── LinkedBlockingQueue<T>
+│   ├── PriorityBlockingQueue<T>
+│   ├── SynchronousQueue<T>
+│   ├── DelayQueue<T>
+```
+
+---
+
+## **5️⃣ Types of Queue Implementations in Java**
+Let's go through the different types of `Queue<T>` implementations.
+
+### **1️⃣ LinkedList<T> as a Queue**
+- Implements `Queue<T>`, `Deque<T>`, and `List<T>`.
+- Can be used as **FIFO Queue** or **Deque**.
+- Not thread-safe.
+
+### **2️⃣ PriorityQueue<T>**
+- Uses **Min-Heap** internally.
+- Orders elements based on **natural ordering or custom comparator**.
+- Does **not** guarantee FIFO.
+
+### **3️⃣ Deque<T> (Double-Ended Queue)**
+- Allows insertion and deletion from **both ends**.
+- `ArrayDeque<T>` and `LinkedList<T>` implement `Deque<T>`.
+
+### **4️⃣ ArrayDeque<T> (Resizable Array-Based Deque)**
+- Faster than `Stack<T>` for LIFO.
+- Faster than `LinkedList<T>` for FIFO.
+
+### **5️⃣ ConcurrentLinkedQueue<T>**
+- **Thread-safe implementation** of `Queue<T>`.
+- **Non-blocking** (uses **CAS** instead of locks).
+
+### **6️⃣ BlockingQueue<T> (Used in Multi-Threading)**
+- Designed for **multi-threading scenarios**.
+- Blocks producer/consumer threads if the queue is full/empty.
+- Common implementations:
+  - `ArrayBlockingQueue<T>` → **Fixed-size array-based blocking queue**.
+  - `LinkedBlockingQueue<T>` → **Linked list-based blocking queue**.
+  - `PriorityBlockingQueue<T>` → **Priority-based blocking queue**.
+  - `SynchronousQueue<T>` → **Transfers elements between threads directly**.
+  - `DelayQueue<T>` → **Stores elements with delayed processing**.
+
+---
+
+## **6️⃣ Performance Comparison of Queue Implementations**
+| Queue Type | Insertion (`O`) | Deletion (`O`) | Thread-Safe? |
+|------------|--------------|-------------|--------------|
+| `LinkedList<T>` | `O(1)` | `O(1)` | ❌ No |
+| `PriorityQueue<T>` | `O(log n)` | `O(log n)` | ❌ No |
+| `ArrayDeque<T>` | `O(1)` | `O(1)` | ❌ No |
+| `ConcurrentLinkedQueue<T>` | `O(1)` | `O(1)` | ✅ Yes (Non-Blocking) |
+| `BlockingQueue<T>` | `O(1)` | `O(1)` | ✅ Yes (Blocking) |
+
+---
+
+## **7️⃣ When to Use Which Queue?**
+| **Use Case** | **Best Queue Implementation** |
+|-------------|-----------------------------|
+| Simple FIFO operations | `LinkedList<T>` |
+| Priority-based processing | `PriorityQueue<T>` |
+| Double-ended queue operations | `ArrayDeque<T>` |
+| Multi-threaded queue (non-blocking) | `ConcurrentLinkedQueue<T>` |
+| Multi-threaded queue (blocking) | `BlockingQueue<T>` |
+
+---
+
+## **📌 Summary**
+✔️ **Queue<T> follows FIFO (First-In-First-Out).**  
+✔️ **Different implementations available:** `LinkedList<T>`, `PriorityQueue<T>`, `ArrayDeque<T>`, `ConcurrentLinkedQueue<T>`, `BlockingQueue<T>`.  
+✔️ **Use `offer()` and `poll()` instead of `add()` and `remove()` to avoid exceptions.**  
+✔️ **Choose the right queue based on performance needs (thread-safety, ordering, blocking, etc.).**  
+
+---
+
+# **🚀 LinkedList<T> as a Queue (Deep & Easy Explanation)**  
+
+---
+
+## **1️⃣ What is LinkedList<T> as a Queue?**
+`LinkedList<T>` is a **doubly linked list** that implements the `Queue<T>` interface.  
+It allows **FIFO (First-In-First-Out) operations**, making it a **good choice** for a queue.  
+
+✔️ **Key Features of LinkedList as a Queue:**  
+- **Uses Nodes** (Each element points to the next and previous element).  
+- **Fast Insertions & Deletions (`O(1)`)** at both ends.  
+- **Maintains Order** (Insertion order is preserved).  
+- **Allows Null Values.**  
+- **Not Thread-Safe** (Needs external synchronization for multi-threading).  
+
+✔️ **Real-Life Example:**  
+- **Train Coaches:** The first coach attached is the first to leave the station.  
+
+---
+
+## **2️⃣ How LinkedList<T> Works as a Queue?**
+✔️ **Queue Operations:**  
+1️⃣ **Enqueue (Add element at the rear)** → `offer(E e)` / `add(E e)`  
+2️⃣ **Dequeue (Remove element from the front)** → `poll()` / `remove()`  
+3️⃣ **Peek (Retrieve front element without removing)** → `peek()` / `element()`  
+
+📌 **Internal Working:**  
+- **Each element is stored in a Node (`Node<E>`)**  
+- **Two pointers (`head` and `tail`) keep track of the front & rear.**  
+- **Adding is done at `tail`**, removing is done from `head`.**  
+
+```
+HEAD → [10] → [20] → [30] → TAIL
+```
+
+✔️ **Adding 40 to Queue (`offer(40)`)**  
+```
+HEAD → [10] → [20] → [30] → [40] → TAIL
+```
+
+✔️ **Removing (`poll()`)**  
+```
+HEAD → [20] → [30] → [40] → TAIL  (10 is removed)
+```
+
+---
+
+## **3️⃣ LinkedList<T> Methods for Queue**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element to the queue (throws exception if full). |
+| `offer(E e)` | Adds an element to the queue (returns `false` if full). |
+| `remove()` | Removes the front element (throws exception if empty). |
+| `poll()` | Removes the front element (returns `null` if empty). |
+| `element()` | Retrieves the front element without removing (throws exception if empty). |
+| `peek()` | Retrieves the front element without removing (returns `null` if empty). |
+
+---
+
+## **4️⃣ Implementation of LinkedList<T> as a Queue**
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class LinkedListQueueExample {
+    public static void main(String[] args) {
+        // Create a Queue using LinkedList
+        Queue<Integer> queue = new LinkedList<>();
+
+        // Adding elements to the queue
+        queue.offer(10);
+        queue.offer(20);
+        queue.offer(30);
+
+        System.out.println("Queue: " + queue); // [10, 20, 30]
+
+        // Peek (front element without removing)
+        System.out.println("Front Element: " + queue.peek()); // 10
+
+        // Removing elements
+        System.out.println("Removed: " + queue.poll()); // 10
+        System.out.println("Queue after removal: " + queue); // [20, 30]
+
+        // Checking if queue is empty
+        System.out.println("Is queue empty? " + queue.isEmpty()); // false
+    }
+}
+```
+
+✔️ **Output:**
+```
+Queue: [10, 20, 30]
+Front Element: 10
+Removed: 10
+Queue after removal: [20, 30]
+Is queue empty? false
+```
+
+---
+
+## **5️⃣ How LinkedList<T> Works Internally as a Queue**
+✔️ **Structure:**  
+- **Each element is stored in a `Node<E>`.**  
+- **Each Node contains:**  
+  - `E data` (Element Value)  
+  - `Node<E> next` (Pointer to next node)  
+  - `Node<E> prev` (Pointer to previous node)  
+
+✔️ **Internal Representation:**
+```
+head → [10] ↔ [20] ↔ [30] → tail
+```
+✔️ **Adding an Element (`offer(40)`)**
+```
+head → [10] ↔ [20] ↔ [30] ↔ [40] → tail
+```
+✔️ **Removing an Element (`poll()`)**
+```
+head → [20] ↔ [30] ↔ [40] → tail
+```
+
+---
+
+## **6️⃣ Performance Analysis of LinkedList as a Queue**
+| Operation | Complexity (`O`) |
+|-----------|----------------|
+| `offer(E e)` (Add to rear) | `O(1)` |
+| `poll()` (Remove from front) | `O(1)` |
+| `peek()` (Retrieve front) | `O(1)` |
+| Search | `O(n)` |
+
+✔️ **Why is LinkedList Fast for Queue?**  
+- **`O(1)` insertion and deletion at both ends** (No shifting needed).  
+- **`O(n)` search** (Not efficient for finding elements).  
+
+---
+
+## **7️⃣ When to Use LinkedList as a Queue?**
+✔️ **Use `LinkedList<T>` when:**  
+✅ **Fast Insertion & Deletion (`O(1)`) are needed.**  
+✅ **You don’t need random access (`O(n)`).**  
+✅ **Maintaining insertion order is important.**  
+✅ **You need a flexible data structure (Can act as a Queue & Deque).**  
+
+❌ **Don’t use LinkedList<T> when:**  
+🚫 **You need frequent searching (`O(n)`).**  
+🚫 **Memory consumption is a concern (Each node requires extra pointers).**  
+
+---
+
+## **📌 Summary**
+✔️ **`LinkedList<T>` implements `Queue<T>`.**  
+✔️ **FIFO operations:** Insert at the tail, remove from the head.  
+✔️ **Efficient `O(1)` insertion & deletion, but `O(n)` search.**  
+✔️ **Uses `Node<E>` (doubly linked list structure).**  
+✔️ **Best for scenarios needing fast insert/remove, but not for random access.**  
+
+---
+
+# **🚀 PriorityQueue<T> (Deep & Easy Explanation)**  
+
+---
+
+## **1️⃣ What is a PriorityQueue<T>?**
+A **PriorityQueue<T>** is a special type of queue where **elements are ordered based on priority** rather than insertion order.  
+It is based on **Heap Data Structure** (Min-Heap or Max-Heap).  
+
+✔️ **Key Features of PriorityQueue:**  
+- **Elements are sorted based on priority (Natural or Custom Comparator).**  
+- **By default, it is a Min-Heap (Smallest element at the top).**  
+- **Does NOT allow `null` values.**  
+- **Not thread-safe** (Use `PriorityBlockingQueue` for multi-threading).  
+
+✔️ **Real-Life Example:**  
+- **Hospital Emergency Room:** Patients with serious conditions are treated first.  
+- **Dijkstra’s Algorithm:** Used in shortest path finding.  
+
+---
+
+## **2️⃣ How PriorityQueue<T> Works?**
+✔️ **Queue Operations:**  
+1️⃣ **Enqueue (Add element in the correct position based on priority)** → `offer(E e)` / `add(E e)`  
+2️⃣ **Dequeue (Remove element with highest priority)** → `poll()` / `remove()`  
+3️⃣ **Peek (Retrieve highest-priority element without removing)** → `peek()` / `element()`  
+
+📌 **Default Behavior:**  
+- **Min-Heap (Smallest element first).**  
+- **Max-Heap (Largest element first) needs a custom comparator.**  
+
+```
+Min-Heap:
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+pq.offer(30);
+pq.offer(10);
+pq.offer(20);
+
+Internally Stored:  
+[10, 30, 20]   → 10 is the highest priority (Min-Heap)
+```
+
+✔️ **Adding 5 to Queue (`offer(5)`)**  
+```
+[5, 10, 20, 30]   → 5 moves to the top
+```
+
+✔️ **Removing (`poll()`)**  
+```
+[10, 30, 20]   → 5 is removed
+```
+
+---
+
+## **3️⃣ PriorityQueue<T> Methods**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element to the queue (throws exception if full). |
+| `offer(E e)` | Adds an element to the queue (returns `false` if full). |
+| `remove()` | Removes the highest-priority element (throws exception if empty). |
+| `poll()` | Removes the highest-priority element (returns `null` if empty). |
+| `element()` | Retrieves the highest-priority element without removing (throws exception if empty). |
+| `peek()` | Retrieves the highest-priority element without removing (returns `null` if empty). |
+
+---
+
+## **4️⃣ Implementation of PriorityQueue<T>**
+```java
+import java.util.PriorityQueue;
+
+public class PriorityQueueExample {
+    public static void main(String[] args) {
+        // Create a Min-Heap (default)
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        // Adding elements
+        pq.offer(30);
+        pq.offer(10);
+        pq.offer(20);
+
+        System.out.println("PriorityQueue: " + pq); // Output: [10, 30, 20]
+
+        // Peek (Retrieve highest priority element)
+        System.out.println("Top Element: " + pq.peek()); // Output: 10
+
+        // Removing elements
+        System.out.println("Removed: " + pq.poll()); // Output: 10
+        System.out.println("PriorityQueue after removal: " + pq); // Output: [20, 30]
+    }
+}
+```
+
+✔️ **Output:**
+```
+PriorityQueue: [10, 30, 20]
+Top Element: 10
+Removed: 10
+PriorityQueue after removal: [20, 30]
+```
+
+---
+
+## **5️⃣ How PriorityQueue Works Internally?**
+✔️ **Structure:**  
+- **Uses a Min-Heap (Binary Heap) internally.**  
+- **Heap is stored in an array for efficient retrieval.**  
+- **Insertion follows heap properties (smallest at root).**  
+- **Removal maintains heap properties (restructure after deletion).**  
+
+✔️ **Internal Representation (Heap Structure)**
+```
+        10
+       /  \
+     30    20
+```
+✔️ **Adding 5 (`offer(5)`)**
+```
+        5
+       /  \
+     10    20
+    /
+  30
+```
+✔️ **Removing (`poll()`)**
+```
+        10
+       /  \
+     30    20
+```
+
+---
+
+## **6️⃣ Custom Comparator for Max-Heap (Highest First)**
+By default, `PriorityQueue` is a **Min-Heap**. To make it a **Max-Heap**, use a custom comparator.
+
+```java
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+public class MaxHeapExample {
+    public static void main(String[] args) {
+        // Max-Heap using Comparator
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+
+        maxHeap.offer(30);
+        maxHeap.offer(10);
+        maxHeap.offer(20);
+
+        System.out.println("Max-Heap PriorityQueue: " + maxHeap); // Output: [30, 10, 20]
+
+        System.out.println("Top Element: " + maxHeap.peek()); // Output: 30
+        System.out.println("Removed: " + maxHeap.poll()); // Output: 30
+    }
+}
+```
+✔️ **Output:**
+```
+Max-Heap PriorityQueue: [30, 10, 20]
+Top Element: 30
+Removed: 30
+```
+
+---
+
+## **7️⃣ Performance Analysis of PriorityQueue<T>**
+| Operation | Complexity (`O`) |
+|-----------|----------------|
+| `offer(E e)` (Insertion) | `O(log n)` |
+| `poll()` (Remove highest priority) | `O(log n)` |
+| `peek()` (Retrieve highest priority) | `O(1)` |
+
+✔️ **Why is PriorityQueue Fast?**  
+- **Uses Heap structure (Efficient insertion/removal).**  
+- **Heap properties ensure quick access to the highest priority.**  
+
+---
+
+## **8️⃣ When to Use PriorityQueue?**
+✔️ **Use `PriorityQueue<T>` when:**  
+✅ **You need efficient priority-based retrieval.**  
+✅ **You need a Min-Heap (`O(log n)` operations).**  
+✅ **You need a Max-Heap (With custom comparator).**  
+
+❌ **Don’t use PriorityQueue when:**  
+🚫 **You need FIFO ordering (Use `LinkedList` for Queue).**  
+🚫 **You need thread-safety (Use `PriorityBlockingQueue`).**  
+🚫 **You need fast random access (`O(n)`).**  
+
+---
+
+## **📌 Summary**
+✔️ **`PriorityQueue<T>` orders elements based on priority.**  
+✔️ **Min-Heap by default (Smallest element first).**  
+✔️ **Supports custom comparator for Max-Heap.**  
+✔️ **Operations are `O(log n)`, making it efficient.**  
+✔️ **Best for priority-based tasks like scheduling, pathfinding, etc.**  
+
+---
+
+# **🚀 Deque<T> (Double-Ended Queue) - Deep & Easy Explanation**  
+
+---
+
+## **1️⃣ What is a Deque<T>?**  
+A **Deque (Double-Ended Queue)** is a special type of queue where **elements can be added or removed from both ends (front & rear).**  
+
+✔️ **Key Features of Deque:**  
+- **Supports FIFO & LIFO operations.**  
+- **Efficient insertions/removals from both ends.**  
+- **Allows `null` values (except in concurrent implementations).**  
+- **Faster than `LinkedList` for queue operations.**  
+- **Thread-safe versions exist (`ConcurrentLinkedDeque`).**  
+
+✔️ **Real-Life Example:**  
+- **Deque in Browsers:** Back & Forward navigation history.  
+- **Job Scheduling:** Tasks can be added at the beginning or end.  
+
+---
+
+## **2️⃣ How Deque<T> Works?**
+✔️ **Operations on Both Ends:**  
+1️⃣ **Add to Front** → `addFirst(E e)` / `offerFirst(E e)`  
+2️⃣ **Remove from Front** → `removeFirst()` / `pollFirst()`  
+3️⃣ **Add to Rear** → `addLast(E e)` / `offerLast(E e)`  
+4️⃣ **Remove from Rear** → `removeLast()` / `pollLast()`  
+5️⃣ **Peek (Retrieve without removing)** → `peekFirst()` / `peekLast()`  
+
+✔️ **Deque as a Queue (FIFO)**
+```
+Front ➝ [1, 2, 3, 4, 5] ➝ Rear
+```
+✔️ **Deque as a Stack (LIFO)**
+```
+Top ➝ [1, 2, 3, 4, 5] (Last In First Out)
+```
+
+---
+
+## **3️⃣ Deque<T> Methods**
+| Method | Description |
+|--------|------------|
+| `addFirst(E e)` | Adds element at the front (throws exception if full). |
+| `offerFirst(E e)` | Adds element at the front (returns `false` if full). |
+| `addLast(E e)` | Adds element at the rear (throws exception if full). |
+| `offerLast(E e)` | Adds element at the rear (returns `false` if full). |
+| `removeFirst()` | Removes the first element (throws exception if empty). |
+| `pollFirst()` | Removes the first element (returns `null` if empty). |
+| `removeLast()` | Removes the last element (throws exception if empty). |
+| `pollLast()` | Removes the last element (returns `null` if empty). |
+| `peekFirst()` | Retrieves the first element without removing. |
+| `peekLast()` | Retrieves the last element without removing. |
+
+---
+
+## **4️⃣ Implementation of Deque<T>**
+```java
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class DequeExample {
+    public static void main(String[] args) {
+        // Creating a Deque
+        Deque<Integer> deque = new LinkedList<>();
+
+        // Adding elements at both ends
+        deque.addFirst(10);
+        deque.addLast(20);
+        deque.offerFirst(5);
+        deque.offerLast(25);
+
+        System.out.println("Deque: " + deque); // Output: [5, 10, 20, 25]
+
+        // Retrieving elements
+        System.out.println("First Element: " + deque.peekFirst()); // Output: 5
+        System.out.println("Last Element: " + deque.peekLast()); // Output: 25
+
+        // Removing elements from both ends
+        System.out.println("Removed First: " + deque.pollFirst()); // Output: 5
+        System.out.println("Removed Last: " + deque.pollLast()); // Output: 25
+
+        System.out.println("Deque after removal: " + deque); // Output: [10, 20]
+    }
+}
+```
+
+✔️ **Output:**
+```
+Deque: [5, 10, 20, 25]
+First Element: 5
+Last Element: 25
+Removed First: 5
+Removed Last: 25
+Deque after removal: [10, 20]
+```
+
+---
+
+## **5️⃣ How Deque Works Internally?**
+✔️ **Structure:**  
+- **Uses a Doubly Linked List or Resizable Array (ArrayDeque).**  
+- **Efficient insertions/removals at both ends (`O(1)`).**  
+
+✔️ **Internal Representation (Doubly Linked List)**
+```
+ NULL ← [5] ⇄ [10] ⇄ [20] ⇄ [25] → NULL
+```
+✔️ **Adding 30 at front (`addFirst(30)`)**
+```
+ NULL ← [30] ⇄ [5] ⇄ [10] ⇄ [20] ⇄ [25] → NULL
+```
+✔️ **Removing last (`pollLast()`)**
+```
+ NULL ← [30] ⇄ [5] ⇄ [10] ⇄ [20] → NULL
+```
+
+---
+
+## **6️⃣ ArrayDeque<T> (Faster Alternative to LinkedList)**
+**ArrayDeque** is an array-based **double-ended queue**, faster than `LinkedList`.  
+
+✔️ **Why Use `ArrayDeque` Instead of `LinkedList`?**  
+- **No overhead of node pointers (faster).**  
+- **Resizable array grows automatically.**  
+- **Faster insertion/removal (`O(1)`).**  
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class ArrayDequeExample {
+    public static void main(String[] args) {
+        Deque<Integer> arrayDeque = new ArrayDeque<>();
+
+        arrayDeque.addFirst(10);
+        arrayDeque.addLast(20);
+        arrayDeque.offerFirst(5);
+        arrayDeque.offerLast(25);
+
+        System.out.println("ArrayDeque: " + arrayDeque); // Output: [5, 10, 20, 25]
+    }
+}
+```
+
+---
+
+## **7️⃣ Performance Analysis of Deque<T>**
+| Operation | LinkedList `O(n)` | ArrayDeque `O(1)` |
+|-----------|----------------|----------------|
+| `addFirst(E e)` | `O(1)` | `O(1)` |
+| `addLast(E e)` | `O(1)` | `O(1)` |
+| `removeFirst()` | `O(1)` | `O(1)` |
+| `removeLast()` | `O(1)` | `O(1)` |
+| `getFirst()` | `O(1)` | `O(1)` |
+| `getLast()` | `O(1)` | `O(1)` |
+
+✔️ **`ArrayDeque` is the best choice for Deque operations.**  
+
+---
+
+## **8️⃣ When to Use Deque?**
+✔️ **Use `Deque<T>` when:**  
+✅ **You need insertion/removal from both ends.**  
+✅ **You need a fast, resizable queue.**  
+✅ **You need LIFO & FIFO behavior.**  
+
+❌ **Don’t use Deque when:**  
+🚫 **You need indexed access (Use `ArrayList`).**  
+🚫 **You need thread-safety (Use `ConcurrentLinkedDeque`).**  
+
+---
+
+## **📌 Summary**
+✔️ **Deque supports adding/removing from both ends.**  
+✔️ **Uses `LinkedList` (Doubly Linked List) or `ArrayDeque` (Resizable Array).**  
+✔️ **Faster than `LinkedList` for queue operations.**  
+✔️ **Best choice: `ArrayDeque` (Faster than `LinkedList`).**  
+✔️ **Operations are `O(1)`, making it efficient.**  
+
+---
+
+# 🚀 **ArrayDeque<T> – Deep Dive & Easy Explanation**  
+
+---
+
+## **1️⃣ What is ArrayDeque<T>?**
+An **ArrayDeque (Array Double-Ended Queue)** is a **resizable array-based implementation of Deque**, which allows **efficient insertion and removal of elements from both ends**.  
+
+✔️ **Key Features:**  
+- **Faster than `LinkedList<T>` for Deque operations.**  
+- **Dynamic resizing (no fixed capacity like an array).**  
+- **Does NOT allow `null` elements (unlike `LinkedList`).**  
+- **Not thread-safe (use `ConcurrentLinkedDeque` for multi-threading).**  
+
+📌 **Real-Life Example:**  
+- **Task Scheduling** – Jobs added at the front or end of the queue.  
+- **Undo-Redo Feature** – Last action undone (LIFO), or first action redone (FIFO).  
+
+---
+
+## **2️⃣ How Does ArrayDeque<T> Work?**
+📌 **Operations on Both Ends**  
+1️⃣ **Add at Front** → `addFirst(E e)` / `offerFirst(E e)`  
+2️⃣ **Remove from Front** → `removeFirst()` / `pollFirst()`  
+3️⃣ **Add at Rear** → `addLast(E e)` / `offerLast(E e)`  
+4️⃣ **Remove from Rear** → `removeLast()` / `pollLast()`  
+5️⃣ **Peek (Retrieve without removing)** → `peekFirst()` / `peekLast()`  
+
+✔️ **ArrayDeque as a Queue (FIFO)**
+```
+Front ➝ [1, 2, 3, 4, 5] ➝ Rear
+```
+✔️ **ArrayDeque as a Stack (LIFO)**
+```
+Top ➝ [1, 2, 3, 4, 5] (Last In First Out)
+```
+
+---
+
+## **3️⃣ Methods of ArrayDeque<T>**
+| Method | Description |
+|--------|------------|
+| `addFirst(E e)` | Adds an element at the front (throws exception if full). |
+| `offerFirst(E e)` | Adds an element at the front (returns `false` if full). |
+| `addLast(E e)` | Adds an element at the rear (throws exception if full). |
+| `offerLast(E e)` | Adds an element at the rear (returns `false` if full). |
+| `removeFirst()` | Removes the first element (throws exception if empty). |
+| `pollFirst()` | Removes the first element (returns `null` if empty). |
+| `removeLast()` | Removes the last element (throws exception if empty). |
+| `pollLast()` | Removes the last element (returns `null` if empty). |
+| `peekFirst()` | Retrieves the first element without removing. |
+| `peekLast()` | Retrieves the last element without removing. |
+
+---
+
+## **4️⃣ Implementation of ArrayDeque<T>**
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class ArrayDequeExample {
+    public static void main(String[] args) {
+        // Creating an ArrayDeque
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        // Adding elements at both ends
+        deque.addFirst(10);
+        deque.addLast(20);
+        deque.offerFirst(5);
+        deque.offerLast(25);
+
+        System.out.println("ArrayDeque: " + deque); // Output: [5, 10, 20, 25]
+
+        // Retrieving elements
+        System.out.println("First Element: " + deque.peekFirst()); // Output: 5
+        System.out.println("Last Element: " + deque.peekLast()); // Output: 25
+
+        // Removing elements from both ends
+        System.out.println("Removed First: " + deque.pollFirst()); // Output: 5
+        System.out.println("Removed Last: " + deque.pollLast()); // Output: 25
+
+        System.out.println("ArrayDeque after removal: " + deque); // Output: [10, 20]
+    }
+}
+```
+
+✔️ **Output:**
+```
+ArrayDeque: [5, 10, 20, 25]
+First Element: 5
+Last Element: 25
+Removed First: 5
+Removed Last: 25
+ArrayDeque after removal: [10, 20]
+```
+
+---
+
+## **5️⃣ How ArrayDeque Works Internally?**
+📌 **Structure:**  
+- Uses **a dynamically resizable circular array**.  
+- **Elements wrap around when reaching array capacity.**  
+- **Insertion/removal from both ends is O(1)** because it doesn’t require shifting like `ArrayList`.  
+
+✔️ **Internal Representation (Circular Array)**
+```
+[ _, _, 10, 20, 30, _, _, _ ]
+     ↑   ↑    ↑  
+    Front  Elements  Rear
+```
+✔️ **Adding `40` at front (`addFirst(40)`)**
+```
+[ _, _, 40, 10, 20, 30, _, _ ]
+     ↑   ↑    ↑  
+    Front  Elements  Rear
+```
+✔️ **Removing last (`pollLast()`)**
+```
+[ _, _, 40, 10, 20, _, _, _ ]
+     ↑   ↑    ↑  
+    Front  Elements  Rear
+```
+
+---
+
+## **6️⃣ Performance Analysis of ArrayDeque<T>**
+| Operation | ArrayDeque `O(1)` | LinkedList `O(n)` |
+|-----------|----------------|----------------|
+| `addFirst(E e)` | `O(1)` | `O(1)` |
+| `addLast(E e)` | `O(1)` | `O(1)` |
+| `removeFirst()` | `O(1)` | `O(1)` |
+| `removeLast()` | `O(1)` | `O(1)` |
+| `getFirst()` | `O(1)` | `O(1)` |
+| `getLast()` | `O(1)` | `O(1)` |
+
+✔️ **ArrayDeque is the best choice for Deque operations.**  
+
+---
+
+## **7️⃣ When to Use ArrayDeque?**
+✔️ **Use `ArrayDeque<T>` when:**  
+✅ **You need fast insertion/removal from both ends.**  
+✅ **You need a resizable array-backed deque.**  
+✅ **You don’t need thread-safety.**  
+
+❌ **Don’t use ArrayDeque when:**  
+🚫 **You need indexed access (Use `ArrayList`).**  
+🚫 **You need thread-safety (Use `ConcurrentLinkedDeque`).**  
+
+---
+
+## **📌 Summary**
+✔️ **ArrayDeque supports adding/removing from both ends.**  
+✔️ **Uses a dynamic resizable array (circular buffer).**  
+✔️ **Faster than `LinkedList` for queue operations.**  
+✔️ **Best choice: `ArrayDeque` (Faster than `LinkedList`).**  
+✔️ **Operations are `O(1)`, making it efficient.**  
+
+---
+
+# 🚀 **ConcurrentLinkedQueue<T> – Deep Dive & Easy Explanation**  
+
+---
+
+## **1️⃣ What is ConcurrentLinkedQueue<T>?**
+A **ConcurrentLinkedQueue** is a **thread-safe, non-blocking, FIFO (First-In-First-Out) queue** that allows multiple threads to access and modify it **without explicit locking**.  
+
+✔️ **Key Features:**  
+- ✅ **Thread-safe** (Multiple threads can modify it safely).  
+- ✅ **Non-blocking** (Uses **CAS (Compare-And-Swap) operations** instead of locks).  
+- ✅ **FIFO Order** (Elements are processed in order of insertion).  
+- ✅ **Does NOT allow `null` elements**.  
+- ✅ **Uses a **linked-list** internally (Each element points to the next).  
+
+📌 **Real-Life Example:**  
+- **Producer-Consumer Pattern** – Multiple producer threads add tasks, while consumer threads process them.  
+- **Multi-threaded Job Queue** – A system where multiple users submit jobs for processing.  
+
+---
+
+## **2️⃣ How Does ConcurrentLinkedQueue<T> Work Internally?**
+📌 **Non-blocking Mechanism**  
+- Instead of locks (`synchronized` keyword), it uses **atomic operations (CAS - Compare-And-Swap)**.  
+- This makes it **faster than blocking queues (`BlockingQueue`) in high-concurrency situations**.  
+
+✔️ **Internal Structure (Linked List Implementation)**  
+```
+Head ➝ [1] ➝ [2] ➝ [3] ➝ Tail
+```
+- **New elements are added at the tail.**  
+- **Elements are removed from the head.**  
+- **Each node contains a reference to the next node.**  
+
+---
+
+## **3️⃣ Methods of ConcurrentLinkedQueue<T>**
+| Method | Description |
+|--------|------------|
+| `add(E e)` | Adds an element at the tail (throws exception if `null`). |
+| `offer(E e)` | Adds an element at the tail (returns `false` if `null`). |
+| `poll()` | Retrieves and removes the head of the queue (returns `null` if empty). |
+| `peek()` | Retrieves but does not remove the head (returns `null` if empty). |
+| `size()` | Returns the number of elements (not always accurate in multi-threading). |
+| `isEmpty()` | Checks if the queue is empty. |
+| `iterator()` | Returns an iterator over the elements (weakly consistent). |
+
+✔️ **Important Notes:**  
+- 🚀 `size()` may not be accurate in multi-threading because other threads might modify the queue simultaneously.  
+- 🚀 **`poll()` is better than `remove()`** since it doesn’t throw an exception if the queue is empty.  
+
+---
+
+## **4️⃣ Implementation of ConcurrentLinkedQueue<T>**
+```java
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class ConcurrentLinkedQueueExample {
+    public static void main(String[] args) {
+        // Creating a ConcurrentLinkedQueue
+        ConcurrentLinkedQueue<Integer> queue = new ConcurrentLinkedQueue<>();
+
+        // Adding elements
+        queue.add(10);
+        queue.offer(20);
+        queue.offer(30);
+
+        System.out.println("Queue: " + queue); // Output: [10, 20, 30]
+
+        // Retrieving elements
+        System.out.println("Head Element (peek): " + queue.peek()); // Output: 10
+
+        // Removing elements
+        System.out.println("Removed Element (poll): " + queue.poll()); // Output: 10
+
+        System.out.println("Queue after removal: " + queue); // Output: [20, 30]
+    }
+}
+```
+
+✔️ **Output:**
+```
+Queue: [10, 20, 30]
+Head Element (peek): 10
+Removed Element (poll): 10
+Queue after removal: [20, 30]
+```
+
+---
+
+## **5️⃣ How ConcurrentLinkedQueue Works Internally?**
+📌 **Uses Atomic References for Thread-Safety**  
+- **Each node contains:**  
+  - **Value**
+  - **Reference to next node**
+- **CAS (Compare-And-Swap) is used to modify nodes without locks.**  
+
+✔️ **Example: Adding Elements**  
+```
+Head ➝ [10] ➝ [20] ➝ [30] ➝ Tail
+```
+✔️ **Example: Polling (Removing Head)**  
+```
+Before poll(): Head ➝ [10] ➝ [20] ➝ [30] ➝ Tail
+After poll():  Head ➝ [20] ➝ [30] ➝ Tail
+```
+
+📌 **Why CAS (Compare-And-Swap)?**  
+Instead of **synchronized locks**, CAS ensures that:  
+- **If the reference is still the same (no change by another thread), it updates the value.**  
+- **If another thread modified it, retry until successful.**  
+- **This makes operations faster and scalable in multi-threading.**  
+
+---
+
+## **6️⃣ Performance Analysis of ConcurrentLinkedQueue<T>**
+| Operation | Complexity `O(n)` | Notes |
+|-----------|----------------|-------|
+| `add(E e)` | `O(1)` | Fast insert at the tail |
+| `offer(E e)` | `O(1)` | Fast insert at the tail |
+| `poll()` | `O(1)` | Fast removal from head |
+| `peek()` | `O(1)` | Constant time retrieval |
+| `size()` | `O(n)` | Not always accurate |
+
+✔️ **Why use `ConcurrentLinkedQueue`?**  
+- **No locking overhead (`synchronized`).**  
+- **Scales better in high-concurrency environments.**  
+- **Best for multi-threaded queue processing.**  
+
+---
+
+## **7️⃣ When to Use ConcurrentLinkedQueue?**
+✔️ **Use `ConcurrentLinkedQueue<T>` when:**  
+✅ **Multiple threads need to access a queue concurrently.**  
+✅ **You want a non-blocking, lock-free queue.**  
+✅ **Elements should be processed in FIFO order.**  
+✅ **Performance is critical in a multi-threaded environment.**  
+
+❌ **Don’t use `ConcurrentLinkedQueue<T>` when:**  
+🚫 **You need blocking operations (use `BlockingQueue<T>` instead).**  
+🚫 **You require precise `size()` calculation.**  
+
+---
+
+## **📌 Summary**
+✔️ **ConcurrentLinkedQueue is a non-blocking, thread-safe queue.**  
+✔️ **FIFO order is maintained.**  
+✔️ **Uses CAS (Compare-And-Swap) for efficient updates.**  
+✔️ **Faster than `BlockingQueue` in high-concurrency situations.**  
+✔️ **Best for producer-consumer scenarios in multi-threading.**  
+
+---
 
