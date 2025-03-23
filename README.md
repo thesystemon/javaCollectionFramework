@@ -106,9 +106,6 @@
 
 ---
 
-Alright! Let’s go **step by step** and explain **Chapter 1: Introduction to Java Collection Framework** in a **very deep and easy way** so that you can **understand clearly** as a beginner. 🚀  
-
----
 
 # **📌 Chapter 1: Introduction to Java Collection Framework**  
 
@@ -4253,6 +4250,2094 @@ Instead of **synchronized locks**, CAS ensures that:
 ✔️ **Uses CAS (Compare-And-Swap) for efficient updates.**  
 ✔️ **Faster than `BlockingQueue` in high-concurrency situations.**  
 ✔️ **Best for producer-consumer scenarios in multi-threading.**  
+
+---
+
+# 📌 **Chapter 6: Map Interface (Key-Value Pair Collection) – Deep Dive & Easy Explanation**  
+
+---
+
+## **1️⃣ What is `Map<K, V>` Interface?**
+A **Map** is a data structure that **stores elements in key-value pairs**. Unlike `List` or `Set`, a `Map` does not store individual elements but rather a **mapping of keys to values**.
+
+✔️ **Key Features of Map<K, V>:**  
+- ✅ **Stores data in the form of key-value pairs (`K → V`).**  
+- ✅ **Each key is unique (no duplicates).**  
+- ✅ **Values can be duplicated.**  
+- ✅ **Efficient retrieval based on keys (`O(1)` for HashMap, `O(log n)` for TreeMap).**  
+- ✅ **Provides various implementations with different characteristics.**  
+
+📌 **Real-Life Example of a Map:**  
+A **dictionary** is a great example of a Map.  
+- **Key** → Word  
+- **Value** → Meaning  
+Example:  
+```
+{"apple" → "A fruit", "car" → "A vehicle", "java" → "A programming language"}
+```
+---
+
+## **2️⃣ Why Use Map Over List/Set?**
+| Feature | List | Set | Map |
+|---------|------|-----|-----|
+| Stores Elements | ✅ Yes | ✅ Yes | 🚫 No (Stores Key-Value pairs) |
+| Allows Duplicates | ✅ Yes | 🚫 No | 🚫 No (Keys must be unique) |
+| Ordered | ✅ Yes (List is ordered) | ❌ No (HashSet is unordered) | ✅ Depends on implementation |
+| Fast Lookup | ❌ No (O(n) for search) | ❌ No (O(n) for search) | ✅ Yes (O(1) for HashMap) |
+| Key-Value Mapping | ❌ No | ❌ No | ✅ Yes |
+
+📌 **Use Map when:**  
+✔️ You need **fast retrieval of values using keys**.  
+✔️ You want **unique keys with associated values**.  
+✔️ You require **efficient search and updates**.  
+
+---
+
+## **3️⃣ Map Interface – Important Methods**
+| Method | Description |
+|--------|------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value associated with the key. |
+| `remove(K key)` | Removes the key-value pair from the map. |
+| `containsKey(K key)` | Checks if the key exists in the map. |
+| `containsValue(V value)` | Checks if the value exists in the map. |
+| `keySet()` | Returns a set of all keys. |
+| `values()` | Returns a collection of all values. |
+| `entrySet()` | Returns a set of all key-value pairs. |
+| `size()` | Returns the number of key-value pairs in the map. |
+| `isEmpty()` | Checks if the map is empty. |
+
+---
+
+## **4️⃣ Implementations of Map<K, V>**
+| Implementation | Order | Thread-Safe | Null Keys Allowed? | Performance |
+|---------------|------|-------------|----------------|-------------|
+| `HashMap` | ❌ No Order | ❌ No | ✅ Yes (Only one null key) | 🚀 Fast (O(1) for put/get) |
+| `LinkedHashMap` | ✅ Insertion Order | ❌ No | ✅ Yes | 🚀 Fast (O(1) for put/get) |
+| `TreeMap` | ✅ Sorted Order | ❌ No | ❌ No | 🐢 Slower (O(log n) for put/get) |
+| `Hashtable` | ❌ No Order | ✅ Yes | ❌ No | 🐢 Slower (Thread-safe) |
+| `ConcurrentHashMap` | ❌ No Order | ✅ Yes | ❌ No | 🚀 Fast (Thread-safe, better than Hashtable) |
+
+📌 **Choosing the Right Map:**  
+- **If you need fast access:** ✅ `HashMap`  
+- **If you need insertion order:** ✅ `LinkedHashMap`  
+- **If you need sorted keys:** ✅ `TreeMap`  
+- **If you need thread safety:** ✅ `ConcurrentHashMap`  
+
+---
+
+## **5️⃣ Basic Implementation of Map**
+```java
+import java.util.*;
+
+public class MapExample {
+    public static void main(String[] args) {
+        // Creating a Map
+        Map<String, Integer> map = new HashMap<>();
+
+        // Adding key-value pairs
+        map.put("Apple", 10);
+        map.put("Banana", 20);
+        map.put("Mango", 30);
+
+        // Retrieving a value
+        System.out.println("Value for 'Apple': " + map.get("Apple")); // 10
+
+        // Checking key existence
+        System.out.println("Contains 'Banana'? " + map.containsKey("Banana")); // true
+
+        // Removing a key-value pair
+        map.remove("Banana");
+
+        // Iterating over the Map
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+
+✔️ **Output:**
+```
+Value for 'Apple': 10
+Contains 'Banana'? true
+Apple → 10
+Mango → 30
+```
+
+---
+
+## **6️⃣ How Map Works Internally?**
+### **🔹 Internal Working of `HashMap`**
+- Uses a **hashing algorithm** to store key-value pairs.  
+- **Keys are converted into hash codes**, which determine their storage location in an array.  
+- **Collisions are handled using linked lists (before Java 8) or balanced trees (after Java 8 for large collisions).**  
+
+📌 **Example Storage Mechanism (Hash Buckets)**
+```
+HashMap<K, V> Internal Structure:
+Index | Key | Value
+------|-----|------
+0     | null | null
+1     | "Apple" | 10
+2     | "Banana" | 20
+3     | "Mango" | 30
+```
+
+- When `map.put("Apple", 10);` is called:
+  - `"Apple"` is **hashed**.
+  - It is placed in the corresponding **bucket index**.
+  - If another key hashes to the same index (collision), it is stored in a **linked list/tree at that index**.
+
+---
+
+## **7️⃣ Performance Analysis**
+| Operation | HashMap | LinkedHashMap | TreeMap |
+|-----------|--------|--------------|---------|
+| `put(K, V)` | **O(1)** | **O(1)** | **O(log n)** |
+| `get(K)` | **O(1)** | **O(1)** | **O(log n)** |
+| `remove(K)` | **O(1)** | **O(1)** | **O(log n)** |
+| `containsKey(K)` | **O(1)** | **O(1)** | **O(log n)** |
+
+📌 **Why is `HashMap` faster than `TreeMap`?**  
+- **`HashMap` uses direct indexing via hashing (`O(1)`)**.  
+- **`TreeMap` uses a Red-Black tree for sorting (`O(log n)`)**, which is slower.  
+
+---
+
+## **8️⃣ When to Use Map<K, V>?**
+✔️ **Use `HashMap` when:**  
+✅ Fast access (`O(1)`).  
+✅ No need to maintain order.  
+✅ Allows one `null` key.  
+
+✔️ **Use `LinkedHashMap` when:**  
+✅ You need to maintain insertion order.  
+✅ Performance similar to `HashMap`.  
+
+✔️ **Use `TreeMap` when:**  
+✅ You need sorted keys.  
+✅ `O(log n)` operations are acceptable.  
+
+✔️ **Use `ConcurrentHashMap` when:**  
+✅ You need a thread-safe alternative.  
+✅ Better performance than `Hashtable`.  
+
+---
+
+## **📌 Summary**
+✔️ **Map stores key-value pairs where keys are unique.**  
+✔️ **Different implementations serve different use cases (`HashMap`, `TreeMap`, etc.).**  
+✔️ **Performance varies based on use case (`O(1)` vs `O(log n)`).**  
+✔️ **Choosing the right `Map` depends on order, thread safety, and lookup speed.**  
+
+---
+
+# 📌 **Deep Dive into `HashMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `HashMap<K, V>`?**
+A `HashMap<K, V>` is a **key-value-based** data structure in Java that stores unique keys and their associated values. It is **unordered** and allows for **fast retrieval** of values using keys.
+
+✔️ **Key Features of `HashMap<K, V>`**  
+- ✅ **Stores elements in key-value pairs (`K → V`).**  
+- ✅ **Keys must be unique, but values can be duplicate.**  
+- ✅ **Allows one `null` key and multiple `null` values.**  
+- ✅ **Unordered (does not maintain insertion order).**  
+- ✅ **Uses hashing to store data for fast access (`O(1)` time complexity).**  
+- ✅ **Not thread-safe (use `ConcurrentHashMap` for multi-threading).**  
+
+📌 **Example:**  
+Imagine a **phonebook** where names (keys) are mapped to phone numbers (values).  
+```
+{ "Alice" → 9876543210, "Bob" → 8765432109, "Charlie" → 7654321098 }
+```
+Here, names are **keys** (unique) and phone numbers are **values**.
+
+---
+
+## **2️⃣ Why Use `HashMap` Instead of List or Array?**
+| Feature | Array | List | HashMap |
+|---------|-------|------|---------|
+| Stores Elements | ✅ Yes | ✅ Yes | 🚫 No (Stores Key-Value) |
+| Allows Duplicates | ✅ Yes | ✅ Yes | 🚫 No (Keys are unique) |
+| Ordered | ✅ Yes (Array order) | ✅ Yes (List order) | ❌ No (Unordered) |
+| Fast Lookup | ❌ No (`O(n)`) | ❌ No (`O(n)`) | ✅ Yes (`O(1)`) |
+| Key-Value Mapping | ❌ No | ❌ No | ✅ Yes |
+
+📌 **Use `HashMap` when:**  
+✔️ **You need fast lookups, insertions, and deletions (`O(1)`).**  
+✔️ **You want a unique key for each value.**  
+✔️ **You don’t care about ordering.**  
+
+---
+
+## **3️⃣ How `HashMap` Works Internally?**
+`HashMap` uses **hashing** to store key-value pairs. It converts a key into a **hashcode** and determines its storage location (bucket) in an **array of nodes**.
+
+### **🔹 Steps of `put(K, V)` Method:**
+1. **Compute the Hash Code**  
+   - Converts the key into a **hashcode** (unique number).  
+   - Example: `"Apple".hashCode()` → `2536478`
+
+2. **Find the Bucket (Index Calculation)**  
+   - Uses `hash % capacity` formula to find a storage index.  
+   - Example: `2536478 % 16 = 6` → Stored in bucket 6.
+
+3. **Insert the Key-Value Pair**  
+   - If the bucket is empty, store the pair.  
+   - If a **collision** occurs (same bucket), use **Linked List** or **Balanced Tree** (from Java 8) to store multiple entries.
+
+### **🔹 Steps of `get(K)` Method:**
+1. **Compute the Hash Code of the Key.**  
+2. **Find the Bucket Using Hashing Formula.**  
+3. **Search for the Key in That Bucket.**  
+4. **If Found, Return the Value; Otherwise, Return `null`.**  
+
+📌 **Visual Representation of `HashMap` Storage:**
+```
+Bucket | Key    | Value  
+-------------------------  
+  0    | null  | null  
+  1    | "Bob" | 8765432109  
+  2    | null  | null  
+  3    | "Alice" | 9876543210  
+  4    | null  | null  
+  5    | "Charlie" | 7654321098  
+```
+
+🔹 **Collision Handling:**  
+If two keys produce the **same hash**, `HashMap` uses **Linked List or Balanced Tree** at that bucket index.
+
+---
+
+## **4️⃣ `HashMap` Constructors**
+| Constructor | Description |
+|------------|------------|
+| `HashMap()` | Creates an empty HashMap with default size (16). |
+| `HashMap(int capacity)` | Creates HashMap with given capacity. |
+| `HashMap(int capacity, float loadFactor)` | Creates HashMap with capacity and load factor (default = 0.75). |
+| `HashMap(Map<K, V> m)` | Creates HashMap with elements from another map. |
+
+---
+
+## **5️⃣ Important Methods of `HashMap`**
+| Method | Description |
+|--------|------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+
+---
+
+## **6️⃣ `HashMap` Example Code**
+```java
+import java.util.*;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        // Creating a HashMap
+        HashMap<String, Integer> map = new HashMap<>();
+
+        // Adding elements (put method)
+        map.put("Alice", 25);
+        map.put("Bob", 30);
+        map.put("Charlie", 28);
+
+        // Retrieving values (get method)
+        System.out.println("Age of Alice: " + map.get("Alice")); // 25
+
+        // Checking if a key exists
+        System.out.println("Contains 'Bob'? " + map.containsKey("Bob")); // true
+
+        // Removing a key-value pair
+        map.remove("Charlie");
+
+        // Iterating through the HashMap
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+✔️ **Output:**
+```
+Age of Alice: 25
+Contains 'Bob'? true
+Alice → 25
+Bob → 30
+```
+
+---
+
+## **7️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** (Best case) / **O(n)** (Worst case, collisions) |
+| `get(K)` | **O(1)** (Best case) / **O(n)** (Worst case) |
+| `remove(K)` | **O(1)** (Best case) / **O(n)** (Worst case) |
+| `containsKey(K)` | **O(1)** |
+| `containsValue(V)` | **O(n)** |
+
+📌 **Why is `O(1)` lookup possible?**  
+Because `HashMap` directly accesses the **bucket index** using **hashing**.
+
+📌 **When does `O(n)` happen?**  
+When **many keys have the same hashcode** (collisions), forcing a **linked list traversal**.
+
+---
+
+## **8️⃣ When to Use `HashMap<K, V>`?**
+✔️ **When you need fast lookup (`O(1)`).**  
+✔️ **When key order doesn’t matter.**  
+✔️ **When you want one `null` key and multiple `null` values.**  
+
+❌ **Avoid `HashMap` if:**  
+- You need **ordered keys** (`Use LinkedHashMap`).  
+- You need **sorted keys** (`Use TreeMap`).  
+- You need **thread safety** (`Use ConcurrentHashMap`).  
+
+---
+
+## **📌 Summary**
+✔️ **`HashMap<K, V>` stores key-value pairs using hashing.**  
+✔️ **Keys must be unique, but values can be duplicated.**  
+✔️ **Offers `O(1)` lookup time but may degrade to `O(n)` in case of collisions.**  
+✔️ **Unordered (does not maintain insertion order).**  
+✔️ **Used when fast retrieval of data is needed.**  
+
+---
+
+# 📌 **Deep Dive into `LinkedHashMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `LinkedHashMap<K, V>`?**
+A `LinkedHashMap<K, V>` is a **key-value-based** data structure in Java that extends `HashMap<K, V>`, but **maintains insertion order**.
+
+✔️ **Key Features of `LinkedHashMap<K, V>`**  
+- ✅ **Stores elements in key-value pairs (`K → V`).**  
+- ✅ **Maintains insertion order (unlike `HashMap`).**  
+- ✅ **Uses a doubly linked list along with a hash table.**  
+- ✅ **Fast lookup and retrieval (`O(1)`).**  
+- ✅ **Allows one `null` key and multiple `null` values.**  
+- ✅ **Not thread-safe (use `Collections.synchronizedMap()` for thread safety).**  
+
+📌 **Example:**  
+Imagine an **attendance register** where names (keys) are mapped to attendance status (values).  
+```
+{ "Alice" → Present, "Bob" → Absent, "Charlie" → Present }
+```
+Here, **insertion order is preserved**.
+
+---
+
+## **2️⃣ Difference Between `HashMap` and `LinkedHashMap`**
+| Feature | HashMap | LinkedHashMap |
+|---------|--------|---------------|
+| Ordering | ❌ No (Unordered) | ✅ Yes (Insertion Order) |
+| Performance | ✅ Fast (`O(1)`) | ✅ Slightly Slower (`O(1)`) |
+| Memory Usage | ✅ Less | ❌ More (Extra Linked List) |
+| Allows `null` Key | ✅ Yes | ✅ Yes |
+| Thread-Safe | ❌ No | ❌ No |
+| Use Case | Fast access, no order needed | Fast access, order matters |
+
+📌 **Use `LinkedHashMap` when:**  
+✔️ **You need fast lookups but also maintain order.**  
+✔️ **You need predictable iteration order.**  
+✔️ **You want a cache with access-ordering (LRU Cache).**  
+
+---
+
+## **3️⃣ How `LinkedHashMap` Works Internally?**
+`LinkedHashMap` is built on top of `HashMap`, but it **maintains insertion order** using a **doubly linked list**.
+
+### **🔹 How Entries Are Stored?**
+- It maintains a **hash table** (like `HashMap`) for fast access.
+- It also has a **doubly linked list** that keeps track of order.
+
+📌 **Example:** Adding `"Alice" → 25`, `"Bob" → 30`, `"Charlie" → 28`
+```
+Hash Table (Buckets) → Fast Lookup
+Bucket | Key     | Value  | Next (Linked List)
+-------------------------------------------
+  0    | null   | null   | null
+  1    | "Alice" | 25     | Bob → Charlie → null (Doubly Linked List)
+  2    | "Bob"   | 30     | Charlie → null
+  3    | "Charlie" | 28  | null
+```
+✔️ **Doubly Linked List ensures order is maintained!**  
+
+---
+
+## **4️⃣ `LinkedHashMap` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `LinkedHashMap()` | Creates an empty LinkedHashMap with default size (16). |
+| `LinkedHashMap(int capacity)` | Creates LinkedHashMap with given capacity. |
+| `LinkedHashMap(int capacity, float loadFactor)` | Creates LinkedHashMap with capacity and load factor (default = 0.75). |
+| `LinkedHashMap(int capacity, float loadFactor, boolean accessOrder)` | Creates LinkedHashMap with access-order (LRU cache). |
+
+---
+
+## **5️⃣ Important Methods of `LinkedHashMap`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+
+---
+
+## **6️⃣ `LinkedHashMap` Example Code**
+```java
+import java.util.*;
+
+public class LinkedHashMapExample {
+    public static void main(String[] args) {
+        // Creating a LinkedHashMap
+        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+
+        // Adding elements (put method)
+        map.put("Alice", 25);
+        map.put("Bob", 30);
+        map.put("Charlie", 28);
+
+        // Retrieving values (get method)
+        System.out.println("Age of Alice: " + map.get("Alice")); // 25
+
+        // Checking if a key exists
+        System.out.println("Contains 'Bob'? " + map.containsKey("Bob")); // true
+
+        // Removing a key-value pair
+        map.remove("Charlie");
+
+        // Iterating through the LinkedHashMap
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+✔️ **Output:**
+```
+Age of Alice: 25
+Contains 'Bob'? true
+Alice → 25
+Bob → 30
+```
+✔️ **Insertion order is maintained!**
+
+---
+
+## **7️⃣ Special Feature: Access Order (LRU Cache)**
+By default, `LinkedHashMap` maintains **insertion order**, but we can use **access order** for caching (Least Recently Used - LRU Cache).
+
+📌 **LRU Cache Example:**
+```java
+import java.util.*;
+
+class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    private final int capacity;
+
+    public LRUCache(int capacity) {
+        super(capacity, 0.75f, true); // Access Order = true
+        this.capacity = capacity;
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return size() > capacity; // Remove oldest entry when full
+    }
+}
+
+public class LRUExample {
+    public static void main(String[] args) {
+        LRUCache<Integer, String> cache = new LRUCache<>(3);
+
+        cache.put(1, "A");
+        cache.put(2, "B");
+        cache.put(3, "C");
+
+        // Access key 1, making it most recently used
+        cache.get(1);
+
+        // Adding new key, 2 should be removed (LRU policy)
+        cache.put(4, "D");
+
+        System.out.println(cache.keySet()); // Output: [3, 1, 4]
+    }
+}
+```
+✔️ **LRU Cache removes least used items!**
+
+---
+
+## **8️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** |
+| `get(K)` | **O(1)** |
+| `remove(K)` | **O(1)** |
+| `containsKey(K)` | **O(1)** |
+| `containsValue(V)` | **O(n)** |
+
+📌 **Why does `O(1)` lookup happen?**  
+Because `LinkedHashMap` uses **hashing** like `HashMap`.
+
+📌 **When does `O(n)` happen?**  
+When searching for a **specific value**, as all values must be checked.
+
+---
+
+## **9️⃣ When to Use `LinkedHashMap<K, V>`?**
+✔️ **When you need insertion order.**  
+✔️ **When you need fast lookup like `HashMap`.**  
+✔️ **When you need an LRU cache.**  
+
+❌ **Avoid `LinkedHashMap` if:**  
+- You don’t care about ordering (`Use HashMap`).  
+- You need sorted keys (`Use TreeMap`).  
+- You need thread safety (`Use ConcurrentHashMap`).  
+
+---
+
+## **📌 Summary**
+✔️ **`LinkedHashMap<K, V>` maintains insertion order.**  
+✔️ **Fast lookup with `O(1)` complexity.**  
+✔️ **Can be used as an LRU cache with access order.**  
+✔️ **Uses extra memory for maintaining order.**  
+
+---
+
+# 📌 **Deep Dive into `TreeMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `TreeMap<K, V>`?**
+A **`TreeMap<K, V>`** is a key-value collection in Java that **stores keys in sorted order** (ascending by default).  
+
+✔️ **Key Features of `TreeMap<K, V>`**  
+- ✅ **Stores key-value pairs (`K → V`).**  
+- ✅ **Maintains keys in sorted order (Natural or Custom Comparator).**  
+- ✅ **Implements `NavigableMap<K, V>` and `SortedMap<K, V>`.**  
+- ✅ **Uses a **Red-Black Tree** for self-balancing.**  
+- ✅ **Search, Insert, Delete in `O(log n)`.**  
+- ✅ **Does **NOT** allow `null` keys (unlike `HashMap`).**  
+- ✅ **Thread-Unsafe (Use `Collections.synchronizedMap()` for thread safety).**  
+
+📌 **Example Use Case:**  
+Imagine a **student ranking system** where we store students' scores and want to retrieve them in **sorted order** automatically.
+
+---
+## **2️⃣ Difference Between `HashMap`, `LinkedHashMap`, and `TreeMap`**
+| Feature | HashMap | LinkedHashMap | TreeMap |
+|---------|---------|--------------|---------|
+| **Ordering** | ❌ No order | ✅ Insertion Order | ✅ Sorted Order (Ascending by default) |
+| **Performance (Put, Get, Remove)** | ✅ `O(1)` | ✅ `O(1)` | ❌ `O(log n)` |
+| **Implementation** | **Hash Table** | **Hash Table + Linked List** | **Red-Black Tree** |
+| **Allows `null` Key** | ✅ Yes | ✅ Yes | ❌ No |
+| **Memory Usage** | ✅ Low | ❌ High (Linked List) | ❌ High (Tree Structure) |
+| **Use Case** | Fast lookup | Order-preserving | Sorted Data |
+
+📌 **Use `TreeMap<K, V>` when:**  
+✔️ **You need keys to be sorted automatically.**  
+✔️ **You need efficient range queries (`subMap`, `headMap`, `tailMap`).**  
+✔️ **You need to maintain a priority-based ordering.**  
+
+---
+## **3️⃣ How `TreeMap` Works Internally?**
+`TreeMap<K, V>` **uses a Red-Black Tree** for self-balancing.
+
+### **🔹 How Data is Stored?**
+- Unlike `HashMap`, `TreeMap` **stores elements in a sorted tree structure**.
+- Each node contains:  
+  - **Key (`K`)**  
+  - **Value (`V`)**  
+  - **Left Child (Smaller Keys)**  
+  - **Right Child (Larger Keys)**  
+- The tree is **balanced** using **Red-Black Tree** properties.
+
+📌 **Example:**  
+```java
+TreeMap<Integer, String> map = new TreeMap<>();
+map.put(50, "Alice");
+map.put(30, "Bob");
+map.put(70, "Charlie");
+map.put(20, "David");
+map.put(40, "Eve");
+```
+✔️ **Internally, the Red-Black Tree will arrange them as:**  
+```
+        50
+       /   \
+     30    70
+    /  \
+  20   40
+```
+✅ **Keys are always sorted in ascending order!**  
+
+---
+## **4️⃣ `TreeMap` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `TreeMap()` | Creates an empty `TreeMap` with natural ordering. |
+| `TreeMap(Comparator<? super K> comparator)` | Creates `TreeMap` with a custom sorting order. |
+| `TreeMap(Map<? extends K, ? extends V> map)` | Creates a `TreeMap` with the same elements as an existing map. |
+| `TreeMap(SortedMap<K, ? extends V> sortedMap)` | Creates a `TreeMap` from another sorted map. |
+
+---
+## **5️⃣ Important Methods of `TreeMap<K, V>`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+| `firstKey()` | Returns the smallest key. |
+| `lastKey()` | Returns the largest key. |
+| `higherKey(K key)` | Returns the smallest key greater than `key`. |
+| `lowerKey(K key)` | Returns the largest key less than `key`. |
+| `subMap(K fromKey, K toKey)` | Returns a portion of the map between `fromKey` and `toKey`. |
+
+---
+## **6️⃣ `TreeMap` Example Code**
+```java
+import java.util.*;
+
+public class TreeMapExample {
+    public static void main(String[] args) {
+        // Creating a TreeMap
+        TreeMap<Integer, String> map = new TreeMap<>();
+
+        // Adding elements (put method)
+        map.put(50, "Alice");
+        map.put(30, "Bob");
+        map.put(70, "Charlie");
+        map.put(20, "David");
+        map.put(40, "Eve");
+
+        // Retrieving values (get method)
+        System.out.println("Value of 50: " + map.get(50)); // Alice
+
+        // Getting first and last key
+        System.out.println("Smallest key: " + map.firstKey()); // 20
+        System.out.println("Largest key: " + map.lastKey()); // 70
+
+        // Iterating through TreeMap (Sorted Order)
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+✔️ **Output:**
+```
+Value of 50: Alice
+Smallest key: 20
+Largest key: 70
+20 → David
+30 → Bob
+40 → Eve
+50 → Alice
+70 → Charlie
+```
+✔️ **Keys are sorted automatically!**
+
+---
+## **7️⃣ Custom Sorting with `TreeMap`**
+We can pass a **custom comparator** to define our own sorting order.
+
+📌 **Example: Sorting in Descending Order**
+```java
+import java.util.*;
+
+public class TreeMapDescending {
+    public static void main(String[] args) {
+        // Custom comparator for descending order
+        TreeMap<Integer, String> map = new TreeMap<>(Comparator.reverseOrder());
+
+        map.put(50, "Alice");
+        map.put(30, "Bob");
+        map.put(70, "Charlie");
+
+        System.out.println(map);
+    }
+}
+```
+✔️ **Output:**
+```
+{70=Charlie, 50=Alice, 30=Bob}
+```
+✔️ **Sorted in descending order!**
+
+---
+## **8️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(log n)** |
+| `get(K)` | **O(log n)** |
+| `remove(K)` | **O(log n)** |
+| `containsKey(K)` | **O(log n)** |
+| `containsValue(V)` | **O(n)** |
+
+📌 **Why `O(log n)`?**  
+Because `TreeMap` is based on **Red-Black Tree**, a balanced tree structure.
+
+---
+## **9️⃣ When to Use `TreeMap<K, V>`?**
+✔️ **When you need keys to be sorted automatically.**  
+✔️ **When you need efficient range queries (`subMap`, `headMap`, `tailMap`).**  
+✔️ **When maintaining order is crucial.**  
+
+❌ **Avoid `TreeMap` if:**  
+- You don’t need sorted order (`Use HashMap`).  
+- Performance is a priority (`TreeMap` is slower than `HashMap`).  
+- You need thread safety (`Use ConcurrentSkipListMap`).  
+
+---
+## **📌 Summary**
+✔️ **`TreeMap<K, V>` maintains sorted order.**  
+✔️ **Uses Red-Black Tree (`O(log n)` performance).**  
+✔️ **Great for range queries (`subMap`, `headMap`, etc.).**  
+✔️ **No `null` keys allowed!**  
+
+---
+
+# 📌 **Deep Dive into `Hashtable<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `Hashtable<K, V>`?**
+A **`Hashtable<K, V>`** is a key-value data structure in Java that is **thread-safe** and does **not allow `null` keys or values**.
+
+✔️ **Key Features of `Hashtable<K, V>`**  
+- ✅ **Stores key-value pairs (`K → V`).**  
+- ✅ **Thread-Safe (Synchronized Methods).**  
+- ✅ **No `null` keys or values allowed.**  
+- ✅ **Uses a Hash Table for fast lookups (`O(1)` in most cases).**  
+- ✅ **Implemented using `synchronized` methods, making it slower than `HashMap`.**  
+- ✅ **Legacy class (Introduced in Java 1.0, before `HashMap`).**  
+
+📌 **Example Use Case:**  
+Imagine a **multi-threaded banking system** where we store customer account balances and need thread safety to avoid data corruption.
+
+---
+## **2️⃣ Difference Between `Hashtable`, `HashMap`, and `ConcurrentHashMap`**
+| Feature | Hashtable | HashMap | ConcurrentHashMap |
+|---------|---------|--------------|------------------|
+| **Thread-Safe?** | ✅ Yes | ❌ No | ✅ Yes (Better Performance) |
+| **Allows `null` Key?** | ❌ No | ✅ Yes | ❌ No |
+| **Allows `null` Values?** | ❌ No | ✅ Yes | ❌ No |
+| **Performance (Put, Get, Remove)** | ❌ Slow (Synchronized) | ✅ Fast (`O(1)`) | ✅ Fast (Lock-Free Reads) |
+| **Iteration** | **Slow** (Locks Entire Table) | **Fast** (Uses `fail-fast` iterator) | **Fast** (Lock-Free Segments) |
+| **Usage** | **Legacy, Avoid Using** | **Best for Single-Threaded Apps** | **Best for Multi-Threaded Apps** |
+
+📌 **Use `Hashtable<K, V>` when:**  
+✔️ **You need thread safety in older Java versions.**  
+✔️ **You are maintaining legacy Java code.**  
+✔️ **You cannot use `ConcurrentHashMap` (for some reason).**  
+
+❌ **Avoid `Hashtable<K, V>` if:**  
+- You don’t need thread safety (`Use HashMap`).  
+- You need better performance (`Use ConcurrentHashMap`).  
+
+---
+## **3️⃣ How `Hashtable` Works Internally?**
+`Hashtable<K, V>` **uses a hash table with synchronization** to store key-value pairs.
+
+### **🔹 How Data is Stored?**
+- Similar to `HashMap`, `Hashtable` **uses an array of "buckets"**.  
+- Each bucket stores **key-value pairs** using **linked lists** (to handle collisions).  
+- The **hash function** determines the bucket index for a key.
+- If two keys have the same hash, they are stored in the same bucket **(chaining method)**.
+
+📌 **Example:**  
+```java
+Hashtable<Integer, String> table = new Hashtable<>();
+table.put(50, "Alice");
+table.put(30, "Bob");
+table.put(70, "Charlie");
+table.put(20, "David");
+table.put(40, "Eve");
+```
+✔️ **Internally, the Hashtable might look like this:**  
+```
+Bucket 0: (50 → Alice)
+Bucket 1: (30 → Bob)
+Bucket 2: (70 → Charlie)
+Bucket 3: (20 → David)
+Bucket 4: (40 → Eve)
+```
+✅ **Data is stored in hash buckets, ensuring fast lookup.**
+
+---
+## **4️⃣ `Hashtable` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `Hashtable()` | Creates an empty `Hashtable` with default capacity. |
+| `Hashtable(int initialCapacity)` | Creates a `Hashtable` with a specific capacity. |
+| `Hashtable(int initialCapacity, float loadFactor)` | Creates a `Hashtable` with capacity and load factor. |
+| `Hashtable(Map<? extends K, ? extends V> map)` | Creates a `Hashtable` from another map. |
+
+---
+## **5️⃣ Important Methods of `Hashtable<K, V>`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the table. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the table is empty. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+| `clone()` | Creates a copy of the `Hashtable`. |
+| `clear()` | Removes all elements from the `Hashtable`. |
+
+---
+## **6️⃣ `Hashtable` Example Code**
+```java
+import java.util.*;
+
+public class HashtableExample {
+    public static void main(String[] args) {
+        // Creating a Hashtable
+        Hashtable<Integer, String> table = new Hashtable<>();
+
+        // Adding elements (put method)
+        table.put(50, "Alice");
+        table.put(30, "Bob");
+        table.put(70, "Charlie");
+        table.put(20, "David");
+        table.put(40, "Eve");
+
+        // Retrieving values (get method)
+        System.out.println("Value of 50: " + table.get(50)); // Alice
+
+        // Checking if a key exists
+        System.out.println("Contains key 30? " + table.containsKey(30)); // true
+
+        // Iterating through Hashtable
+        for (Map.Entry<Integer, String> entry : table.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+✔️ **Output:**
+```
+Value of 50: Alice
+Contains key 30? true
+20 → David
+30 → Bob
+40 → Eve
+50 → Alice
+70 → Charlie
+```
+✔️ **Keys are stored in a hash table, not sorted!**
+
+---
+## **7️⃣ Thread-Safety in `Hashtable`**
+Since `Hashtable` methods are **synchronized**, only **one thread** can access them at a time.
+
+📌 **Example (Multiple Threads Using `Hashtable`)**
+```java
+import java.util.*;
+
+public class HashtableThreadExample {
+    public static void main(String[] args) {
+        Hashtable<Integer, String> table = new Hashtable<>();
+
+        // Thread 1 (Adding Data)
+        Thread t1 = new Thread(() -> {
+            table.put(1, "A");
+            table.put(2, "B");
+            table.put(3, "C");
+        });
+
+        // Thread 2 (Reading Data)
+        Thread t2 = new Thread(() -> {
+            System.out.println(table.get(1));
+            System.out.println(table.get(2));
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+✔️ **`Hashtable` prevents data corruption by synchronizing access.**
+
+---
+## **8️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+| `get(K)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+| `remove(K)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+
+📌 **Why Slower than `HashMap`?**  
+- **Every method is synchronized** → **More overhead** in multi-threaded environments.
+- **Collisions can degrade performance** to `O(n)` in worst cases.
+
+---
+## **9️⃣ When to Use `Hashtable<K, V>`?**
+✔️ **When you need thread safety in older Java versions.**  
+✔️ **When working with legacy applications.**  
+✔️ **When you don’t need `null` keys/values.**  
+
+❌ **Avoid `Hashtable<K, V>` if:**  
+- You need better performance (`Use ConcurrentHashMap`).  
+- You need null keys or values (`Use HashMap`).  
+
+---
+## **📌 Summary**
+✔️ **`Hashtable<K, V>` is thread-safe (`synchronized`).**  
+✔️ **Uses a hash table (`O(1)` lookups in most cases).**  
+✔️ **No `null` keys or values allowed.**  
+✔️ **Slower than `HashMap` due to synchronization.**  
+
+---
+
+# 📌 **Deep Dive into `ConcurrentHashMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `ConcurrentHashMap<K, V>`?**
+A **`ConcurrentHashMap<K, V>`** is an advanced **thread-safe** version of `HashMap` that allows **multiple threads** to read and write without blocking the entire map.
+
+✔️ **Key Features of `ConcurrentHashMap<K, V>`**  
+- ✅ **Thread-Safe without using `synchronized` on the entire map.**  
+- ✅ **Faster than `Hashtable` (Uses Locking at Segment Level).**  
+- ✅ **No `null` keys or values allowed.**  
+- ✅ **Uses multiple "segments" (buckets) to allow concurrent operations.**  
+- ✅ **Best suited for multi-threaded environments.**  
+- ✅ **Improved performance over `Hashtable`.**  
+
+📌 **Example Use Case:**  
+Imagine a **real-time stock market system** where thousands of users update stock prices simultaneously. `ConcurrentHashMap` ensures efficient, thread-safe updates without performance bottlenecks.
+
+---
+
+## **2️⃣ Difference Between `HashMap`, `Hashtable`, and `ConcurrentHashMap`**
+| Feature | `HashMap` | `Hashtable` | `ConcurrentHashMap` |
+|---------|---------|--------------|------------------|
+| **Thread-Safe?** | ❌ No | ✅ Yes (Slow) | ✅ Yes (Faster) |
+| **Allows `null` Keys?** | ✅ Yes | ❌ No | ❌ No |
+| **Allows `null` Values?** | ✅ Yes | ❌ No | ❌ No |
+| **Performance (Put, Get, Remove)** | ✅ Fast (`O(1)`) | ❌ Slow (Locks Entire Table) | ✅ Fast (Segmented Locks) |
+| **Usage** | Best for Single-Threaded Apps | Legacy (Avoid Using) | Best for Multi-Threaded Apps |
+
+📌 **When to Use `ConcurrentHashMap`?**  
+✔️ **When you need high-performance thread-safe operations.**  
+✔️ **When multiple threads need to read and write simultaneously.**  
+✔️ **When `HashMap` is not safe but `Hashtable` is too slow.**  
+
+---
+
+## **3️⃣ How `ConcurrentHashMap` Works Internally?**
+Instead of locking the entire map (like `Hashtable`), `ConcurrentHashMap` **divides the map into segments (buckets)** and locks only the affected segment during updates.
+
+### **🔹 How Data is Stored?**
+- **Uses a bucket-based structure**, similar to `HashMap`.  
+- **Each bucket (segment) is locked separately**, allowing multiple threads to access different buckets concurrently.  
+- Uses **a special locking mechanism (CAS - Compare-And-Swap)** to ensure consistency without full table locking.  
+
+📌 **Example:**  
+```java
+ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
+map.put(1, "Alice");
+map.put(2, "Bob");
+map.put(3, "Charlie");
+```
+✔️ **Internally, the map might look like this:**  
+```
+Bucket 0: (1 → Alice)
+Bucket 1: (2 → Bob)
+Bucket 2: (3 → Charlie)
+```
+✅ **Each bucket (segment) is locked individually, allowing faster access.**
+
+---
+
+## **4️⃣ `ConcurrentHashMap` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `ConcurrentHashMap()` | Creates an empty map with default capacity. |
+| `ConcurrentHashMap(int initialCapacity)` | Creates a map with a specific initial capacity. |
+| `ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel)` | Creates a map with defined concurrency level. |
+| `ConcurrentHashMap(Map<? extends K, ? extends V> map)` | Creates a `ConcurrentHashMap` from another map. |
+
+---
+
+## **5️⃣ Important Methods of `ConcurrentHashMap<K, V>`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+| `replace(K key, V oldValue, V newValue)` | Replaces a value if the current value matches. |
+| `computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction)` | Computes a value if the key is absent. |
+| `computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)` | Computes a new value if the key is present. |
+
+---
+
+## **6️⃣ `ConcurrentHashMap` Example Code**
+```java
+import java.util.concurrent.*;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        // Creating a ConcurrentHashMap
+        ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
+
+        // Adding elements (put method)
+        map.put(1, "Alice");
+        map.put(2, "Bob");
+        map.put(3, "Charlie");
+
+        // Retrieving values (get method)
+        System.out.println("Value of 1: " + map.get(1)); // Alice
+
+        // Checking if a key exists
+        System.out.println("Contains key 2? " + map.containsKey(2)); // true
+
+        // Iterating through ConcurrentHashMap
+        for (ConcurrentHashMap.Entry<Integer, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+```
+✔️ **Output:**
+```
+Value of 1: Alice
+Contains key 2? true
+1 → Alice
+2 → Bob
+3 → Charlie
+```
+✅ **Supports fast, thread-safe operations without full map locking.**
+
+---
+
+## **7️⃣ Multi-Threading with `ConcurrentHashMap`**
+Unlike `Hashtable`, `ConcurrentHashMap` **does not block the entire map for every operation**. Multiple threads can update different segments at the same time.
+
+📌 **Example (Multiple Threads Using `ConcurrentHashMap`)**
+```java
+import java.util.concurrent.*;
+
+public class ConcurrentHashMapThreadExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
+
+        // Thread 1 (Adding Data)
+        Thread t1 = new Thread(() -> {
+            map.put(1, "A");
+            map.put(2, "B");
+            map.put(3, "C");
+        });
+
+        // Thread 2 (Reading Data)
+        Thread t2 = new Thread(() -> {
+            System.out.println(map.get(1));
+            System.out.println(map.get(2));
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+✔️ **Thread-safe operations without full map locking.**
+
+---
+
+## **8️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+| `get(K)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+| `remove(K)` | **O(1)** (best case), **O(n)** (worst case - collisions) |
+
+📌 **Why Faster than `Hashtable`?**  
+- **Does not lock the entire map.**  
+- **Uses fine-grained segment locks.**  
+- **Supports concurrent reads and writes.**  
+
+---
+
+## **9️⃣ When to Use `ConcurrentHashMap<K, V>`?**
+✔️ **When you need high-performance thread-safe operations.**  
+✔️ **When multiple threads need to read and write concurrently.**  
+✔️ **When `HashMap` is not safe but `Hashtable` is too slow.**  
+
+❌ **Avoid `ConcurrentHashMap<K, V>` if:**  
+- You need `null` keys or values (`Use HashMap`).  
+- You need strict synchronization (`Use Hashtable`).  
+
+---
+
+## **📌 Summary**
+✔️ **`ConcurrentHashMap<K, V>` is thread-safe (`Segmented Locking`).**  
+✔️ **Uses hash buckets (`O(1)` lookups in most cases).**  
+✔️ **No `null` keys or values allowed.**  
+✔️ **Faster than `Hashtable` due to better concurrency.**  
+
+---
+
+# 📌 **Deep Dive into `WeakHashMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `WeakHashMap<K, V>`?**  
+A **`WeakHashMap<K, V>`** is a special type of `Map` that **automatically removes entries** when their keys are no longer **strongly referenced** anywhere in the application.  
+
+### **✔️ Key Features of `WeakHashMap<K, V>`**
+- ✅ **Uses weak references for keys**, meaning **entries can be garbage collected (GC) automatically**.
+- ✅ **Prevents memory leaks** by allowing garbage collection to remove unused keys.
+- ✅ **Best suited for caching mechanisms** where keys can be discarded when not in use.
+- ✅ **Works similarly to `HashMap`, but with weak keys.**
+
+📌 **Example Use Case:**  
+Imagine a **cache system** that stores temporary data. If an object (key) is no longer needed in memory, it should be automatically removed from the cache. `WeakHashMap` helps in this case by removing the entry when the key is no longer referenced elsewhere.
+
+---
+
+## **2️⃣ Difference Between `HashMap`, `Hashtable`, `ConcurrentHashMap`, and `WeakHashMap`**
+| Feature | `HashMap` | `Hashtable` | `ConcurrentHashMap` | `WeakHashMap` |
+|---------|----------|------------|--------------------|--------------|
+| **Thread-Safe?** | ❌ No | ✅ Yes (Synchronized) | ✅ Yes (Segmented Locking) | ❌ No |
+| **Garbage Collection Aware?** | ❌ No | ❌ No | ❌ No | ✅ Yes (Removes Unused Keys) |
+| **Allows `null` Keys?** | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
+| **Allows `null` Values?** | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
+| **Performance** | ✅ Fast (`O(1)`) | ❌ Slow (Full Locking) | ✅ Fast (Concurrent Access) | ✅ Fast (`O(1)`) |
+| **When to Use?** | General Purpose Map | Thread-Safe, but slow | High-Performance Thread-Safe Map | Auto-removing keys (cache, temporary data) |
+
+📌 **When to Use `WeakHashMap`?**  
+✔️ **For caching mechanisms** where objects should be automatically removed when no longer needed.  
+✔️ **When preventing memory leaks** by ensuring unused keys do not remain in memory.  
+✔️ **When you need a `Map<K, V>` but want automatic cleanup of unused keys.**  
+
+---
+
+## **3️⃣ How `WeakHashMap` Works Internally?**
+Instead of using **strong references**, `WeakHashMap` **uses weak references for its keys**.  
+
+### **🔹 What is a Weak Reference?**
+- Normally, Java objects are referenced **strongly**—they remain in memory until no reference exists.  
+- **Weak references** allow objects to be garbage collected even when still in the `WeakHashMap`.  
+
+📌 **Example:**  
+```java
+import java.util.*;
+
+public class WeakHashMapExample {
+    public static void main(String[] args) {
+        Map<Object, String> map = new WeakHashMap<>();
+
+        Object key1 = new String("key1");  // Weak reference key
+        Object key2 = new String("key2");
+
+        map.put(key1, "Value 1");
+        map.put(key2, "Value 2");
+
+        System.out.println("Before GC: " + map);
+
+        // Remove strong references to keys
+        key1 = null;
+        key2 = null;
+
+        // Call garbage collector
+        System.gc();
+
+        // Wait for GC to complete
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+        System.out.println("After GC: " + map);
+    }
+}
+```
+✔️ **Output (Example, may vary depending on GC execution):**
+```
+Before GC: {key1=Value 1, key2=Value 2}
+After GC: {}
+```
+✅ **The keys were garbage collected, so the map became empty!**  
+
+---
+
+## **4️⃣ `WeakHashMap` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `WeakHashMap()` | Creates an empty `WeakHashMap`. |
+| `WeakHashMap(int initialCapacity)` | Creates a `WeakHashMap` with a specified capacity. |
+| `WeakHashMap(int initialCapacity, float loadFactor)` | Creates a `WeakHashMap` with a specified capacity and load factor. |
+| `WeakHashMap(Map<? extends K, ? extends V> m)` | Creates a `WeakHashMap` from an existing map. |
+
+---
+
+## **5️⃣ Important Methods of `WeakHashMap<K, V>`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+
+---
+
+## **6️⃣ `WeakHashMap` Example Code**
+```java
+import java.util.WeakHashMap;
+
+public class WeakHashMapDemo {
+    public static void main(String[] args) {
+        WeakHashMap<String, String> map = new WeakHashMap<>();
+
+        String key1 = new String("User1");
+        String key2 = new String("User2");
+
+        map.put(key1, "Alice");
+        map.put(key2, "Bob");
+
+        System.out.println("Before GC: " + map);
+
+        key1 = null; // Removing strong reference
+
+        System.gc(); // Request Garbage Collection
+
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+        System.out.println("After GC: " + map);
+    }
+}
+```
+✔️ **Output (May vary depending on GC execution):**
+```
+Before GC: {User1=Alice, User2=Bob}
+After GC: {User2=Bob}
+```
+✅ **Only `User1` was garbage collected because we removed its reference!**
+
+---
+
+## **7️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+| `get(K)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+| `remove(K)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+
+📌 **Why `WeakHashMap` is Useful?**
+- Prevents **memory leaks** by automatically removing unused keys.  
+- Ideal for **caching and temporary storage**.  
+
+---
+
+## **8️⃣ When to Use `WeakHashMap<K, V>`?**
+✔️ **When you want automatic cleanup of unused keys.**  
+✔️ **When storing temporary/cache data that should be removed when not needed.**  
+✔️ **When you need a `Map<K, V>` that does not block garbage collection.**  
+
+❌ **Avoid `WeakHashMap<K, V>` if:**  
+- You need strong references (Use `HashMap` instead).  
+- You need a thread-safe map (`Use ConcurrentHashMap`).  
+
+---
+
+## **📌 Summary**
+✔️ **`WeakHashMap<K, V>` is a special `Map` that automatically removes unused keys.**  
+✔️ **Uses weak references, so keys are garbage collected when not strongly referenced.**  
+✔️ **Best for caching and temporary data storage.**  
+✔️ **Not thread-safe, but faster than `Hashtable`.**  
+
+---
+
+# 📌 **Deep Dive into `IdentityHashMap<K, V>` (Easy & Detailed Explanation)**  
+
+---
+
+## **1️⃣ What is `IdentityHashMap<K, V>`?**  
+`IdentityHashMap<K, V>` is a special type of `Map<K, V>` in Java that **compares keys using reference equality (`==`) instead of object equality (`equals()`).**  
+
+### **✔️ Key Features of `IdentityHashMap<K, V>`**
+- ✅ **Uses `==` instead of `equals()` for comparing keys.**
+- ✅ **Allows duplicate keys if they are different objects (`new String("A")` ≠ `new String("A")`).**
+- ✅ **Not thread-safe (like `HashMap`).**
+- ✅ **Does not maintain insertion order (like `HashMap`).**
+- ✅ **Faster than `HashMap` because it avoids extra hash computations.**
+
+📌 **Example Use Case:**  
+Imagine you need to **store unique objects based on memory references, not content**—for example, when handling proxies, caches, or serialization where object identity matters.
+
+---
+
+## **2️⃣ Difference Between `HashMap`, `WeakHashMap`, and `IdentityHashMap`**
+| Feature | `HashMap<K, V>` | `WeakHashMap<K, V>` | `IdentityHashMap<K, V>` |
+|---------|---------------|----------------|-------------------|
+| **Key Comparison** | Uses `equals()` | Uses `equals()` | Uses `==` (Reference) |
+| **Garbage Collection Aware?** | ❌ No | ✅ Yes | ❌ No |
+| **Allows `null` Keys?** | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Thread-Safe?** | ❌ No | ❌ No | ❌ No |
+| **Performance** | **O(1)** (Best case) | **O(1)** (Best case) | **O(1)** (Best case) |
+| **When to Use?** | General Purpose Map | Auto-removing keys (caching) | Object Identity-Based Mapping |
+
+📌 **When to Use `IdentityHashMap`?**  
+✔️ **When you want different instances of the same object to be treated as different keys.**  
+✔️ **When handling proxies, serialization, or tracking object identity.**  
+✔️ **When performance is important (faster lookup due to `==` comparison).**
+
+---
+
+## **3️⃣ How `IdentityHashMap<K, V>` Works Internally?**
+Unlike `HashMap`, which uses **hash codes and `equals()`**, `IdentityHashMap` uses **memory references (`==`)** for key comparison.
+
+📌 **Example:**  
+```java
+import java.util.IdentityHashMap;
+
+public class IdentityHashMapExample {
+    public static void main(String[] args) {
+        IdentityHashMap<String, Integer> map = new IdentityHashMap<>();
+
+        String key1 = new String("A"); // Different Object
+        String key2 = new String("A"); // Different Object
+
+        map.put(key1, 1);
+        map.put(key2, 2); // Different object, so it will be added separately
+
+        System.out.println("Map Size: " + map.size()); // Output: 2
+        System.out.println("Map: " + map);
+    }
+}
+```
+✅ **Output:**
+```
+Map Size: 2
+Map: {A=1, A=2}
+```
+✔️ Unlike `HashMap`, **both `"A"` keys are treated as different because they are different objects in memory.**
+
+---
+
+## **4️⃣ `IdentityHashMap` Constructors**
+| Constructor | Description |
+|------------|-------------|
+| `IdentityHashMap()` | Creates an empty `IdentityHashMap`. |
+| `IdentityHashMap(int expectedSize)` | Creates an `IdentityHashMap` with an expected size. |
+| `IdentityHashMap(Map<? extends K, ? extends V> m)` | Creates an `IdentityHashMap` from an existing map. |
+
+---
+
+## **5️⃣ Important Methods of `IdentityHashMap<K, V>`**
+| Method | Description |
+|--------|-------------|
+| `put(K key, V value)` | Adds a key-value pair to the map. |
+| `get(K key)` | Retrieves the value for a key. |
+| `remove(K key)` | Removes a key-value pair. |
+| `containsKey(K key)` | Checks if a key exists. |
+| `containsValue(V value)` | Checks if a value exists. |
+| `size()` | Returns the number of key-value pairs. |
+| `isEmpty()` | Checks if the map is empty. |
+| `keySet()` | Returns all keys as a `Set`. |
+| `values()` | Returns all values as a `Collection`. |
+| `entrySet()` | Returns all key-value pairs as a `Set`. |
+
+---
+
+## **6️⃣ `IdentityHashMap` Example Code**
+```java
+import java.util.IdentityHashMap;
+
+public class IdentityHashMapDemo {
+    public static void main(String[] args) {
+        IdentityHashMap<Integer, String> map = new IdentityHashMap<>();
+
+        Integer key1 = new Integer(10);
+        Integer key2 = new Integer(10);
+
+        map.put(key1, "Value 1");
+        map.put(key2, "Value 2"); // Treated as different keys
+
+        System.out.println("Map Size: " + map.size());
+        System.out.println("Map: " + map);
+    }
+}
+```
+✔️ **Output:**
+```
+Map Size: 2
+Map: {10=Value 1, 10=Value 2}
+```
+✅ **Both `10` keys are treated as different objects because they are different instances.**
+
+---
+
+## **7️⃣ Performance Analysis**
+| Operation | Time Complexity |
+|-----------|---------------|
+| `put(K, V)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+| `get(K)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+| `remove(K)` | **O(1)** (best case), **O(n)** (worst case - hash collisions) |
+
+📌 **Why `IdentityHashMap` is Useful?**
+- 🚀 **Faster than `HashMap` because it avoids hash computation overhead.**
+- 🚀 **Useful when object identity matters instead of content comparison.**
+
+---
+
+## **8️⃣ When to Use `IdentityHashMap<K, V>`?**
+✔️ **When object identity (`==`) matters, not content comparison (`equals()`).**  
+✔️ **When you need to distinguish between different object instances of the same value.**  
+✔️ **When performance is critical, and avoiding hash computations speeds up the program.**  
+
+❌ **Avoid `IdentityHashMap<K, V>` if:**  
+- You need keys to be compared based on content (`equals()`).  
+- You need a thread-safe map (`Use ConcurrentHashMap`).  
+
+---
+
+## **📌 Summary**
+✔️ **`IdentityHashMap<K, V>` is a `Map` that compares keys using reference equality (`==`) instead of `equals()`.**  
+✔️ **Allows duplicate-looking keys if they are different objects in memory.**  
+✔️ **Faster than `HashMap` for specific use cases.**  
+✔️ **Not thread-safe, does not maintain insertion order.**  
+✔️ **Useful for object identity tracking, serialization, caching.**  
+
+---
+# 📌 **Chapter 7: Comparators and Sorting in Collections (Easy & Deep Explanation)**  
+
+Sorting is a crucial part of working with collections in Java. Java provides two key interfaces to handle sorting:  
+1️⃣ **`Comparable<T>`** (Natural Sorting)  
+2️⃣ **`Comparator<T>`** (Custom Sorting)  
+
+---
+
+## **1️⃣ Why Do We Need Sorting in Java Collections?**  
+
+Sorting helps in:  
+✔️ **Quickly searching elements** in a large dataset.  
+✔️ **Efficient data processing** by ordering records logically.  
+✔️ **Enhancing performance** in searching algorithms like binary search.  
+✔️ **Organizing user data** (e.g., sorting students by marks, sorting products by price).  
+
+💡 Java provides two main ways to sort collections:  
+- **Natural Sorting** (`Comparable<T>`)  
+- **Custom Sorting** (`Comparator<T>`)
+
+---
+
+## **2️⃣ How Sorting Works in Java Collections?**  
+Java collections can be sorted using:  
+1️⃣ **`Collections.sort(list)`** → Sorts a `List` using natural ordering (must implement `Comparable<T>`).  
+2️⃣ **`Collections.sort(list, comparator)`** → Sorts a `List` using a `Comparator<T>` for custom ordering.  
+3️⃣ **`TreeSet<T>` and `TreeMap<K, V>`** → Automatically sort elements based on natural ordering or a custom comparator.  
+
+---
+
+## **3️⃣ Understanding `Comparable<T>` and `Comparator<T>` (Key Differences)**  
+
+| Feature | `Comparable<T>` | `Comparator<T>` |
+|---------|---------------|----------------|
+| **Purpose** | Defines **natural sorting order** of an object. | Defines **custom sorting order** for objects. |
+| **Method Used** | `compareTo(T o)` | `compare(T o1, T o2)` |
+| **Where to Implement?** | Implemented **inside the class** being sorted. | Implemented in a **separate class** or using lambda functions. |
+| **Modifies Original Class?** | ✅ Yes, class must implement `Comparable<T>`. | ❌ No, sorting logic is external. |
+| **Sorts By** | Single field (e.g., sorting students by marks). | Multiple fields (e.g., sorting students by name and then marks). |
+| **Used In** | `TreeSet`, `TreeMap`, `Collections.sort()`. | `Collections.sort()`, `TreeSet`, `TreeMap`. |
+
+✅ **Use `Comparable<T>`** when the class has a **single natural sorting order** (e.g., sorting employees by salary).  
+✅ **Use `Comparator<T>`** when sorting should be **flexible** (e.g., sorting employees by salary or by age).  
+
+---
+
+## **4️⃣ Sorting Lists, Sets, and Maps in Java**
+Sorting can be applied to different collections:
+
+### ✅ **Sorting a `List<T>`**
+- `Collections.sort(List<T>)` → Uses `Comparable<T>`  
+- `Collections.sort(List<T>, Comparator<T>)` → Uses `Comparator<T>`  
+
+### ✅ **Sorting a `Set<T>`**
+- `TreeSet<T>` automatically sorts elements based on `Comparable<T>` or `Comparator<T>`.
+
+### ✅ **Sorting a `Map<K, V>`**
+- `TreeMap<K, V>` automatically sorts based on `Comparable<K>` or `Comparator<K>`.  
+- `LinkedHashMap<K, V>` maintains **insertion order**, not sorting.  
+- `HashMap<K, V>` does **not** sort keys or values.
+
+---
+
+# **📌 Deep Dive into `Comparable<T>` (Natural Sorting) (Easy Explanation)**  
+
+## **1️⃣ What is `Comparable<T>`?**  
+
+✅ `Comparable<T>` is an interface in Java used for **natural sorting** of objects.  
+✅ It allows a class to define its own **default sorting order**.  
+✅ It provides the **`compareTo(T o)`** method to define sorting logic.  
+
+---
+
+## **2️⃣ Why Do We Need `Comparable<T>`?**  
+
+Imagine we have a list of **students**, and we want to sort them by their **marks**.  
+Without `Comparable<T>`, Java **does not know** how to compare student objects.  
+By implementing `Comparable<T>`, we can **tell Java** how to compare them (e.g., highest marks first).  
+
+---
+
+## **3️⃣ How to Use `Comparable<T>`?**  
+
+**Steps to Implement `Comparable<T>`**:  
+1️⃣ **Make the class implement `Comparable<T>`**.  
+2️⃣ **Override the `compareTo(T o)` method**.  
+3️⃣ **Define sorting logic inside `compareTo`**.  
+4️⃣ **Use `Collections.sort(List<T>)` to sort the list**.
+
+---
+
+## **4️⃣ Example: Sorting Students by Marks (Ascending Order)**  
+
+```java
+import java.util.*;
+
+class Student implements Comparable<Student> {
+    int id;
+    String name;
+    int marks;
+
+    // Constructor
+    public Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    // Implement compareTo method (Natural Sorting)
+    @Override
+    public int compareTo(Student other) {
+        return this.marks - other.marks; // Sorting by marks (Ascending Order)
+    }
+
+    // Display method
+    public String toString() {
+        return "Student{" + "ID=" + id + ", Name='" + name + "', Marks=" + marks + '}';
+    }
+}
+
+public class ComparableExample {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student(101, "Alice", 85));
+        students.add(new Student(102, "Bob", 72));
+        students.add(new Student(103, "Charlie", 90));
+
+        System.out.println("Before Sorting:");
+        System.out.println(students);
+
+        // Sorting using Collections.sort() (Natural Order)
+        Collections.sort(students);
+
+        System.out.println("\nAfter Sorting:");
+        System.out.println(students);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Before Sorting:
+[Student{ID=101, Name='Alice', Marks=85}, Student{ID=102, Name='Bob', Marks=72}, Student{ID=103, Name='Charlie', Marks=90}]
+
+After Sorting:
+[Student{ID=102, Name='Bob', Marks=72}, Student{ID=101, Name='Alice', Marks=85}, Student{ID=103, Name='Charlie', Marks=90}]
+```
+
+✔️ **Explanation:**  
+- We implemented `Comparable<Student>`.  
+- The `compareTo` method **sorts students by marks in ascending order**.  
+- `Collections.sort(students)` **sorts the list based on `compareTo` method**.  
+
+---
+
+## **5️⃣ Changing Sorting Order (Descending Order)**  
+
+By default, `compareTo` sorts in **ascending order**.  
+To sort in **descending order**, modify `compareTo`:
+
+```java
+@Override
+public int compareTo(Student other) {
+    return other.marks - this.marks; // Sorting by marks (Descending Order)
+}
+```
+
+Now, the highest marks will come first.
+
+---
+
+## **6️⃣ Sorting Objects with Multiple Fields**  
+
+We can modify `compareTo` to sort by **multiple criteria**.
+
+### **Example: Sorting by Marks, then by Name (if Marks are Equal)**  
+
+```java
+@Override
+public int compareTo(Student other) {
+    if (this.marks == other.marks) {
+        return this.name.compareTo(other.name); // Sort by Name (Alphabetical Order)
+    }
+    return other.marks - this.marks; // Sort by Marks (Descending Order)
+}
+```
+
+✔️ **Now students with the same marks will be sorted alphabetically.**  
+
+---
+
+## **7️⃣ Key Points About `Comparable<T>`**  
+
+✔️ Used for **natural sorting** (default order).  
+✔️ We **must modify the original class** (implements `Comparable<T>`).  
+✔️ Sorting logic is defined in **`compareTo(T o)` method**.  
+✔️ Used in `TreeSet<T>`, `TreeMap<K, V>`, and `Collections.sort(List<T>)`.  
+✔️ **Only one sorting order is possible per class.**  
+
+---
+
+# **📌 Deep Dive into `Comparator<T>` (Custom Sorting) (Easy Explanation)**  
+
+## **1️⃣ What is `Comparator<T>`?**  
+
+✅ `Comparator<T>` is an interface used to **define custom sorting logic** for objects.  
+✅ It allows **multiple sorting orders** without modifying the original class.  
+✅ It provides the **`compare(T o1, T o2)`** method to define sorting logic.  
+
+---
+
+## **2️⃣ Why Do We Need `Comparator<T>`?**  
+
+Imagine we have a list of **students** and we want to sort them in different ways:  
+✔️ By **marks** (highest to lowest).  
+✔️ By **name** (alphabetical order).  
+✔️ By **ID** (ascending order).  
+
+If we use `Comparable<T>`, we can **only define one sorting order** inside the class.  
+But with `Comparator<T>`, we can define **multiple sorting orders externally**.  
+
+---
+
+## **3️⃣ How to Use `Comparator<T>`?**  
+
+**Steps to Implement `Comparator<T>`:**  
+1️⃣ **Create a separate class** that implements `Comparator<T>`.  
+2️⃣ **Override the `compare(T o1, T o2)` method**.  
+3️⃣ **Use `Collections.sort(List<T>, Comparator<T>)`** to sort the list.
+
+---
+
+## **4️⃣ Example: Sorting Students by Marks (Descending Order)**  
+
+```java
+import java.util.*;
+
+class Student {
+    int id;
+    String name;
+    int marks;
+
+    public Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public String toString() {
+        return "Student{" + "ID=" + id + ", Name='" + name + "', Marks=" + marks + '}';
+    }
+}
+
+// Custom Comparator for sorting by Marks (Descending Order)
+class SortByMarks implements Comparator<Student> {
+    @Override
+    public int compare(Student s1, Student s2) {
+        return s2.marks - s1.marks; // Highest marks first
+    }
+}
+
+public class ComparatorExample {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student(101, "Alice", 85));
+        students.add(new Student(102, "Bob", 72));
+        students.add(new Student(103, "Charlie", 90));
+
+        System.out.println("Before Sorting:");
+        System.out.println(students);
+
+        // Sorting using Comparator
+        Collections.sort(students, new SortByMarks());
+
+        System.out.println("\nAfter Sorting (By Marks Descending):");
+        System.out.println(students);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Before Sorting:
+[Student{ID=101, Name='Alice', Marks=85}, Student{ID=102, Name='Bob', Marks=72}, Student{ID=103, Name='Charlie', Marks=90}]
+
+After Sorting (By Marks Descending):
+[Student{ID=103, Name='Charlie', Marks=90}, Student{ID=101, Name='Alice', Marks=85}, Student{ID=102, Name='Bob', Marks=72}]
+```
+
+✔️ **Explanation:**  
+- We created a **separate class** `SortByMarks` that implements `Comparator<Student>`.  
+- The `compare` method sorts students **by marks in descending order**.  
+- We passed `new SortByMarks()` to `Collections.sort()` for sorting.
+
+---
+
+## **5️⃣ Sorting Students by Name (Alphabetical Order)**  
+
+We can create another **custom comparator** for sorting by name.
+
+```java
+// Custom Comparator for sorting by Name (Alphabetical Order)
+class SortByName implements Comparator<Student> {
+    @Override
+    public int compare(Student s1, Student s2) {
+        return s1.name.compareTo(s2.name); // A to Z order
+    }
+}
+```
+
+Now, we can sort by name:
+
+```java
+Collections.sort(students, new SortByName());
+```
+
+✔️ Now students will be sorted in **alphabetical order by name**.
+
+---
+
+## **6️⃣ Sorting by Multiple Fields**  
+
+What if **marks are equal**?  
+We can **first sort by marks**, and if they are the same, **sort by name**.
+
+```java
+class SortByMarksThenName implements Comparator<Student> {
+    @Override
+    public int compare(Student s1, Student s2) {
+        if (s1.marks == s2.marks) {
+            return s1.name.compareTo(s2.name); // Sort by Name (Alphabetical)
+        }
+        return s2.marks - s1.marks; // Sort by Marks (Descending)
+    }
+}
+```
+
+Now, we can sort students:
+
+```java
+Collections.sort(students, new SortByMarksThenName());
+```
+
+✔️ If two students have the **same marks**, they will be sorted **alphabetically by name**.
+
+---
+
+## **7️⃣ Using Lambda Expressions for Comparator**  
+
+Instead of creating separate classes, we can use **lambda expressions**.
+
+### **Sorting by Marks (Descending) Using Lambda**
+```java
+Collections.sort(students, (s1, s2) -> s2.marks - s1.marks);
+```
+
+### **Sorting by Name (Alphabetical) Using Lambda**
+```java
+Collections.sort(students, (s1, s2) -> s1.name.compareTo(s2.name));
+```
+
+💡 **Lambda makes sorting more readable and concise**.
+
+---
+
+## **8️⃣ Key Differences: `Comparable<T>` vs `Comparator<T>`**  
+
+| Feature | `Comparable<T>` | `Comparator<T>` |
+|---------|---------------|----------------|
+| **Purpose** | Defines **natural sorting order** of an object. | Defines **custom sorting order** for objects. |
+| **Method Used** | `compareTo(T o)` | `compare(T o1, T o2)` |
+| **Where to Implement?** | Implemented **inside the class** being sorted. | Implemented in a **separate class** or using lambda functions. |
+| **Modifies Original Class?** | ✅ Yes, class must implement `Comparable<T>`. | ❌ No, sorting logic is external. |
+| **Sorts By** | Single field (e.g., sorting students by marks). | Multiple fields (e.g., sorting students by name and then marks). |
+| **Used In** | `TreeSet`, `TreeMap`, `Collections.sort()`. | `Collections.sort()`, `TreeSet`, `TreeMap`. |
+
+✅ **Use `Comparable<T>`** when the class has a **single natural sorting order**.  
+✅ **Use `Comparator<T>`** when sorting should be **flexible**.
+
+---
+# **📌 Sorting in Sets and Maps Using Comparator<T> (Easy Explanation)**  
+
+Sorting **Lists** is easy with `Comparator<T>`, but **how do we sort Sets and Maps**? 🤔  
+Let’s explore **sorting techniques for Sets and Maps in Java**.
+
+---
+
+# **1️⃣ Sorting `Set<T>` (TreeSet, HashSet, LinkedHashSet)**
+✅ **By Default:**  
+- `TreeSet<T>` sorts elements **automatically in ascending order**.  
+- `HashSet<T>` and `LinkedHashSet<T>` **do NOT maintain sorting order**.  
+
+✅ **How to Sort Sets?**  
+Since `HashSet<T>` and `LinkedHashSet<T>` don’t support sorting, we must:  
+✔️ Convert them into a **List**.  
+✔️ Sort the list using `Comparator<T>`.  
+✔️ Convert the list **back into a Set**.  
+
+---
+
+### **Sorting `TreeSet<T>` Using `Comparator<T>`**  
+🔹 `TreeSet<T>` allows custom sorting using a **Comparator**.  
+
+```java
+import java.util.*;
+
+class SortTreeSetExample {
+    public static void main(String[] args) {
+        // TreeSet with custom sorting (Descending Order)
+        TreeSet<Integer> numbers = new TreeSet<>(Comparator.reverseOrder());
+
+        numbers.add(10);
+        numbers.add(50);
+        numbers.add(30);
+        numbers.add(20);
+
+        System.out.println("Sorted TreeSet (Descending Order): " + numbers);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Sorted TreeSet (Descending Order): [50, 30, 20, 10]
+```
+✔️ We passed `Comparator.reverseOrder()` to sort the TreeSet **in descending order**.
+
+---
+
+### **Sorting `HashSet<T>` Using `Comparator<T>`**  
+🔹 `HashSet<T>` does not maintain sorting order, so we need to convert it to a `List<T>`, sort it, and convert it back.
+
+```java
+import java.util.*;
+
+class SortHashSetExample {
+    public static void main(String[] args) {
+        HashSet<String> names = new HashSet<>();
+        names.add("Charlie");
+        names.add("Alice");
+        names.add("Bob");
+
+        // Convert HashSet to List
+        List<String> sortedList = new ArrayList<>(names);
+
+        // Sort List using Comparator (Alphabetical Order)
+        sortedList.sort(Comparator.naturalOrder());
+
+        // Convert List back to Set
+        LinkedHashSet<String> sortedSet = new LinkedHashSet<>(sortedList);
+
+        System.out.println("Sorted HashSet: " + sortedSet);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Sorted HashSet: [Alice, Bob, Charlie]
+```
+✔️ We used `Comparator.naturalOrder()` to sort names **in alphabetical order**.
+
+---
+
+# **2️⃣ Sorting `Map<K, V>` (HashMap, LinkedHashMap, TreeMap)**
+✅ **By Default:**  
+- `TreeMap<K, V>` **sorts keys in natural order**.  
+- `HashMap<K, V>` and `LinkedHashMap<K, V>` **do NOT maintain sorting order**.  
+
+✅ **How to Sort Maps?**  
+✔️ We can sort **by keys** or **by values** using `Comparator<T>`.  
+
+---
+
+### **Sorting `TreeMap<K, V>` By Custom Order**
+🔹 By default, `TreeMap<K, V>` sorts **by key in ascending order**.  
+🔹 We can **customize the sorting order**.
+
+```java
+import java.util.*;
+
+class SortTreeMapExample {
+    public static void main(String[] args) {
+        // TreeMap sorted in reverse order of keys
+        TreeMap<Integer, String> treeMap = new TreeMap<>(Comparator.reverseOrder());
+
+        treeMap.put(1, "Apple");
+        treeMap.put(3, "Banana");
+        treeMap.put(2, "Cherry");
+
+        System.out.println("Sorted TreeMap (By Key Descending): " + treeMap);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Sorted TreeMap (By Key Descending): {3=Banana, 2=Cherry, 1=Apple}
+```
+✔️ We used `Comparator.reverseOrder()` to **sort keys in descending order**.
+
+---
+
+### **Sorting `HashMap<K, V>` By Keys**
+🔹 Since `HashMap<K, V>` is **unordered**, we:  
+✔️ Convert it into a `List<Map.Entry<K, V>>`.  
+✔️ Sort it using a `Comparator<K>`.  
+✔️ Insert it into a `LinkedHashMap<K, V>`.
+
+```java
+import java.util.*;
+
+class SortHashMapByKeyExample {
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(3, "Banana");
+        map.put(1, "Apple");
+        map.put(2, "Cherry");
+
+        // Convert to List
+        List<Map.Entry<Integer, String>> entryList = new ArrayList<>(map.entrySet());
+
+        // Sort by Key (Ascending)
+        entryList.sort(Map.Entry.comparingByKey());
+
+        // Convert back to LinkedHashMap
+        LinkedHashMap<Integer, String> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Integer, String> entry : entryList) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        System.out.println("Sorted HashMap (By Key Ascending): " + sortedMap);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Sorted HashMap (By Key Ascending): {1=Apple, 2=Cherry, 3=Banana}
+```
+✔️ We used `Map.Entry.comparingByKey()` to **sort by key**.
+
+---
+
+### **Sorting `HashMap<K, V>` By Values**
+🔹 If we want to **sort by values** instead of keys:  
+
+```java
+import java.util.*;
+
+class SortHashMapByValueExample {
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(3, "Banana");
+        map.put(1, "Apple");
+        map.put(2, "Cherry");
+
+        // Convert to List
+        List<Map.Entry<Integer, String>> entryList = new ArrayList<>(map.entrySet());
+
+        // Sort by Value (Alphabetical Order)
+        entryList.sort(Map.Entry.comparingByValue());
+
+        // Convert back to LinkedHashMap
+        LinkedHashMap<Integer, String> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Integer, String> entry : entryList) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        System.out.println("Sorted HashMap (By Value): " + sortedMap);
+    }
+}
+```
+
+### **🔹 Output:**
+```
+Sorted HashMap (By Value): {1=Apple, 3=Banana, 2=Cherry}
+```
+✔️ We used `Map.Entry.comparingByValue()` to **sort by value alphabetically**.
+
+---
+
+# **🔹 Summary: Sorting Techniques for Collections**  
+
+| Collection | Sorting Strategy |
+|------------|----------------|
+| `ArrayList<T>` | Use `Collections.sort(list, comparator)` |
+| `TreeSet<T>` | Use `new TreeSet<>(comparator)` |
+| `HashSet<T>` | Convert to `List<T>`, sort, convert back |
+| `TreeMap<K, V>` | Use `new TreeMap<>(comparator)` |
+| `HashMap<K, V>` | Convert to `List<Map.Entry<K, V>>`, sort, convert back |
+
+✅ **Use `Comparator<T>`** for **custom sorting** in Lists, Sets, and Maps.  
+✅ **Convert HashSet/HashMap to a List** if they don’t support sorting directly.  
 
 ---
 
