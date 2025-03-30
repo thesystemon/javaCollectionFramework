@@ -7603,4 +7603,1519 @@ Frequency of 'red': 3
 
 ---
 
+# **Deep Dive into Next Three Methods of `Collections` Class**  
 
+✅ `Collections.fill(List<T> list, T obj)`  
+✅ `Collections.replaceAll(List<T> list, T oldVal, T newVal)`  
+✅ `Collections.copy(List<T> dest, List<T> src)`  
+
+We will go step by step:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.fill(List<T> list, T obj)` (Replace All Elements with One Value)**  
+
+### **📌 What It Does?**  
+- Replaces **all elements** of the list with the **same value**.  
+- Useful when we want to **reset** or **initialize** a list with a default value.  
+
+### **📌 Syntax**
+```java
+Collections.fill(List<T> list, T obj);
+```
+- `list` → The list to be modified.  
+- `obj` → The object to set in all positions.  
+
+🚨 **Important:** The `list` **must be mutable** (modifiable), otherwise it throws an exception!  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Iterates through each index** of the list.  
+2. **Replaces each element** with `obj`.  
+3. **Returns nothing** (modifies the list directly).  
+4. **Time Complexity: O(n)** (since every element is updated once).  
+
+---
+
+### **📌 Example: Filling a List with a Default Value**
+```java
+import java.util.*;
+
+class FillExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        Collections.fill(numbers, 0);
+        System.out.println("List after fill: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+List after fill: [0, 0, 0, 0, 0]
+```
+✔️ **All elements are replaced with `0`.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Resetting a list** (e.g., clearing marks in a survey).  
+- **Initializing a list** (e.g., filling a list with `null` values in a cache).  
+
+---
+
+## **2️⃣ `Collections.replaceAll(List<T> list, T oldVal, T newVal)` (Replace Specific Elements)**  
+
+### **📌 What It Does?**  
+- **Finds all occurrences** of `oldVal` in the list and **replaces them** with `newVal`.  
+- **Does NOT change** elements that do not match `oldVal`.  
+
+### **📌 Syntax**
+```java
+Collections.replaceAll(List<T> list, T oldVal, T newVal);
+```
+- `list` → The list to modify.  
+- `oldVal` → The value to replace.  
+- `newVal` → The new value to set.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Iterates through the list** to find occurrences of `oldVal`.  
+2. **If a match is found**, it **replaces** it with `newVal`.  
+3. **Returns nothing** (modifies the list directly).  
+4. **Time Complexity: O(n)** (each element is checked once).  
+
+---
+
+### **📌 Example: Replacing All `2`s with `99`**
+```java
+import java.util.*;
+
+class ReplaceAllExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 2, 4, 2, 5));
+
+        Collections.replaceAll(numbers, 2, 99);
+        System.out.println("List after replaceAll: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+List after replaceAll: [1, 99, 3, 99, 4, 99, 5]
+```
+✔️ **All `2`s are replaced with `99`.**  
+
+---
+
+### **📌 Example: Replacing Words in a List**
+```java
+import java.util.*;
+
+class ReplaceAllStringExample {
+    public static void main(String[] args) {
+        List<String> words = new ArrayList<>(Arrays.asList("apple", "banana", "apple", "grape"));
+
+        Collections.replaceAll(words, "apple", "mango");
+        System.out.println("List after replaceAll: " + words);
+    }
+}
+```
+### **🔹 Output:**
+```
+List after replaceAll: [mango, banana, mango, grape]
+```
+✔️ **All `"apple"` entries are replaced with `"mango"`.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Replacing censored words** in a list of comments.  
+- **Updating incorrect data** (e.g., replacing a misspelled name).  
+
+---
+
+## **3️⃣ `Collections.copy(List<T> dest, List<T> src)` (Copy One List into Another)**  
+
+### **📌 What It Does?**  
+- Copies **all elements** from `src` (source) to `dest` (destination).  
+- 🚨 **The destination list (`dest`) must have the same size or larger than the source (`src`)!**  
+
+### **📌 Syntax**
+```java
+Collections.copy(List<T> dest, List<T> src);
+```
+- `dest` → The list that will receive the copied elements.  
+- `src` → The list from which elements are copied.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Checks that `dest` has enough space** (throws an exception if not).  
+2. **Iterates through `src`** and copies each element to `dest`.  
+3. **Modifies `dest` in-place** (returns nothing).  
+4. **Time Complexity: O(n)** (since each element is copied once).  
+
+---
+
+### **📌 Example: Copying One List into Another**
+```java
+import java.util.*;
+
+class CopyExample {
+    public static void main(String[] args) {
+        List<Integer> src = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> dest = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
+
+        Collections.copy(dest, src);
+        System.out.println("Destination List after copy: " + dest);
+    }
+}
+```
+### **🔹 Output:**
+```
+Destination List after copy: [1, 2, 3, 4, 5]
+```
+✔️ **`dest` now contains all elements from `src`.**  
+
+🚨 **Important:**  
+If `dest` has fewer elements than `src`, you will get an `IndexOutOfBoundsException`.  
+So, always ensure `dest` has **at least the same size** as `src`.  
+
+---
+
+### **📌 Real-World Use Case**
+- **Copying user settings** from one list to another.  
+- **Backing up a list before making changes.**  
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.fill(List<T>, T)` | Replaces all elements with a single value. | `O(n)` |
+| `Collections.replaceAll(List<T>, T, T)` | Replaces all occurrences of a value. | `O(n)` |
+| `Collections.copy(List<T>, List<T>)` | Copies one list into another. | `O(n)` |
+
+---
+
+
+
+# **📌 Chapter 9: Thread-Safety in Java Collections**
+## **🔹 What is Thread-Safety in Java Collections?**
+- **Thread-Safety** means that **multiple threads** can access a collection **without causing data inconsistency** or unexpected behavior.  
+- In Java, **normal collections like `ArrayList`, `HashSet`, and `HashMap` are NOT thread-safe** because multiple threads can modify them at the same time, leading to **race conditions.**  
+- Java provides **two solutions** for thread-safe collections:
+  1. **Synchronized Collections** (Older Approach)
+  2. **Concurrent Collections** (Modern Approach)
+
+---
+
+## **🔹 1️⃣ Synchronized Collections (Old Approach)**
+Java provides synchronized versions of collections using **`Collections.synchronizedXXX()`** methods.
+
+### **📌 Example: Synchronized List**
+```java
+import java.util.*;
+
+class SynchronizedListExample {
+    public static void main(String[] args) {
+        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        synchronized (list) {  // Required for safe iteration
+            for (int num : list) {
+                System.out.println(num);
+            }
+        }
+    }
+}
+```
+✔️ **Problems with Synchronized Collections:**  
+- **Slow Performance:** Because it locks the entire collection.  
+- **Manual Synchronization Required:** You must manually synchronize while iterating (`synchronized` block).  
+- **Better Alternative?** ✅ **Use Concurrent Collections!**  
+
+---
+
+## **🔹 2️⃣ Concurrent Collections (Modern Approach)**
+Java introduced the **`java.util.concurrent`** package to provide **faster and better thread-safe collections.**  
+
+🚀 **Key Concurrent Collections:**
+| Collection | Type | Feature |
+|------------|------|---------|
+| `CopyOnWriteArrayList` | **List** | **Thread-Safe ArrayList** (No Manual Synchronization Needed) |
+| `CopyOnWriteArraySet` | **Set** | **Thread-Safe HashSet** (Works Like CopyOnWriteArrayList) |
+| `ConcurrentHashMap` | **Map** | **Thread-Safe HashMap** (Uses Lock Stripes) |
+| `ConcurrentSkipListSet` | **Set** | **Thread-Safe Sorted Set** |
+| `ConcurrentSkipListMap` | **Map** | **Thread-Safe Sorted Map** |
+
+---
+
+## **🔹 3️⃣ CopyOnWriteArrayList (Thread-Safe ArrayList)**
+**📌 What is it?**
+- It is a **thread-safe version** of `ArrayList` that allows multiple threads to read the list **without locking**.  
+- **Whenever you modify it (add, remove, update), it creates a new copy of the list!**  
+
+**📌 When to Use?**
+- When **reads are more frequent** than writes (e.g., a list of online users in a chat app).  
+
+### **Example: CopyOnWriteArrayList**
+```java
+import java.util.concurrent.CopyOnWriteArrayList;
+
+class CopyOnWriteArrayListExample {
+    public static void main(String[] args) {
+        CopyOnWriteArrayList<Integer> list = new CopyOnWriteArrayList<>();
+
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        for (Integer num : list) {  // No need to manually synchronize
+            System.out.println(num);
+        }
+    }
+}
+```
+✔️ **Advantages:**
+- **Thread-Safe without Locks** (Multiple threads can read at the same time).  
+- **No ConcurrentModificationException** (Unlike `ArrayList`, which throws errors during modification).  
+✔️ **Disadvantages:**
+- **Memory Overhead** (Creates a new copy every time you modify it).  
+
+---
+
+## **🔹 4️⃣ CopyOnWriteArraySet (Thread-Safe HashSet)**
+- It is a **thread-safe version of `HashSet`** and works **just like `CopyOnWriteArrayList`.**  
+- **Each write operation (add/remove) creates a new copy of the set.**  
+
+**📌 Example:**
+```java
+import java.util.concurrent.CopyOnWriteArraySet;
+
+class CopyOnWriteArraySetExample {
+    public static void main(String[] args) {
+        CopyOnWriteArraySet<Integer> set = new CopyOnWriteArraySet<>();
+
+        set.add(10);
+        set.add(20);
+        set.add(30);
+
+        for (Integer num : set) {
+            System.out.println(num);
+        }
+    }
+}
+```
+✔️ **Advantage:** No need for manual synchronization.  
+✔️ **Disadvantage:** **Slower writes** due to copy creation.  
+
+---
+
+## **🔹 5️⃣ ConcurrentHashMap (Thread-Safe HashMap)**
+**📌 What is it?**
+- A **thread-safe version of `HashMap`** that allows **fast reads and writes using lock stripping.**  
+- Instead of locking the **entire map**, it locks **only specific parts (buckets).**  
+
+**📌 Example:**
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
+
+        map.put(1, "A");
+        map.put(2, "B");
+        map.put(3, "C");
+
+        for (Integer key : map.keySet()) {
+            System.out.println(key + " -> " + map.get(key));
+        }
+    }
+}
+```
+✔️ **Advantages:**
+- **Faster than `Hashtable`** (does not lock entire map).  
+- **No ConcurrentModificationException** (safe for multi-threading).  
+
+---
+
+## **🔹 6️⃣ ConcurrentSkipListSet (Thread-Safe Sorted Set)**
+- A **thread-safe version of `TreeSet`** (keeps elements sorted).  
+- Uses a **Skip List data structure** instead of a Red-Black tree.  
+
+**📌 Example:**
+```java
+import java.util.concurrent.ConcurrentSkipListSet;
+
+class ConcurrentSkipListSetExample {
+    public static void main(String[] args) {
+        ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<>();
+
+        set.add(30);
+        set.add(10);
+        set.add(20);
+
+        for (Integer num : set) {
+            System.out.println(num);
+        }
+    }
+}
+```
+✔️ **Advantage:** Automatically **keeps elements sorted** while being **thread-safe.**  
+
+---
+
+## **🔹 7️⃣ Performance Comparison: Synchronized vs Concurrent Collections**
+| Collection | Thread-Safety Type | Performance |
+|------------|------------------|-------------|
+| `Collections.synchronizedList()` | Full Locking | 🚨 **Slow (Locks Entire Collection)** |
+| `CopyOnWriteArrayList` | No Lock for Read | ✅ **Fast Reads, Slow Writes** |
+| `ConcurrentHashMap` | Partial Locking | ✅ **Fast Read & Write** |
+| `Hashtable` | Full Locking | 🚨 **Slow (Locks Whole Table)** |
+
+✔️ **Best Choice?**  
+- **Use `ConcurrentHashMap` instead of `Hashtable`** for better performance.  
+- **Use `CopyOnWriteArrayList` for thread-safe lists with frequent reads.**  
+
+---
+
+# **📌 Summary**
+| Collection | Type | Thread-Safe? | Best For |
+|------------|------|-------------|----------|
+| `CopyOnWriteArrayList` | **List** | ✅ Yes | **Frequent Reads, Rare Writes** |
+| `CopyOnWriteArraySet` | **Set** | ✅ Yes | **Frequent Reads, Rare Writes** |
+| `ConcurrentHashMap` | **Map** | ✅ Yes | **High-Performance Thread-Safe Map** |
+| `ConcurrentSkipListSet` | **Set** | ✅ Yes | **Sorted Set in Multi-threading** |
+
+🚀 **Conclusion:**  
+- Use **Concurrent Collections** instead of `synchronized` collections for **better performance.**  
+- Choose **`CopyOnWriteArrayList` for frequent reads** and **`ConcurrentHashMap` for multi-threaded key-value storage.**  
+
+---
+
+# **📌 Chapter 10: Best Practices and Performance Optimization**  
+
+## **🔹 What is Best Practices and Performance Optimization in Collections?**  
+Java Collections Framework provides a **wide range of data structures** to store and manipulate data efficiently. However, **using them correctly** is **crucial** for writing efficient, maintainable, and high-performance code.  
+
+📌 **Best practices** help you avoid common pitfalls, reduce errors, and make your code **clean and maintainable.**  
+📌 **Performance optimization** ensures your collections work **efficiently**, using the least memory and CPU power.
+
+---
+
+## **🔹 Why is Performance Optimization Important?**  
+- Collections are **used everywhere** in Java applications (e.g., lists, sets, maps).  
+- **Poor choice of collection** can **slow down your application** significantly.  
+- **Incorrect usage** can lead to **memory leaks, unnecessary CPU usage, and crashes.**  
+- **Choosing the right collection** improves speed and reduces resource usage.  
+
+---
+
+## **🔹 Best Practices for Java Collections**
+### **1️⃣ Choose the Right Collection for the Right Use Case**
+✅ **Use `ArrayList` when you need fast retrieval and random access.**  
+✅ **Use `LinkedList` when you need frequent insertions/deletions.**  
+✅ **Use `HashSet` when unique elements are required and order doesn't matter.**  
+✅ **Use `TreeSet` when unique elements are needed in sorted order.**  
+✅ **Use `HashMap` for fast key-value lookups.**  
+✅ **Use `Concurrent Collections` for multi-threading instead of synchronized collections.**  
+
+---
+
+### **2️⃣ Prefer Immutable Collections When Possible**
+- If a collection **does not need to change**, use **unmodifiable collections** to prevent accidental modifications.  
+- Java provides **`Collections.unmodifiableList()`**, **`Collections.unmodifiableSet()`**, and **`Collections.unmodifiableMap()`**.  
+
+```java
+import java.util.*;
+
+class ImmutableCollectionExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
+        List<String> immutableList = Collections.unmodifiableList(list);
+
+        immutableList.add("D"); // This will throw UnsupportedOperationException
+    }
+}
+```
+✔️ **Advantage:** Prevents accidental modification, making the code more **secure** and **predictable**.  
+
+---
+
+### **3️⃣ Minimize Unnecessary Autoboxing and Unboxing**
+- Java automatically **converts primitives** (int, double, etc.) into their wrapper classes (`Integer`, `Double`), which **causes performance overhead.**  
+- **Always prefer primitive collections** like `int[]` over `List<Integer>` if boxing/unboxing is unnecessary.  
+
+```java
+List<Integer> list = new ArrayList<>();  // Slower, due to autoboxing
+list.add(10); // Converts int to Integer
+
+int num = list.get(0); // Unboxes Integer to int
+```
+✔️ **Solution:** Use `IntStream` or `Arrays` for primitive values instead of collections.  
+
+---
+
+### **4️⃣ Avoid Memory Leaks with Collections**
+- **Problem:** If you keep adding elements but **never remove them**, memory usage will increase indefinitely.  
+- **Solution:** Always **clear large collections** when they are no longer needed.  
+
+```java
+List<String> list = new ArrayList<>();
+list.add("data1");
+list.add("data2");
+
+// Clear collection when not needed
+list.clear();  
+```
+✔️ **Advantage:** Reduces memory footprint and avoids **OutOfMemoryError**.
+
+---
+
+### **5️⃣ Use `computeIfAbsent()` for Efficient Map Updates**
+Instead of checking for null manually, use **`computeIfAbsent()`** to optimize adding values to a `Map`.  
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+class ComputeIfAbsentExample {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+
+        // Instead of checking manually, use computeIfAbsent
+        map.computeIfAbsent("A", key -> 10);
+        map.computeIfAbsent("B", key -> 20);
+
+        System.out.println(map); // {A=10, B=20}
+    }
+}
+```
+✔️ **Advantage:** Reduces redundant `if-else` checks and improves readability.  
+
+---
+
+### **6️⃣ Use Streams and Parallel Processing for Large Collections**
+- Instead of **looping manually**, use **Java Streams API** for better performance.  
+- **Parallel Streams** can be used to **process large datasets faster** using multiple CPU cores.  
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class StreamExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        // Convert all numbers to square using Streams
+        List<Integer> squares = numbers.stream()
+                                       .map(n -> n * n)
+                                       .collect(Collectors.toList());
+
+        System.out.println(squares); // [1, 4, 9, 16, 25]
+    }
+}
+```
+✔️ **Advantage:** Faster, more readable, and concise compared to traditional loops.  
+
+---
+
+### **7️⃣ Use `containsKey()` Instead of `get()` for Maps**
+- Using `map.get(key) != null` can be **slower** than directly checking with `containsKey()`.  
+- **Best practice:** **Use `containsKey()` before calling `get()`**.  
+
+```java
+Map<String, Integer> map = new HashMap<>();
+
+if (map.containsKey("A")) {
+    System.out.println(map.get("A"));
+}
+```
+✔️ **Advantage:** Improves performance in large maps.  
+
+---
+
+# **📌 When to Use Which Collection? (Deep Explanation)**  
+
+Choosing the right **Java Collection** is crucial for building **efficient** and **high-performing** applications. The **wrong choice** can lead to **slow performance, memory issues, and unnecessary complexity**.  
+
+In this section, we will **deeply analyze** when to use each **List, Set, Queue, and Map** based on different use cases.  
+
+---
+
+# **🔹 List Interface: When to Use?**  
+A **List** is an **ordered collection** that **allows duplicate elements**.  
+Use a `List<T>` when:  
+✔️ You need to maintain **insertion order**.  
+✔️ You need **indexed access** (access elements by position).  
+✔️ You need to allow **duplicates**.  
+
+## **1️⃣ `ArrayList<T>` – Fast Retrieval, Slow Insert/Delete**
+🔹 **Best for:** **Read-heavy applications where elements are accessed frequently.**  
+🔹 **Avoid if:** You need frequent **insertions/deletions in the middle**.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Access (get(index))** | O(1) ✅ (Super fast) |
+| **Insert (add at end)** | O(1) ✅ |
+| **Insert/Delete in middle** | O(n) ❌ (Slow shifting required) |
+
+**📌 When to Use?**  
+✔️ When you need **fast random access** to elements using indexes.  
+✔️ When the **insertion order** should be maintained.  
+✔️ Example: **Reading customer reviews, fetching product lists in an e-commerce website.**  
+
+```java
+List<String> names = new ArrayList<>();
+names.add("Alice");  
+names.add("Bob"); 
+names.add("Charlie");
+System.out.println(names.get(1)); // Output: Bob
+```
+
+---
+
+## **2️⃣ `LinkedList<T>` – Fast Insert/Delete, Slow Access**
+🔹 **Best for:** **Insert/delete-heavy applications.**  
+🔹 **Avoid if:** You need frequent **random access (get(index))**.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Access (get(index))** | O(n) ❌ (Slow, must traverse the list) |
+| **Insert/Delete in middle** | O(1) ✅ (Just update pointers) |
+
+**📌 When to Use?**  
+✔️ When you frequently **insert/delete elements in the middle**.  
+✔️ Example: **Implementing undo/redo feature, task schedulers.**  
+
+```java
+List<String> tasks = new LinkedList<>();
+tasks.add("Task 1");
+tasks.add("Task 2");
+tasks.add(1, "New Task in between");
+System.out.println(tasks); 
+```
+
+---
+
+## **3️⃣ `Vector<T>` – Thread-Safe, But Rarely Used**
+🔹 **Best for:** **Thread-safe operations (legacy, use Concurrent collections instead).**  
+🔹 **Avoid if:** You don’t need synchronization.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Access (get(index))** | O(1) ✅ |
+| **Insert/Delete in middle** | O(n) ❌ (Slow shifting required) |
+| **Thread-Safety** | Yes ✅ |
+
+**📌 When to Use?**  
+✔️ When you need a **synchronized** version of an `ArrayList`.  
+✔️ Example: **Multi-threaded application needing synchronized list.**  
+
+---
+
+## **4️⃣ `Stack<T>` – Last-In-First-Out (LIFO)**
+🔹 **Best for:** **Undo/Redo, Backtracking, Expression Evaluation.**  
+🔹 **Avoid if:** You need **random access** to elements.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Push (add element)** | O(1) ✅ |
+| **Pop (remove last element)** | O(1) ✅ |
+
+**📌 When to Use?**  
+✔️ When you need **LIFO behavior**.  
+✔️ Example: **Undo feature in text editors, evaluating expressions.**  
+
+```java
+Stack<Integer> stack = new Stack<>();
+stack.push(10);
+stack.push(20);
+System.out.println(stack.pop()); // Output: 20 (LIFO)
+```
+
+---
+
+# **🔹 Set Interface: When to Use?**  
+A **Set** is a collection that **does not allow duplicate elements**.  
+Use a `Set<T>` when:  
+✔️ You need **unique elements only**.  
+✔️ You don’t care about **insertion order** (except `LinkedHashSet`).  
+✔️ You need **fast lookups**.  
+
+## **1️⃣ `HashSet<T>` – Fastest Set for Unordered Unique Elements**
+🔹 **Best for:** **High-performance unique element storage.**  
+🔹 **Avoid if:** You need to maintain order.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Insert/Delete/Search** | O(1) ✅ |
+
+**📌 When to Use?**  
+✔️ When you need **unique elements with fast performance**.  
+✔️ Example: **Removing duplicate usernames in a system.**  
+
+```java
+Set<String> users = new HashSet<>();
+users.add("Alice");
+users.add("Bob");
+users.add("Alice"); // Duplicate ignored
+System.out.println(users); // Output: [Alice, Bob]
+```
+
+---
+
+## **2️⃣ `LinkedHashSet<T>` – Maintains Insertion Order**
+🔹 **Best for:** **Unique elements + maintaining order.**  
+🔹 **Avoid if:** Order doesn’t matter.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Insert/Delete/Search** | O(1) ✅ |
+
+**📌 When to Use?**  
+✔️ When you need **unique elements but order matters**.  
+✔️ Example: **Maintaining a unique list of visited pages in a browser.**  
+
+```java
+Set<String> pages = new LinkedHashSet<>();
+pages.add("Home");
+pages.add("About");
+pages.add("Contact");
+System.out.println(pages); // Output: [Home, About, Contact]
+```
+
+---
+
+## **3️⃣ `TreeSet<T>` – Sorted Unique Elements**
+🔹 **Best for:** **Sorted unique elements (ascending order by default).**  
+🔹 **Avoid if:** You don’t need sorting (Use `HashSet` instead).  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Insert/Delete/Search** | O(log n) ❌ (Slower than HashSet) |
+
+**📌 When to Use?**  
+✔️ When you need **unique elements in sorted order**.  
+✔️ Example: **Storing sorted employee IDs.**  
+
+```java
+Set<Integer> ids = new TreeSet<>();
+ids.add(3);
+ids.add(1);
+ids.add(2);
+System.out.println(ids); // Output: [1, 2, 3]
+```
+
+---
+
+# **🔹 Map Interface: When to Use?**  
+A **Map** stores **key-value pairs** for fast lookups.  
+Use a `Map<K, V>` when:  
+✔️ You need to **map unique keys to values**.  
+✔️ You need **fast lookups by key**.  
+
+## **1️⃣ `HashMap<K, V>` – Fastest Key-Value Lookup (Unordered)**
+🔹 **Best for:** **Fast key-value storage.**  
+🔹 **Avoid if:** You need sorted order.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Insert/Delete/Search** | O(1) ✅ |
+
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("Alice", 25);
+map.put("Bob", 30);
+System.out.println(map.get("Alice")); // Output: 25
+```
+
+---
+
+## **2️⃣ `TreeMap<K, V>` – Sorted Key-Value Mapping**
+🔹 **Best for:** **Sorted key-value pairs.**  
+🔹 **Avoid if:** Sorting is unnecessary.  
+
+| **Operation** | **Time Complexity** |
+|--------------|------------------|
+| **Insert/Delete/Search** | O(log n) ❌ (Slower than HashMap) |
+
+```java
+Map<Integer, String> treeMap = new TreeMap<>();
+treeMap.put(2, "B");
+treeMap.put(1, "A");
+System.out.println(treeMap); // Output: {1=A, 2=B}
+```
+
+---
+
+# **🔹 Conclusion**
+| **Collection Type** | **Best For** |
+|------------------|------------|
+| `ArrayList<T>` | Fast access, slow insert/delete |
+| `LinkedList<T>` | Fast insert/delete, slow access |
+| `HashSet<T>` | Fast unique elements (unordered) |
+| `TreeSet<T>` | Unique sorted elements |
+| `HashMap<K,V>` | Fastest key-value storage |
+| `TreeMap<K,V>` | Sorted key-value pairs |
+
+---
+
+# **📌 Performance Considerations for Different Data Structures (Deep Explanation)**  
+
+Choosing the **right data structure** is not just about functionality—it’s also about **performance**.  
+Each **Collection** has different **strengths and weaknesses** depending on **time complexity, memory usage, and threading support**.  
+
+In this section, we will analyze the **performance of Lists, Sets, Queues, and Maps** in **depth** and compare their operations.  
+
+---
+
+## **🔹 Understanding Performance Factors**  
+The performance of a data structure depends on:  
+✔️ **Time Complexity** - How fast the operations (insert, search, delete) are.  
+✔️ **Memory Usage** - How much space the data structure consumes.  
+✔️ **Thread-Safety** - Whether it supports multi-threading.  
+✔️ **Sorting Needs** - Whether elements are sorted automatically.  
+
+---
+
+# **🔹 Performance Analysis of List Implementations**  
+
+## **1️⃣ `ArrayList<T>` – Fast Random Access, Slow Insert/Delete**  
+**✔️ Best For:** **Fast read-heavy operations**  
+**❌ Avoid If:** **Frequent insert/delete in the middle**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Access (get(i))** | O(1) ✅ | Direct index-based lookup. |
+| **Insert at End**   | O(1) ✅ | If capacity allows, it’s instant. |
+| **Insert in Middle** | O(n) ❌ | All elements after must shift. |
+| **Remove by Index** | O(n) ❌ | Elements shift left to fill gap. |
+| **Memory Usage** | Medium | Uses contiguous memory. |
+
+📌 **Performance Tip:** Use **ArrayList** when you need **fast lookups** and **less insertion/deletion**.  
+
+---
+
+## **2️⃣ `LinkedList<T>` – Fast Insert/Delete, Slow Access**  
+**✔️ Best For:** **Insert/delete-heavy operations**  
+**❌ Avoid If:** **Frequent random access needed**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Access (get(i))** | O(n) ❌ | Must traverse nodes one by one. |
+| **Insert at End**   | O(1) ✅ | Just update last node’s pointer. |
+| **Insert in Middle** | O(1) ✅ | If node reference is known. |
+| **Remove by Index** | O(1) ✅ | Just update pointers. |
+| **Memory Usage** | High ❌ | Stores extra pointers (next/prev). |
+
+📌 **Performance Tip:** Use **LinkedList** when you need **frequent insertions/deletions** and **don’t need fast random access**.  
+
+---
+
+## **3️⃣ `Vector<T>` – Thread-Safe but Slower than ArrayList**  
+**✔️ Best For:** **Multi-threaded applications requiring a List**  
+**❌ Avoid If:** **Single-threaded applications (use ArrayList instead)**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Access (get(i))** | O(1) ✅ | Same as ArrayList. |
+| **Insert at End**   | O(1) ✅ | Same as ArrayList. |
+| **Insert in Middle** | O(n) ❌ | Shifting needed. |
+| **Thread-Safety** | Yes ✅ | Uses synchronization (slower). |
+
+📌 **Performance Tip:** Use **Vector** only if **synchronization is needed**, otherwise prefer **ArrayList**.  
+
+---
+
+## **4️⃣ `Stack<T>` – LIFO Performance**  
+**✔️ Best For:** **Last-In-First-Out (LIFO) operations**  
+**❌ Avoid If:** **Random access is needed**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Push (add)** | O(1) ✅ | Just add at the top. |
+| **Pop (remove top)** | O(1) ✅ | Remove top element only. |
+| **Search (contains)** | O(n) ❌ | Must check each element. |
+
+📌 **Performance Tip:** Use **Stack** only for **LIFO-based operations** like **undo/redo**.  
+
+---
+
+# **🔹 Performance Analysis of Set Implementations**  
+
+## **1️⃣ `HashSet<T>` – Fastest Unique Element Storage**  
+**✔️ Best For:** **Fast unique element storage**  
+**❌ Avoid If:** **Sorting is required**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Insert/Delete** | O(1) ✅ | Uses **hashing** for quick access. |
+| **Search (contains)** | O(1) ✅ | Hash lookup is very fast. |
+| **Sorting** | Not Supported ❌ | No order maintained. |
+
+📌 **Performance Tip:** Use **HashSet** when you need **unique elements with fast lookups**.  
+
+---
+
+## **2️⃣ `TreeSet<T>` – Unique + Sorted**  
+**✔️ Best For:** **Maintaining unique elements in sorted order**  
+**❌ Avoid If:** **You don’t need sorting**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Insert/Delete** | O(log n) ❌ | Uses **Red-Black Tree** for sorting. |
+| **Search (contains)** | O(log n) ❌ | Must traverse the tree. |
+| **Sorting** | Yes ✅ | Elements are always sorted. |
+
+📌 **Performance Tip:** Use **TreeSet** when you need **sorting** but can accept **slightly slower performance**.  
+
+---
+
+# **🔹 Performance Analysis of Queue Implementations**  
+
+## **1️⃣ `PriorityQueue<T>` – Min-Heap Implementation**  
+**✔️ Best For:** **Processing elements based on priority**  
+**❌ Avoid If:** **You need FIFO behavior**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Insert (add)** | O(log n) ❌ | Maintains heap property. |
+| **Remove (poll)** | O(log n) ❌ | Heap must be restructured. |
+| **Peek (min element)** | O(1) ✅ | Fast access to smallest element. |
+
+📌 **Performance Tip:** Use **PriorityQueue** for **task scheduling, job processing, etc.**  
+
+---
+
+# **🔹 Performance Analysis of Map Implementations**  
+
+## **1️⃣ `HashMap<K, V>` – Fastest Key-Value Storage**  
+**✔️ Best For:** **Fast key-value lookup**  
+**❌ Avoid If:** **Sorting is needed**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Insert/Delete** | O(1) ✅ | Uses **hashing** for fast access. |
+| **Search (containsKey)** | O(1) ✅ | Direct hash lookup. |
+| **Sorting** | Not Supported ❌ | Unordered storage. |
+
+📌 **Performance Tip:** Use **HashMap** for **fast key-based lookups**.  
+
+---
+
+## **2️⃣ `TreeMap<K, V>` – Sorted Key-Value Mapping**  
+**✔️ Best For:** **Maintaining sorted keys**  
+**❌ Avoid If:** **Sorting is unnecessary**  
+
+| **Operation**       | **Time Complexity** | **Explanation** |
+|---------------------|--------------------|----------------|
+| **Insert/Delete** | O(log n) ❌ | Uses **Red-Black Tree**. |
+| **Search (containsKey)** | O(log n) ❌ | Tree traversal needed. |
+| **Sorting** | Yes ✅ | Always sorted. |
+
+📌 **Performance Tip:** Use **TreeMap** when you need **sorted key-value pairs**.  
+
+---
+
+# **🔹 Conclusion: Choosing the Best Data Structure**  
+
+| **Requirement** | **Best Choice** |
+|----------------|---------------|
+| **Fast Read (index-based access)** | `ArrayList` ✅ |
+| **Frequent Insert/Delete** | `LinkedList` ✅ |
+| **Unique Elements (Fast Access)** | `HashSet` ✅ |
+| **Unique Elements (Sorted)** | `TreeSet` ✅ |
+| **Fast Key-Value Storage** | `HashMap` ✅ |
+| **Sorted Key-Value Mapping** | `TreeMap` ✅ |
+| **FIFO Processing** | `Queue` ✅ |
+| **LIFO Processing** | `Stack` ✅ |
+
+---
+
+# **📌 Avoiding NullPointerException in Collections (Deep and Easy Explanation)**  
+
+A **NullPointerException (NPE)** occurs when you try to **access a method or property of a `null` object**.  
+In **Java Collections**, NPEs often happen when:  
+✔️ You try to **add null values** into a collection that **doesn’t support nulls** (e.g., `TreeSet`, `TreeMap`).  
+✔️ You try to **access an element from a null collection**.  
+✔️ You forget to **initialize a collection before using it**.  
+✔️ You remove elements without checking if the collection is empty.  
+
+---
+
+# **🔹 Common Scenarios Where NullPointerException Happens in Collections**  
+
+## **1️⃣ Using a Null Collection Reference**
+📌 **Problem:** Trying to access or modify a collection that is not initialized.  
+
+```java
+List<String> list = null;
+list.add("Hello"); // ❌ NullPointerException! list is null
+```
+
+✅ **Solution:** Always initialize collections before use.  
+
+```java
+List<String> list = new ArrayList<>(); // ✅ Safe initialization
+list.add("Hello");
+```
+
+---
+
+## **2️⃣ Adding Null Values into a Collection that Doesn’t Allow Nulls**
+📌 **Problem:** Some collections do **not** allow `null` values.  
+
+```java
+Set<String> treeSet = new TreeSet<>();
+treeSet.add(null); // ❌ NullPointerException! TreeSet does not allow nulls
+```
+
+✅ **Solution:** Use `HashSet` or `ArrayList` if `null` values are needed.  
+
+```java
+Set<String> hashSet = new HashSet<>();
+hashSet.add(null); // ✅ Allowed in HashSet
+```
+
+---
+
+## **3️⃣ Accessing a Null Element in a Collection**
+📌 **Problem:** Getting an element that is `null` and then calling a method on it.  
+
+```java
+List<String> names = new ArrayList<>();
+names.add(null);
+
+System.out.println(names.get(0).length()); // ❌ NullPointerException!
+```
+
+✅ **Solution:** Always check for `null` before using an element.  
+
+```java
+if (names.get(0) != null) {
+    System.out.println(names.get(0).length()); // ✅ Safe
+}
+```
+
+---
+
+## **4️⃣ Forgetting to Handle Null Return Values**
+📌 **Problem:** Some map methods return `null` if the key is not found.  
+
+```java
+Map<String, String> map = new HashMap<>();
+String value = map.get("key"); // May return null
+
+System.out.println(value.length()); // ❌ NullPointerException!
+```
+
+✅ **Solution:** Use `getOrDefault()` or check for `null`.  
+
+```java
+String value = map.getOrDefault("key", "Default");
+System.out.println(value.length()); // ✅ Safe
+
+// OR
+if (value != null) {
+    System.out.println(value.length());
+}
+```
+
+---
+
+## **5️⃣ Using an Empty Collection Instead of Null**
+📌 **Problem:** Returning `null` from a method instead of an empty collection.  
+
+```java
+public List<String> getNames() {
+    return null; // ❌ Bad practice
+}
+
+List<String> names = getNames();
+System.out.println(names.size()); // ❌ NullPointerException!
+```
+
+✅ **Solution:** Return an **empty collection** instead of `null`.  
+
+```java
+public List<String> getNames() {
+    return new ArrayList<>(); // ✅ Good practice
+}
+
+List<String> names = getNames();
+System.out.println(names.size()); // ✅ Works fine (prints 0)
+```
+
+---
+
+## **6️⃣ Checking for Null Before Removing Elements**
+📌 **Problem:** Trying to remove elements from a `null` collection.  
+
+```java
+List<String> list = null;
+list.remove("Hello"); // ❌ NullPointerException!
+```
+
+✅ **Solution:** Check for `null` before removing elements.  
+
+```java
+if (list != null) {
+    list.remove("Hello"); // ✅ Safe
+}
+```
+
+---
+
+# **🔹 Best Practices to Avoid NullPointerException in Collections**  
+
+✔️ **Always initialize collections before use** (`new ArrayList<>();`).  
+✔️ **Use `getOrDefault()` for Maps** instead of directly using `get()`.  
+✔️ **Check for `null` before accessing or modifying collections**.  
+✔️ **Return empty collections instead of `null`** in methods.  
+✔️ **Prefer `Optional<T>` for return values that may be `null`**.  
+
+---
+
+# **📌 Optimizing Memory and CPU Usage in Collections (Deep & Easy Explanation)**  
+
+Java collections are powerful, but if **not used efficiently**, they can consume **more memory and CPU** than necessary.  
+To improve **performance**, follow these **best practices** to optimize **memory usage and processing speed**.  
+
+---
+
+# **🔹 1️⃣ Choose the Right Collection Type**  
+Using the **wrong collection type** leads to **high memory usage** and **slow performance**.  
+
+### **💡 Example: Using `ArrayList` vs. `LinkedList`**  
+📌 If **more searching is needed**, use **`ArrayList`** because it supports **fast index-based access**.  
+📌 If **frequent insertions/deletions** happen, use **`LinkedList`**, because it avoids shifting elements.  
+
+```java
+List<Integer> arrayList = new ArrayList<>(); // ✅ Best for fast retrieval
+List<Integer> linkedList = new LinkedList<>(); // ✅ Best for frequent insertions/deletions
+```
+
+---
+
+# **🔹 2️⃣ Avoid Unnecessary Memory Allocation**
+Some collections **resize dynamically**, which can cause **performance overhead**.  
+
+### **💡 Example: Setting Initial Capacity for Lists**
+📌 By default, `ArrayList` starts with **10 elements** and resizes when full.  
+📌 If you **already know the required size**, set the **initial capacity** to **avoid resizing overhead**.  
+
+```java
+List<Integer> list = new ArrayList<>(100); // ✅ Optimized for 100 elements
+```
+
+### **💡 Example: Using `HashMap` with Proper Capacity**
+📌 `HashMap` has a **default capacity of 16** and **grows when 75% full**.  
+📌 If you know you'll store **1000 elements**, set capacity properly:  
+
+```java
+Map<String, Integer> map = new HashMap<>(1000, 0.75f); // ✅ Prevents unnecessary resizing
+```
+
+---
+
+# **🔹 3️⃣ Use `Collections.unmodifiableList()` to Save Memory**
+If a collection **doesn’t need modification**, **use immutable collections** to **save memory** and **avoid accidental changes**.  
+
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+List<String> unmodifiableNames = Collections.unmodifiableList(names); // ✅ More efficient
+```
+
+---
+
+# **🔹 4️⃣ Use Primitive Arrays Instead of Collections (If Possible)**
+Collections store **objects**, which take **more memory**.  
+If dealing with **only numbers**, use **primitive arrays (`int[]`)** instead of **`ArrayList<Integer>`**.  
+
+```java
+int[] numbers = new int[1000]; // ✅ Uses less memory than ArrayList<Integer>
+```
+
+---
+
+# **🔹 5️⃣ Remove Unused Elements to Free Up Memory**
+If a collection **grows dynamically** and elements are removed, it may still hold **extra memory**.  
+
+### **💡 Example: Trim `ArrayList` After Removing Elements**
+```java
+ArrayList<Integer> list = new ArrayList<>(100);
+list.add(10);
+list.add(20);
+list.remove(1);
+
+list.trimToSize(); // ✅ Shrinks the ArrayList to free memory
+```
+
+---
+
+# **🔹 6️⃣ Use `WeakHashMap` for Temporary Caching**
+A **regular `HashMap` keeps objects in memory forever**, even if they're no longer needed.  
+A **`WeakHashMap`** automatically **removes unused keys**, helping reduce memory usage.  
+
+```java
+Map<String, Integer> cache = new WeakHashMap<>();
+```
+
+---
+
+# **🔹 7️⃣ Use `Concurrent Collections` for Multi-threading**
+If **multiple threads** access a collection, **avoid using `synchronized` manually**.  
+Use **thread-safe collections** like **`ConcurrentHashMap`** instead of manually locking a **`HashMap`**.  
+
+```java
+Map<String, Integer> concurrentMap = new ConcurrentHashMap<>(); // ✅ Faster than synchronized HashMap
+```
+
+---
+
+# **🔹 8️⃣ Prefer `for-each` Instead of Traditional Loops**
+A **for-each loop** is **faster and uses less memory** than manually iterating with an **Iterator**.  
+
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+// ✅ Better performance
+for (String name : names) {
+    System.out.println(name);
+}
+
+// ❌ Slower due to extra iterator object
+Iterator<String> it = names.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+
+---
+
+# **🔹 9️⃣ Avoid Auto-Boxing in Collections**
+Collections store **only objects**, so primitive types (**`int`, `double`**) are **converted into objects** (`Integer`, `Double`).  
+This is called **auto-boxing** and consumes **more memory**.  
+
+### **💡 Example: Using `int` vs. `Integer`**
+```java
+List<Integer> list = new ArrayList<>(); 
+list.add(10);  // ❌ Auto-boxing happens, uses more memory
+
+int num = list.get(0); // ❌ Auto-unboxing happens
+```
+
+✅ **Solution:** If dealing with **large numeric data**, consider **primitive arrays (`int[]`)**.  
+
+---
+
+# **✅ Final Summary: Best Ways to Optimize Collections**  
+
+✅ Use **the right collection** for the right task.  
+✅ Set **initial capacity** to avoid resizing overhead.  
+✅ Use **immutable collections** when modification is not needed.  
+✅ Use **primitive arrays (`int[]`)** instead of `ArrayList<Integer>` when possible.  
+✅ Use **`trimToSize()`** to free up unused memory in `ArrayList`.  
+✅ Use **`WeakHashMap`** for temporary caching.  
+✅ Use **`ConcurrentHashMap`** instead of manually synchronizing a `HashMap`.  
+✅ Use **for-each loops** instead of manually iterating.  
+✅ Avoid **auto-boxing** where possible.  
+
+---
+
+# **📌 Chapter 11: Summary of Java Collection Framework (Final Revision Guide)**  
+
+This chapter summarizes **everything we've learned** about **Java Collections Framework (JCF)** in an **easy-to-read, deep, and structured format**. 📜  
+
+---
+
+## **🔹 1️⃣ What is the Java Collection Framework?**
+The **Java Collection Framework (JCF)** is a set of **predefined classes and interfaces** for handling **data structures** like **Lists, Sets, Queues, and Maps** efficiently.  
+
+✅ **Benefits of JCF:**  
+✔ **Reusable** – No need to create custom data structures.  
+✔ **Optimized Performance** – Built-in implementations are **highly optimized**.  
+✔ **Flexible & Scalable** – Collections can grow dynamically.  
+✔ **Thread-Safe Options** – Supports **concurrent programming**.  
+✔ **Sorting & Searching Support** – Utility methods like `Collections.sort()` and `binarySearch()`.  
+
+---
+
+## **🔹 2️⃣ Collection Framework Hierarchy (Main Interfaces & Implementations)**  
+The **Java Collections Framework** consists of **4 main interfaces**:  
+
+| **Interface** | **Description** | **Common Implementations** |
+|--------------|---------------|---------------------------|
+| **List** | Ordered collection (allows duplicates) | `ArrayList`, `LinkedList`, `Vector`, `Stack` |
+| **Set** | Unordered collection (unique elements only) | `HashSet`, `LinkedHashSet`, `TreeSet` |
+| **Queue** | Follows **FIFO (First In, First Out)** | `LinkedList`, `PriorityQueue`, `ArrayDeque` |
+| **Map** | Stores **key-value pairs** (unique keys) | `HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable` |
+
+---
+
+## **🔹 3️⃣ Deep Dive into Collection Interfaces**
+### **📍 List Interface (`List<T>`) – Ordered Collection**
+A **List** maintains **insertion order** and allows **duplicate elements**.  
+✔ **Fast Retrieval** → `ArrayList`  
+✔ **Fast Insert/Delete** → `LinkedList`  
+✔ **Thread-Safe** → `Vector`, `CopyOnWriteArrayList`  
+✔ **LIFO** (Last-In, First-Out) → `Stack`  
+
+### **📍 Set Interface (`Set<T>`) – Unique Elements**
+A **Set** does **not allow duplicate elements**.  
+✔ **Fastest Search (Unordered)** → `HashSet`  
+✔ **Maintains Insertion Order** → `LinkedHashSet`  
+✔ **Sorted Elements** → `TreeSet`  
+✔ **Thread-Safe** → `CopyOnWriteArraySet`  
+
+### **📍 Queue Interface (`Queue<T>`) – FIFO Data Structure**
+A **Queue** follows **First In, First Out (FIFO)**.  
+✔ **Standard Queue** → `LinkedList`  
+✔ **Priority-Based Queue** → `PriorityQueue`  
+✔ **Double-Ended Queue** → `ArrayDeque`  
+✔ **Thread-Safe Queue** → `ConcurrentLinkedQueue`, `BlockingQueue`  
+
+### **📍 Map Interface (`Map<K, V>`) – Key-Value Pair Collection**
+A **Map** stores **key-value pairs** (keys must be unique).  
+✔ **Fastest Search (Unordered)** → `HashMap`  
+✔ **Maintains Insertion Order** → `LinkedHashMap`  
+✔ **Sorted by Key** → `TreeMap`  
+✔ **Thread-Safe** → `ConcurrentHashMap`  
+
+---
+
+## **🔹 4️⃣ Sorting & Searching in Collections**
+### **✅ Sorting Collections**
+✔ `Collections.sort(list)` – Sorts a list **naturally**.  
+✔ `Collections.sort(list, comparator)` – Sorts a list **using custom logic**.  
+✔ `TreeSet` and `TreeMap` automatically maintain **sorted order**.  
+
+### **✅ Searching Collections**
+✔ `Collections.binarySearch(list, key)` – **Fastest search** on sorted lists.  
+✔ `HashMap.get(key)` – **Constant-time retrieval** for maps.  
+✔ `contains()` in **Set** is **faster than `contains()` in List**.  
+
+---
+
+## **🔹 5️⃣ Thread-Safety in Java Collections**
+✔ **Thread-Safe Lists & Sets** → `CopyOnWriteArrayList`, `CopyOnWriteArraySet`  
+✔ **Thread-Safe Maps** → `ConcurrentHashMap`, `ConcurrentSkipListMap`  
+✔ **Blocking Queues for Multi-threading** → `ArrayBlockingQueue`, `LinkedBlockingQueue`, `PriorityBlockingQueue`  
+
+---
+
+## **🔹 6️⃣ Performance Optimization & Best Practices**
+🔹 **Use the Right Collection for the Task** (e.g., `HashMap` for fast lookup, `ArrayList` for fast read, etc.)  
+🔹 **Set Initial Capacity** to avoid resizing overhead (`new ArrayList<>(100)`, `new HashMap<>(100, 0.75f)`).  
+🔹 **Use Immutable Collections** (`Collections.unmodifiableList()`) when modification is **not needed**.  
+🔹 **Use WeakHashMap for Caching** (removes unused entries automatically).  
+🔹 **Avoid Auto-Boxing** (`int[]` is more memory-efficient than `ArrayList<Integer>`).  
+🔹 **Use `Concurrent Collections` Instead of Synchronized Wrappers** (`ConcurrentHashMap` > `synchronizedMap`).  
+
+---
+
+## **🔹 7️⃣ When to Use Which Collection? (Quick Reference)**
+| **Scenario** | **Best Collection to Use** |
+|-------------|---------------------------|
+| **Fast retrieval (index-based search)** | `ArrayList` |
+| **Frequent insertions/deletions** | `LinkedList` |
+| **Unique unordered elements** | `HashSet` |
+| **Unique ordered elements** | `LinkedHashSet` |
+| **Sorted elements** | `TreeSet`, `TreeMap` |
+| **Key-value mapping (fast lookup)** | `HashMap` |
+| **Multi-threaded key-value storage** | `ConcurrentHashMap` |
+| **FIFO queue (First In, First Out)** | `LinkedList` (as Queue), `ArrayDeque` |
+| **Priority-based processing** | `PriorityQueue` |
+| **LIFO stack (Last In, First Out)** | `Stack`, `ArrayDeque` |
+| **Blocking queues (multi-threading)** | `ArrayBlockingQueue`, `LinkedBlockingQueue` |
+
+---
+
+# **🎯 Final Conclusion**
+The **Java Collection Framework** provides a **powerful and flexible** way to manage data structures efficiently.  
+By understanding the **different types of collections**, **sorting & searching methods**, and **thread-safety mechanisms**, you can **write optimized, high-performance Java applications**. 🚀  
+
+---
+
+Got it! Here’s a **Quick Reference Chapter** covering:  
+
+- **Key Methods** of each Collection (10+ per type)  
+- **Internal Working** of Data Structure  
+- **Time Complexity** (Big-O Notation)  
+- **When to Use** (Short One-Liner)  
+
+---
+
+# **📌 Chapter 12: Quick Reference Guide for Java Collections**  
+
+## **🔹 List Implementations (Ordered Collection, Allows Duplicates)**  
+
+### **1️⃣ ArrayList (Dynamic Array, Fast Read)**
+✅ **Key Methods:**  
+1. `add(E e)` – Adds element at the end  
+2. `add(int index, E e)` – Inserts element at index  
+3. `get(int index)` – Retrieves element at index  
+4. `set(int index, E e)` – Replaces element at index  
+5. `remove(int index)` – Removes element at index  
+6. `indexOf(Object o)` – Returns first index of element  
+7. `lastIndexOf(Object o)` – Returns last index of element  
+8. `contains(Object o)` – Checks if element exists  
+9. `size()` – Returns number of elements  
+10. `clear()` – Removes all elements  
+
+✅ **Internal Working:** Uses a **resizable array** (grows dynamically).  
+✅ **Time Complexity:** `O(1)` for get, `O(n)` for insert/remove in the middle.  
+✅ **When to Use:** When **fast read access** is needed.  
+
+---
+
+### **2️⃣ LinkedList (Doubly Linked List, Fast Insert/Delete)**
+✅ **Key Methods:**  
+1. `addFirst(E e)` – Adds element at the beginning  
+2. `addLast(E e)` – Adds element at the end  
+3. `removeFirst()` – Removes first element  
+4. `removeLast()` – Removes last element  
+5. `getFirst()` – Retrieves first element  
+6. `getLast()` – Retrieves last element  
+7. `offer(E e)` – Adds element (like `add()`)  
+8. `poll()` – Removes and returns first element  
+9. `peek()` – Retrieves but does not remove first element  
+10. `size()` – Returns number of elements  
+
+✅ **Internal Working:** Uses **nodes** (each node contains data + two pointers).  
+✅ **Time Complexity:** `O(1)` for insert/remove at ends, `O(n)` for search.  
+✅ **When to Use:** When **frequent insertions/deletions** are needed.  
+
+---
+
+### **3️⃣ Stack (LIFO – Last In, First Out)**
+✅ **Key Methods:**  
+1. `push(E e)` – Pushes element onto stack  
+2. `pop()` – Removes and returns top element  
+3. `peek()` – Returns top element without removing  
+4. `empty()` – Checks if stack is empty  
+5. `search(Object o)` – Finds position of element  
+
+✅ **Internal Working:** Uses **ArrayList internally**.  
+✅ **Time Complexity:** `O(1)` for push/pop.  
+✅ **When to Use:** When **LIFO (Last-In, First-Out) behavior** is needed.  
+
+---
+
+### **4️⃣ Vector (Thread-Safe, Legacy)**
+✅ **Key Methods:** *(Same as `ArrayList`, but synchronized)*  
+✅ **Internal Working:** Uses **synchronized resizable array**.  
+✅ **Time Complexity:** Similar to `ArrayList`.  
+✅ **When to Use:** When **thread-safe dynamic array** is needed.  
+
+---
+
+## **🔹 Set Implementations (Unique Elements, No Duplicates)**  
+
+### **5️⃣ HashSet (Unordered, Unique Elements)**
+✅ **Key Methods:**  
+1. `add(E e)` – Adds element  
+2. `remove(Object o)` – Removes element  
+3. `contains(Object o)` – Checks if element exists  
+4. `size()` – Returns number of elements  
+5. `clear()` – Removes all elements  
+
+✅ **Internal Working:** Uses **HashMap internally** (each element is a key).  
+✅ **Time Complexity:** `O(1)` for add/remove/search (average).  
+✅ **When to Use:** When **unique elements + fast lookup** are needed.  
+
+---
+
+### **6️⃣ TreeSet (Sorted Unique Elements)**
+✅ **Key Methods:** *(Same as `HashSet` + sorting features)*  
+✅ **Internal Working:** Uses **Red-Black Tree (Self-Balancing BST)**.  
+✅ **Time Complexity:** `O(log n)` for add/remove/search.  
+✅ **When to Use:** When **sorted unique elements** are needed.  
+
+---
+
+## **🔹 Queue Implementations (FIFO – First In, First Out)**  
+
+### **7️⃣ PriorityQueue (Elements with Priority)**
+✅ **Key Methods:**  
+1. `offer(E e)` – Inserts element with priority  
+2. `poll()` – Retrieves and removes highest-priority element  
+3. `peek()` – Retrieves highest-priority element without removing  
+
+✅ **Internal Working:** Uses **Min-Heap (Binary Heap)**.  
+✅ **Time Complexity:** `O(log n)` for insertion/removal.  
+✅ **When to Use:** When **priority-based processing** is needed.  
+
+---
+
+### **8️⃣ ArrayDeque (Double-Ended Queue)**
+✅ **Key Methods:** *(Combination of `Queue` & `Stack` methods)*  
+✅ **Internal Working:** Uses **circular array** for better performance.  
+✅ **Time Complexity:** `O(1)` for add/remove at both ends.  
+✅ **When to Use:** When **deque operations (both ends)** are needed.  
+
+---
+
+## **🔹 Map Implementations (Key-Value Pairs)**  
+
+### **9️⃣ HashMap (Unordered Key-Value Storage)**
+✅ **Key Methods:**  
+1. `put(K key, V value)` – Inserts key-value pair  
+2. `get(Object key)` – Retrieves value by key  
+3. `remove(Object key)` – Removes key-value pair  
+4. `containsKey(Object key)` – Checks if key exists  
+5. `containsValue(Object value)` – Checks if value exists  
+6. `size()` – Returns number of key-value pairs  
+7. `clear()` – Removes all entries  
+
+✅ **Internal Working:** Uses **Hashing (Bucket + LinkedList/Tree structure)**.  
+✅ **Time Complexity:** `O(1)` for get/put/remove (average), `O(n)` (worst case).  
+✅ **When to Use:** When **fast key-based lookup** is needed.  
+
+---
+
+### **🔟 TreeMap (Sorted Key-Value Storage)**
+✅ **Key Methods:** *(Same as `HashMap`, but sorted)*  
+✅ **Internal Working:** Uses **Red-Black Tree (Self-Balancing BST)**.  
+✅ **Time Complexity:** `O(log n)` for get/put/remove.  
+✅ **When to Use:** When **sorted key-value pairs** are needed.  
+
+---
+
+# **⏳ Complexity Summary**
+| Data Structure | Best Case | Worst Case |
+|---------------|----------|------------|
+| **ArrayList (get)** | `O(1)` | `O(1)` |
+| **ArrayList (add/remove at end)** | `O(1)` | `O(n)` |
+| **LinkedList (add/remove)** | `O(1)` | `O(n)` |
+| **Stack (push/pop)** | `O(1)` | `O(1)` |
+| **HashSet (search/add/remove)** | `O(1)` | `O(n)` |
+| **TreeSet (search/add/remove)** | `O(log n)` | `O(log n)` |
+| **PriorityQueue (insert/remove)** | `O(log n)` | `O(log n)` |
+| **HashMap (search/add/remove)** | `O(1)` | `O(n)` |
+| **TreeMap (search/add/remove)** | `O(log n)` | `O(log n)` |
+
+---
+
+# **🎯 Conclusion**
+This **Quick Reference Guide** helps you **choose the right data structure** based on:  
+🔹 **Operations Needed (Insertion, Deletion, Lookup, Sorting)**  
+🔹 **Performance Considerations (Time Complexity, Internal Working)**  
+🔹 **Thread-Safety & Usage Scenarios**  
+
+
+🔥 **That's it! Your Java Collection Framework Guide is COMPLETE!**  
