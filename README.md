@@ -6341,3 +6341,1266 @@ Sorted HashMap (By Value): {1=Apple, 3=Banana, 2=Cherry}
 
 ---
 
+# **📌 Chapter 8: Collections Utility Class (Helper Methods) – Deep Explanation**  
+
+The **Collections Utility Class** in Java provides several static methods to operate on **lists, sets, and maps** easily. It includes methods for:  
+✅ **Sorting** (e.g., `Collections.sort()`)  
+✅ **Searching** (e.g., `Collections.binarySearch()`)  
+✅ **Making Collections Immutable** (e.g., `Collections.unmodifiableList()`)  
+✅ **Creating Thread-Safe Collections** (e.g., `Collections.synchronizedList()`)  
+
+---
+
+## **🔹 What is the `Collections` Utility Class?**
+The `Collections` class is a **final class** in Java's `java.util` package.  
+- It **cannot be instantiated** because it only contains **static methods**.  
+- It **enhances** how we work with collections by providing **common utility functions**.  
+
+### **📌 Key Features of `Collections` Class**
+| Feature | Description |
+|---------|------------|
+| **Sorting** | Sorts a `List<T>` using natural or custom ordering. |
+| **Searching** | Searches for an element in a sorted list using binary search. |
+| **Thread-Safe Collections** | Converts collections into thread-safe versions. |
+| **Immutable Collections** | Creates **unmodifiable** collections that cannot be changed. |
+| **Shuffling** | Randomizes the order of elements. |
+| **Reversing** | Reverses the order of elements in a list. |
+| **Filling** | Replaces all elements in a list with a specified value. |
+| **Copying** | Copies elements from one list to another. |
+| **Finding Min/Max** | Finds the smallest or largest element in a collection. |
+
+---
+
+## **🔹 Why Use `Collections` Utility Class?**
+### ✅ **Without `Collections` Class** (Manual Sorting Example)
+```java
+import java.util.*;
+
+class WithoutCollections {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(5, 2, 8, 1));
+
+        // Manual sorting using loops
+        for (int i = 0; i < numbers.size() - 1; i++) {
+            for (int j = i + 1; j < numbers.size(); j++) {
+                if (numbers.get(i) > numbers.get(j)) {
+                    // Swap elements
+                    int temp = numbers.get(i);
+                    numbers.set(i, numbers.get(j));
+                    numbers.set(j, temp);
+                }
+            }
+        }
+
+        System.out.println("Sorted List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted List: [1, 2, 5, 8]
+```
+✔️ Here, we had to **write a lot of code** just to sort a list.  
+
+---
+
+### ✅ **With `Collections` Class (Easy Sorting)**
+```java
+import java.util.*;
+
+class WithCollections {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(5, 2, 8, 1));
+
+        // Using Collections.sort()
+        Collections.sort(numbers);
+
+        System.out.println("Sorted List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted List: [1, 2, 5, 8]
+```
+✔️ Just **one line of code** using `Collections.sort()`!
+
+---
+
+## **🔹 List of Important Methods in `Collections` Class**
+| Method | Description |
+|--------|------------|
+| `Collections.sort(List<T>)` | Sorts a list in natural order. |
+| `Collections.sort(List<T>, Comparator<T>)` | Sorts a list using a custom comparator. |
+| `Collections.binarySearch(List<T>, key)` | Searches for an element in a sorted list using binary search. |
+| `Collections.unmodifiableList(List<T>)` | Creates an **immutable list**. |
+| `Collections.synchronizedList(List<T>)` | Makes a list **thread-safe**. |
+| `Collections.reverse(List<T>)` | Reverses the order of elements in a list. |
+| `Collections.shuffle(List<T>)` | Randomizes the order of elements. |
+| `Collections.fill(List<T>, value)` | Replaces all elements in a list with a specified value. |
+| `Collections.copy(List<T>, List<T>)` | Copies elements from one list to another. |
+| `Collections.min(Collection<T>)` | Finds the smallest element. |
+| `Collections.max(Collection<T>)` | Finds the largest element. |
+
+---
+
+# **Deep Dive into First Three Methods of `Collections` Class**  
+
+In this section, we'll **deeply understand** the first three methods of the `Collections` utility class:  
+✅ `Collections.sort(List<T>)`  
+✅ `Collections.sort(List<T>, Comparator<T>)`  
+✅ `Collections.binarySearch(List<T>, key)`
+
+We'll cover:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.sort(List<T>)` (Natural Sorting)**
+### **📌 What It Does?**
+- This method **sorts a List** in **ascending order** using **natural ordering**.
+- It works with elements that implement the **`Comparable` interface** (like `Integer`, `String`, `Double`, etc.).
+- Sorting is done using **Timsort**, which is a combination of **Merge Sort** and **Insertion Sort**.
+
+### **📌 Syntax**
+```java
+Collections.sort(List<T> list);
+```
+- This method **modifies the original list** by sorting it.
+
+---
+
+### **📌 Internal Working (How It Works?)**
+1. **Checks if the list implements `RandomAccess`** (i.e., if it’s an `ArrayList`).  
+   - If `true` → Uses **Dual-Pivot QuickSort** (fastest for arrays).  
+   - If `false` → Uses **Merge Sort** (better for linked lists).  
+2. **Calls `TimSort.sort()` method** for sorting the list.  
+3. **Rearranges elements in ascending order**.  
+
+---
+
+### **📌 Example: Sorting a List of Numbers**
+```java
+import java.util.*;
+
+class SortExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(9, 3, 7, 1, 5));
+
+        // Sorting in ascending order
+        Collections.sort(numbers);
+
+        System.out.println("Sorted List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted List: [1, 3, 5, 7, 9]
+```
+---
+
+### **📌 Example: Sorting a List of Strings**
+```java
+import java.util.*;
+
+class StringSortExample {
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>(Arrays.asList("John", "Alice", "Bob"));
+
+        // Sorting alphabetically
+        Collections.sort(names);
+
+        System.out.println("Sorted Names: " + names);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted Names: [Alice, Bob, John]
+```
+
+---
+
+### **📌 Time Complexity**
+- **Worst Case:** `O(n log n)`  
+- **Best Case (Already Sorted):** `O(n)`  
+- **Average Case:** `O(n log n)`  
+
+✔️ **Fast and efficient** for large datasets.
+
+---
+
+## **2️⃣ `Collections.sort(List<T>, Comparator<T>)` (Custom Sorting)**
+### **📌 What It Does?**
+- This method **sorts a list** using a **custom sorting logic** defined by a `Comparator<T>`.
+- Used when elements **do not have natural ordering** (e.g., sorting objects, sorting in descending order).
+
+### **📌 Syntax**
+```java
+Collections.sort(List<T> list, Comparator<T> comparator);
+```
+- The **comparator** defines **how elements should be sorted**.
+
+---
+
+### **📌 Example: Sorting in Descending Order**
+```java
+import java.util.*;
+
+class DescendingSort {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(9, 3, 7, 1, 5));
+
+        // Sorting in descending order
+        Collections.sort(numbers, (a, b) -> b - a);
+
+        System.out.println("Sorted Descending: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted Descending: [9, 7, 5, 3, 1]
+```
+
+---
+
+### **📌 Example: Sorting a List of Objects**
+```java
+import java.util.*;
+
+class Person {
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+class AgeComparator implements Comparator<Person> {
+    public int compare(Person p1, Person p2) {
+        return p1.age - p2.age; // Sort by age (ascending)
+    }
+}
+
+class ObjectSortingExample {
+    public static void main(String[] args) {
+        List<Person> people = new ArrayList<>(Arrays.asList(
+            new Person("Alice", 25),
+            new Person("Bob", 22),
+            new Person("Charlie", 28)
+        ));
+
+        // Sorting by age
+        Collections.sort(people, new AgeComparator());
+
+        System.out.println("Sorted by Age: " + people);
+    }
+}
+```
+### **🔹 Output:**
+```
+Sorted by Age: [Bob (22), Alice (25), Charlie (28)]
+```
+
+---
+
+### **📌 Time Complexity**
+- Same as `Collections.sort(List<T>)`, i.e., `O(n log n)`.  
+✔️ **More flexible**, as it allows **custom sorting**.
+
+---
+
+## **3️⃣ `Collections.binarySearch(List<T>, key)` (Efficient Searching)**
+### **📌 What It Does?**
+- **Searches for an element in a sorted list** using **Binary Search**.
+- It is **faster than linear search** (`O(log n)` instead of `O(n)`).
+- The list **must be sorted** before using `binarySearch()`.
+
+### **📌 Syntax**
+```java
+int index = Collections.binarySearch(List<T> list, T key);
+```
+- Returns the **index** of `key` if found.  
+- Returns **negative index** (`-(insertion point) - 1`) if **not found**.
+
+---
+
+### **📌 Example: Searching in a Sorted List**
+```java
+import java.util.*;
+
+class BinarySearchExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 3, 5, 7, 9));
+
+        int index = Collections.binarySearch(numbers, 5);
+        System.out.println("Index of 5: " + index);
+    }
+}
+```
+### **🔹 Output:**
+```
+Index of 5: 2
+```
+✔️ `5` is found at **index 2**.
+
+---
+
+### **📌 Example: Searching for an Element Not in the List**
+```java
+import java.util.*;
+
+class BinarySearchNotFound {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 3, 5, 7, 9));
+
+        int index = Collections.binarySearch(numbers, 6);
+        System.out.println("Index of 6: " + index);
+    }
+}
+```
+### **🔹 Output:**
+```
+Index of 6: -4
+```
+✔️ **Explanation:**  
+- `6` is **not in the list**.  
+- `-(insertion point) - 1` = `-(3) - 1 = -4`.  
+- The insertion point is `index 3`.
+
+---
+
+### **📌 Time Complexity**
+- **Best Case:** `O(1)` (if the element is at the middle).  
+- **Worst/Average Case:** `O(log n)`.  
+✔️ **Faster** than a simple linear search.
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.sort(List<T>)` | Sorts a list in natural order (ascending). | `O(n log n)` |
+| `Collections.sort(List<T>, Comparator<T>)` | Sorts a list using custom order. | `O(n log n)` |
+| `Collections.binarySearch(List<T>, key)` | Searches for an element in a sorted list. | `O(log n)` |
+
+---
+
+# **Deep Dive into Next Three Methods of `Collections` Class**  
+
+✅ `Collections.unmodifiableList(List<T>)`  
+✅ `Collections.synchronizedList(List<T>)`  
+✅ `Collections.reverse(List<T>)`  
+
+We'll cover:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.unmodifiableList(List<T>)` (Immutable List)**
+### **📌 What It Does?**
+- Creates a **read-only (immutable) version** of a list.  
+- Any attempt to modify the list (add, remove, update) **throws an exception**.  
+- Used when you **want to protect a list** from accidental modification.  
+
+### **📌 Syntax**
+```java
+List<T> immutableList = Collections.unmodifiableList(List<T> list);
+```
+- **Returns an unmodifiable view** of the list.  
+
+---
+
+### **📌 Internal Working (How It Works?)**
+1. **Wraps the original list** inside an unmodifiable wrapper.  
+2. **Allows only read operations** (like `get()`, `contains()`).  
+3. **Throws `UnsupportedOperationException`** for any modification.  
+
+---
+
+### **📌 Example: Creating an Unmodifiable List**
+```java
+import java.util.*;
+
+class UnmodifiableListExample {
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie"));
+
+        // Creating an unmodifiable list
+        List<String> immutableNames = Collections.unmodifiableList(names);
+
+        System.out.println("Immutable List: " + immutableNames);
+
+        // Trying to modify the list (will throw an exception)
+        immutableNames.add("David");  // Throws UnsupportedOperationException
+    }
+}
+```
+### **🔹 Output:**
+```
+Exception in thread "main" java.lang.UnsupportedOperationException
+```
+✔️ The program crashes when trying to modify the list.
+
+---
+
+### **📌 Real-World Use Case**
+- **Used in APIs** to return **safe lists** that clients cannot modify.  
+- Example: `List.of()` in Java 9+ creates immutable lists directly.
+
+---
+
+## **2️⃣ `Collections.synchronizedList(List<T>)` (Thread-Safe List)**
+### **📌 What It Does?**
+- Converts a **normal list** into a **thread-safe list**.  
+- Allows **multiple threads** to access the list **without conflicts**.  
+- **Synchronizes all methods** (`add()`, `remove()`, `get()`, etc.).  
+
+### **📌 Syntax**
+```java
+List<T> syncList = Collections.synchronizedList(List<T> list);
+```
+- **Returns a synchronized version** of the list.  
+
+---
+
+### **📌 Internal Working (How It Works?)**
+1. **Wraps the list inside a synchronized wrapper**.  
+2. **Every method is synchronized** (ensures only one thread modifies at a time).  
+3. **Iterating still requires external synchronization** (`synchronized(syncList)`).  
+
+---
+
+### **📌 Example: Making a List Thread-Safe**
+```java
+import java.util.*;
+
+class SynchronizedListExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3));
+
+        // Creating a thread-safe list
+        List<Integer> syncNumbers = Collections.synchronizedList(numbers);
+
+        // Thread-safe modification
+        syncNumbers.add(4);
+        System.out.println("Synchronized List: " + syncNumbers);
+    }
+}
+```
+✔️ **This prevents concurrency issues** in a multi-threaded environment.
+
+---
+
+### **📌 Important: Synchronizing Iteration**
+Even though the list is synchronized, **iteration must be synchronized externally**:
+```java
+synchronized(syncNumbers) {
+    for (Integer num : syncNumbers) {
+        System.out.println(num);
+    }
+}
+```
+✔️ Without this, **ConcurrentModificationException** may occur.
+
+---
+
+### **📌 Real-World Use Case**
+- Used in **multi-threaded applications** where lists are shared across threads.  
+- **Alternative:** `CopyOnWriteArrayList` (better performance for concurrent reads).  
+
+---
+
+## **3️⃣ `Collections.reverse(List<T>)` (Reverse Order)**
+### **📌 What It Does?**
+- **Reverses the order** of elements in a list.  
+- Modifies the **original list**.  
+- Works on any `List<T>` implementation (`ArrayList`, `LinkedList`, etc.).  
+
+### **📌 Syntax**
+```java
+Collections.reverse(List<T> list);
+```
+- **Directly modifies** the input list.  
+
+---
+
+### **📌 Internal Working (How It Works?)**
+1. **Swaps first and last elements**, second and second-last, and so on.  
+2. **Uses `O(n)` time complexity** (single pass).  
+
+---
+
+### **📌 Example: Reversing a List**
+```java
+import java.util.*;
+
+class ReverseExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // Reversing the list
+        Collections.reverse(numbers);
+
+        System.out.println("Reversed List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Reversed List: [5, 4, 3, 2, 1]
+```
+
+---
+
+### **📌 Example: Reversing a List of Strings**
+```java
+import java.util.*;
+
+class ReverseStringList {
+    public static void main(String[] args) {
+        List<String> words = new ArrayList<>(Arrays.asList("Hello", "World", "Java"));
+
+        // Reversing the list
+        Collections.reverse(words);
+
+        System.out.println("Reversed Words: " + words);
+    }
+}
+```
+### **🔹 Output:**
+```
+Reversed Words: [Java, World, Hello]
+```
+
+---
+
+### **📌 Time Complexity**
+- `O(n)`, as it swaps **half** the elements in a **single pass**.
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.unmodifiableList(List<T>)` | Creates a read-only list (modification not allowed). | `O(1)` |
+| `Collections.synchronizedList(List<T>)` | Creates a thread-safe list. | `O(1)` (method calls may take extra time) |
+| `Collections.reverse(List<T>)` | Reverses the order of elements in a list. | `O(n)` |
+
+---
+
+# **Deep Dive into Next Three Methods of `Collections` Class**  
+
+✅ `Collections.fill(List<T>, T value)`  
+✅ `Collections.copy(List<T> dest, List<T> src)`  
+✅ `Collections.replaceAll(List<T> list, T oldValue, T newValue)`
+
+We’ll cover:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.fill(List<T>, T value)` (Fill List with a Single Value)**  
+
+### **📌 What It Does?**  
+- Replaces **all elements** of a list with a **single value**.  
+- **Modifies the original list**.  
+- Works only with **modifiable lists** (not immutable lists).  
+
+### **📌 Syntax**
+```java
+Collections.fill(List<T> list, T value);
+```
+- Takes a **list** and a **value**, then replaces **every element** with that value.
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. Iterates through **each index of the list**.  
+2. Replaces the **existing value** with the new value.  
+3. **Time Complexity: O(n)** (as it modifies every element).  
+
+---
+
+### **📌 Example: Filling a List**
+```java
+import java.util.*;
+
+class FillExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // Filling the list with 0
+        Collections.fill(numbers, 0);
+
+        System.out.println("Filled List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Filled List: [0, 0, 0, 0, 0]
+```
+✔️ **All elements are replaced with `0`**.
+
+---
+
+### **📌 Example: Filling a List of Strings**
+```java
+import java.util.*;
+
+class FillStringList {
+    public static void main(String[] args) {
+        List<String> words = new ArrayList<>(Arrays.asList("Java", "Python", "C++"));
+
+        // Filling the list with "Default"
+        Collections.fill(words, "Default");
+
+        System.out.println("Filled List: " + words);
+    }
+}
+```
+### **🔹 Output:**
+```
+Filled List: [Default, Default, Default]
+```
+
+---
+
+### **📌 Real-World Use Case**
+- Used to **reset a list** with a default value.  
+- Used in **game development** to **initialize** a list with default scores.  
+
+---
+
+## **2️⃣ `Collections.copy(List<T> dest, List<T> src)` (Copy Elements from One List to Another)**  
+
+### **📌 What It Does?**  
+- Copies **all elements** from the **source list** (`src`) to the **destination list** (`dest`).  
+- **Destination list must have the same or larger size** as the source list.  
+- **Modifies the destination list**.  
+
+### **📌 Syntax**
+```java
+Collections.copy(List<T> dest, List<T> src);
+```
+- `dest` should be **at least the same size** as `src`, otherwise it throws `IndexOutOfBoundsException`.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. Iterates through the **source list** and copies **each element** to the destination list.  
+2. **Overwrites** existing elements in `dest`.  
+3. **Time Complexity: O(n)** (as it processes every element).  
+
+---
+
+### **📌 Example: Copying One List to Another**
+```java
+import java.util.*;
+
+class CopyExample {
+    public static void main(String[] args) {
+        List<String> src = Arrays.asList("Apple", "Banana", "Cherry");
+        List<String> dest = new ArrayList<>(Arrays.asList("X", "Y", "Z"));
+
+        // Copying src to dest
+        Collections.copy(dest, src);
+
+        System.out.println("Destination List After Copy: " + dest);
+    }
+}
+```
+### **🔹 Output:**
+```
+Destination List After Copy: [Apple, Banana, Cherry]
+```
+✔️ The elements in `dest` are **replaced** by elements from `src`.
+
+---
+
+### **📌 Important Notes**
+❌ This **will not work** if `dest` is smaller than `src`:
+```java
+List<String> dest = new ArrayList<>(Arrays.asList("X", "Y")); // Smaller size
+Collections.copy(dest, src); // Throws IndexOutOfBoundsException
+```
+✔️ **Solution:** Ensure `dest` has the **same or larger size** before copying.
+
+---
+
+### **📌 Real-World Use Case**
+- Used to **backup lists** before modification.  
+- Used in **undo-redo features** to maintain copies of lists.  
+
+---
+
+## **3️⃣ `Collections.replaceAll(List<T> list, T oldValue, T newValue)` (Replace a Specific Value in a List)**  
+
+### **📌 What It Does?**  
+- **Finds and replaces** all occurrences of `oldValue` in a list with `newValue`.  
+- **Modifies the original list**.  
+
+### **📌 Syntax**
+```java
+Collections.replaceAll(List<T> list, T oldValue, T newValue);
+```
+- Searches for **`oldValue`** and replaces it with **`newValue`** in the list.
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. Iterates through **each element** in the list.  
+2. If an element **matches `oldValue`**, it is replaced with `newValue`.  
+3. **Time Complexity: O(n)** (as it checks every element).  
+
+---
+
+### **📌 Example: Replacing Elements in a List**
+```java
+import java.util.*;
+
+class ReplaceAllExample {
+    public static void main(String[] args) {
+        List<String> fruits = new ArrayList<>(Arrays.asList("Apple", "Banana", "Apple", "Cherry"));
+
+        // Replacing all "Apple" with "Mango"
+        Collections.replaceAll(fruits, "Apple", "Mango");
+
+        System.out.println("List After Replace: " + fruits);
+    }
+}
+```
+### **🔹 Output:**
+```
+List After Replace: [Mango, Banana, Mango, Cherry]
+```
+✔️ **All occurrences of "Apple" are replaced with "Mango".**  
+
+---
+
+### **📌 Example: Replacing Numbers in a List**
+```java
+import java.util.*;
+
+class ReplaceNumbers {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 2, 4));
+
+        // Replacing all 2s with 99
+        Collections.replaceAll(numbers, 2, 99);
+
+        System.out.println("List After Replace: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+List After Replace: [1, 99, 3, 99, 4]
+```
+
+---
+
+### **📌 Real-World Use Case**
+- Used to **update outdated values** in lists.  
+- Used to **change labels or categories** dynamically in applications.  
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.fill(List<T>, T value)` | Replaces all elements with a single value. | `O(n)` |
+| `Collections.copy(List<T> dest, List<T> src)` | Copies elements from one list to another. | `O(n)` |
+| `Collections.replaceAll(List<T>, T oldValue, T newValue)` | Replaces occurrences of `oldValue` with `newValue`. | `O(n)` |
+
+---
+
+# **Deep Dive into Next Three Methods of `Collections` Class**  
+
+
+✅ `Collections.shuffle(List<T> list)`  
+✅ `Collections.rotate(List<T> list, int distance)`  
+✅ `Collections.swap(List<T> list, int i, int j)`  
+
+We’ll cover:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.shuffle(List<T> list)` (Randomly Rearrange Elements in a List)**  
+
+### **📌 What It Does?**  
+- **Randomly shuffles** the elements of the list.  
+- **Changes the order each time** it is called.  
+- Uses **Java's Random class** internally to generate random indices.  
+
+### **📌 Syntax**
+```java
+Collections.shuffle(List<T> list);
+```
+- Modifies the **original list**.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. Uses the **Fisher-Yates algorithm** (modern version of **Knuth shuffle**).  
+2. **Swaps each element** with a randomly chosen element after it.  
+3. Uses `java.util.Random` to generate **random indices**.  
+4. **Time Complexity: O(n)** (as each element is processed once).  
+
+---
+
+### **📌 Example: Shuffling a List**
+```java
+import java.util.*;
+
+class ShuffleExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+        // Shuffling the list
+        Collections.shuffle(numbers);
+
+        System.out.println("Shuffled List: " + numbers);
+    }
+}
+```
+### **🔹 Output (changes each time):**
+```
+Shuffled List: [4, 9, 1, 7, 3, 5, 2, 8, 6]
+```
+✔️ **The order of elements is randomized**.  
+
+---
+
+### **📌 Example: Shuffling a List of Strings**
+```java
+import java.util.*;
+
+class ShuffleStringList {
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie", "David"));
+
+        Collections.shuffle(names);
+
+        System.out.println("Shuffled Names: " + names);
+    }
+}
+```
+### **🔹 Output (changes each time):**
+```
+Shuffled Names: [Charlie, Alice, David, Bob]
+```
+
+---
+
+### **📌 Real-World Use Case**
+- **Randomizing quiz questions** in an exam application.  
+- **Shuffling a deck of cards** in a card game.  
+
+---
+
+## **2️⃣ `Collections.rotate(List<T> list, int distance)` (Rotate Elements in a List)**  
+
+### **📌 What It Does?**  
+- Rotates the list by moving elements **rightward** (positive distance) or **leftward** (negative distance).  
+
+### **📌 Syntax**
+```java
+Collections.rotate(List<T> list, int distance);
+```
+- **Positive distance → Right rotation**.  
+- **Negative distance → Left rotation**.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. Uses **modulo arithmetic** (`distance % list.size()`) to optimize movement.  
+2. **Rightward rotation** shifts elements to the right.  
+3. **Leftward rotation** (when distance is negative) shifts elements to the left.  
+4. **Time Complexity: O(n)** (as every element is moved once).  
+
+---
+
+### **📌 Example: Rotating Right by 2 Places**
+```java
+import java.util.*;
+
+class RotateExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // Rotating right by 2
+        Collections.rotate(numbers, 2);
+
+        System.out.println("Rotated List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Rotated List: [4, 5, 1, 2, 3]
+```
+✔️ **Last two elements move to the front.**  
+
+---
+
+### **📌 Example: Rotating Left by 2 Places**
+```java
+import java.util.*;
+
+class RotateLeftExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // Rotating left by 2 (equivalent to rotating right by -2)
+        Collections.rotate(numbers, -2);
+
+        System.out.println("Rotated List: " + numbers);
+    }
+}
+```
+### **🔹 Output:**
+```
+Rotated List: [3, 4, 5, 1, 2]
+```
+✔️ **First two elements move to the end.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Shifting circular queue elements** in task scheduling.  
+- **Rotating images** in a slideshow.  
+
+---
+
+## **3️⃣ `Collections.swap(List<T> list, int i, int j)` (Swap Two Elements in a List)**  
+
+### **📌 What It Does?**  
+- **Swaps two elements** in a list at given indices `i` and `j`.  
+
+### **📌 Syntax**
+```java
+Collections.swap(List<T> list, int i, int j);
+```
+- Works for **both mutable and immutable lists**.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Stores the element at index `i` in a temp variable**.  
+2. **Replaces the element at `i` with the element at `j`**.  
+3. **Puts the temp value into `j`**.  
+4. **Time Complexity: O(1)** (only two assignments).  
+
+---
+
+### **📌 Example: Swapping Two Elements**
+```java
+import java.util.*;
+
+class SwapExample {
+    public static void main(String[] args) {
+        List<String> colors = new ArrayList<>(Arrays.asList("Red", "Green", "Blue", "Yellow"));
+
+        // Swapping "Green" and "Blue"
+        Collections.swap(colors, 1, 2);
+
+        System.out.println("List After Swap: " + colors);
+    }
+}
+```
+### **🔹 Output:**
+```
+List After Swap: [Red, Blue, Green, Yellow]
+```
+✔️ **The elements at index `1` and `2` are swapped.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Swapping players in a game leaderboard**.  
+- **Swapping elements in sorting algorithms (like Bubble Sort)**.  
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.shuffle(List<T> list)` | Randomly shuffles elements in a list. | `O(n)` |
+| `Collections.rotate(List<T> list, int distance)` | Moves elements left or right in a list. | `O(n)` |
+| `Collections.swap(List<T> list, int i, int j)` | Swaps two elements in a list. | `O(1)` |
+
+---
+
+# **Deep Dive into Next Three Methods of `Collections` Class**  
+
+✅ `Collections.min(Collection<T> coll)`  
+✅ `Collections.max(Collection<T> coll)`  
+✅ `Collections.frequency(Collection<T> coll, Object obj)`  
+
+We’ll cover:  
+🔹 **What the method does**  
+🔹 **How it works internally**  
+🔹 **Code examples**  
+🔹 **Time complexity**  
+🔹 **Real-world use cases**  
+
+---
+
+## **1️⃣ `Collections.min(Collection<T> coll)` (Find the Minimum Element)**  
+
+### **📌 What It Does?**  
+- Finds the **smallest element** in a given collection.  
+- Uses **natural ordering** (`Comparable<T>`).  
+- Can also work with a **custom comparator**.  
+
+### **📌 Syntax**
+```java
+Collections.min(Collection<T> coll);
+Collections.min(Collection<T> coll, Comparator<T> comp);
+```
+- **First version** → Uses **natural sorting order** (`Comparable<T>`).  
+- **Second version** → Uses a **custom comparator** (`Comparator<T>`).  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Iterates through all elements** of the collection.  
+2. **Compares elements** using the `compareTo()` method (for `Comparable<T>`) or `compare()` method (for `Comparator<T>`).  
+3. **Returns the smallest element**.  
+4. **Time Complexity: O(n)** (since every element is checked once).  
+
+---
+
+### **📌 Example: Finding Minimum in a List**
+```java
+import java.util.*;
+
+class MinExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(45, 12, 78, 34, 23);
+
+        int minNumber = Collections.min(numbers);
+        System.out.println("Minimum Number: " + minNumber);
+    }
+}
+```
+### **🔹 Output:**
+```
+Minimum Number: 12
+```
+✔️ **Finds the smallest number from the list.**  
+
+---
+
+### **📌 Example: Finding Minimum with a Custom Comparator**
+```java
+import java.util.*;
+
+class MinCustomExample {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "banana", "grape", "mango");
+
+        // Finding the shortest word using a custom comparator
+        String minWord = Collections.min(words, Comparator.comparing(String::length));
+
+        System.out.println("Shortest Word: " + minWord);
+    }
+}
+```
+### **🔹 Output:**
+```
+Shortest Word: grape
+```
+✔️ **Finds the shortest word using a custom comparator.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Finding the lowest price in an e-commerce product list.**  
+- **Finding the youngest student in a list based on age.**  
+
+---
+
+## **2️⃣ `Collections.max(Collection<T> coll)` (Find the Maximum Element)**  
+
+### **📌 What It Does?**  
+- Finds the **largest element** in a given collection.  
+- Uses **natural ordering** (`Comparable<T>`).  
+- Can also work with a **custom comparator**.  
+
+### **📌 Syntax**
+```java
+Collections.max(Collection<T> coll);
+Collections.max(Collection<T> coll, Comparator<T> comp);
+```
+- **First version** → Uses **natural sorting order** (`Comparable<T>`).  
+- **Second version** → Uses a **custom comparator** (`Comparator<T>`).  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Iterates through all elements** of the collection.  
+2. **Compares elements** using the `compareTo()` method (for `Comparable<T>`) or `compare()` method (for `Comparator<T>`).  
+3. **Returns the largest element**.  
+4. **Time Complexity: O(n)** (since every element is checked once).  
+
+---
+
+### **📌 Example: Finding Maximum in a List**
+```java
+import java.util.*;
+
+class MaxExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(45, 12, 78, 34, 23);
+
+        int maxNumber = Collections.max(numbers);
+        System.out.println("Maximum Number: " + maxNumber);
+    }
+}
+```
+### **🔹 Output:**
+```
+Maximum Number: 78
+```
+✔️ **Finds the largest number from the list.**  
+
+---
+
+### **📌 Example: Finding Maximum with a Custom Comparator**
+```java
+import java.util.*;
+
+class MaxCustomExample {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "banana", "grape", "mango");
+
+        // Finding the longest word using a custom comparator
+        String maxWord = Collections.max(words, Comparator.comparing(String::length));
+
+        System.out.println("Longest Word: " + maxWord);
+    }
+}
+```
+### **🔹 Output:**
+```
+Longest Word: banana
+```
+✔️ **Finds the longest word using a custom comparator.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Finding the highest salary from an employee list.**  
+- **Finding the most expensive product in an inventory.**  
+
+---
+
+## **3️⃣ `Collections.frequency(Collection<T> coll, Object obj)` (Count Occurrences of an Element)**  
+
+### **📌 What It Does?**  
+- Counts how many times an element **appears** in a collection.  
+
+### **📌 Syntax**
+```java
+Collections.frequency(Collection<T> coll, Object obj);
+```
+- Returns an **integer** representing the **count** of `obj` in `coll`.  
+
+---
+
+### **📌 Internal Working (How It Works?)**  
+1. **Iterates through the entire collection**.  
+2. **Compares each element** with `obj` using `.equals()` method.  
+3. **Increments count** for each match.  
+4. **Returns total count**.  
+5. **Time Complexity: O(n)** (since every element is checked once).  
+
+---
+
+### **📌 Example: Counting Frequency of a Number**
+```java
+import java.util.*;
+
+class FrequencyExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 2, 4, 2, 5, 2);
+
+        int count = Collections.frequency(numbers, 2);
+        System.out.println("Frequency of 2: " + count);
+    }
+}
+```
+### **🔹 Output:**
+```
+Frequency of 2: 4
+```
+✔️ **Counts how many times `2` appears in the list.**  
+
+---
+
+### **📌 Example: Counting Frequency of a String**
+```java
+import java.util.*;
+
+class FrequencyStringExample {
+    public static void main(String[] args) {
+        List<String> colors = Arrays.asList("red", "blue", "green", "red", "yellow", "red");
+
+        int count = Collections.frequency(colors, "red");
+        System.out.println("Frequency of 'red': " + count);
+    }
+}
+```
+### **🔹 Output:**
+```
+Frequency of 'red': 3
+```
+✔️ **Counts occurrences of the string `"red"`.**  
+
+---
+
+### **📌 Real-World Use Case**
+- **Counting the number of times a word appears in a text file.**  
+- **Finding the most frequently purchased product in an e-commerce application.**  
+
+---
+
+# **📌 Summary Table**
+| Method | Purpose | Time Complexity |
+|--------|---------|----------------|
+| `Collections.min(Collection<T> coll)` | Finds the smallest element. | `O(n)` |
+| `Collections.max(Collection<T> coll)` | Finds the largest element. | `O(n)` |
+| `Collections.frequency(Collection<T> coll, Object obj)` | Counts occurrences of an element. | `O(n)` |
+
+---
+
+
